@@ -64,6 +64,83 @@ HLV-Enhanced BMS: Physical State ⟷ Informational State → Coupled Dynamics �
 | Integration Time | <1 hour | For experienced BMS engineers |
 
 ---
+# 🔧 Advanced Features & Examples
+
+The HLV Battery Enhancement Library includes a suite of advanced capabilities designed for real‑world EV deployment, multi‑cell pack analysis, and high‑fidelity state estimation. These features extend the core HLV physics engine and provide engineers with deeper visibility, better diagnostics, and more accurate long‑term predictions.
+
+This module is fully modular — you can enable only what your platform requires. All advanced features are demonstrated in the `/examples` directory for quick experimentation and integration.
+
+---
+
+## ⚙️ Advanced Capabilities
+
+### 1. **Chemistry‑Specific Optimization**
+The library includes a full chemistry profile system for **LFP, NMC, NCA, LTO**, and custom chemistries.  
+Each profile tunes:
+
+- λ coupling strength  
+- entropy weighting  
+- thermal sensitivity  
+- voltage curves  
+- safe operating limits  
+- degradation characteristics  
+
+This ensures HLV behaves correctly across different pack designs and chemistries.
+
+---
+
+### 2. **Multi‑Cell Pack Modeling**
+For packs with dozens or hundreds of series cells, the advanced module provides:
+
+- per‑cell HLV dynamics  
+- weak‑cell detection  
+- voltage imbalance tracking  
+- thermal spread analysis  
+- pack‑level health prediction (worst‑cell EOL logic)  
+
+This mirrors the architecture used in modern EV platforms and is essential for accurate pack‑level diagnostics.
+
+---
+
+### 3. **Kalman Filter Integration**
+A lightweight Kalman filter fuses:
+
+- HLV‑predicted SoC  
+- measured SoC  
+- degradation proxies  
+- entropy and Φ‑state evolution  
+
+This produces smoother, more reliable estimates under noisy sensor conditions.
+
+---
+
+### 4. **ML Hybrid Predictions (Optional)**
+HLV can be paired with a small neural network to refine:
+
+- degradation corrections  
+- EOL estimates  
+- confidence scores  
+
+This hybrid approach combines physics‑based structure with data‑driven nuance.
+
+---
+
+### 5. **Fleet‑Wide Learning (Opt‑In)**
+The system supports anonymized fleet data aggregation:
+
+- chemistry‑grouped degradation patterns  
+- temperature‑cycle correlations  
+- median degradation rates  
+- exportable datasets for ML training  
+
+This enables continuous improvement across large deployments.
+
+---
+
+### 6. **GPU Acceleration (Experimental)**
+For large packs or high‑frequency BMS loops, the advanced module includes a GPU interface stub for parallel per‑cell updates.
+
+---
 
 ## 🔧 Quick Start
 
