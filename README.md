@@ -576,8 +576,8 @@ MIT License - See main project LICENSE file
 
 ## Authors
 
-- **Don Michael Feeney Jr.** - Physics implementation & system design
-- **Claude (Anthropic)** - Code generation & optimization
+- **Don Michael Feeney Jr.** - Physics implementation, System Design & Developer
+- **Claude (Anthropic)** - Code generation & optimization Assistant
 
 ---
 
