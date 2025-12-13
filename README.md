@@ -646,6 +646,30 @@ Integration checklist for deployment
 
 docs/oem_can_mapping.md
 
+## 🛑 Intelligent Regenerative Braking (HLV Regen Module)
+
+This release introduces an **HLV-based intelligent regenerative braking manager** that extends battery and torque intelligence into the braking domain.
+
+The module computes **real-time, battery-aware regen torque limits** and a **recommended regen–friction blend**, using:
+- state of charge and voltage headroom  
+- battery temperature and charge acceptance  
+- cell imbalance and weak-cell indicators  
+- HLV stress and confidence metrics  
+- ABS / ESC cooperation signals  
+
+It is designed to **augment existing brake-by-wire systems**, not replace them.  
+ABS and ESC always retain authority, and regen is cut immediately during stability events with smooth recovery afterward.
+
+📁 **Files:**  
+
+include/hlv_regen_braking_manager_v1.hpp
+examples/regen_braking_loop.cpp
+docs/regen_braking_overview.md
+
+
+This completes the HLV control loop:
+**Battery Intelligence → Torque Intelligence → Braking Intelligence → Battery Health**
+
 🏗️ Architecture Overview
 
 A system-level view explaining how:
@@ -1129,13 +1153,6 @@ Marcel Krüger
 ---
 
 ## 🗺️ Roadmap
-
-### Current Version (v1.0)
-- ✅ Core HLV coupling engine
-- ✅ Dual-state battery model
-- ✅ Basic health prediction
-- ✅ Optimal charging profiles
-- ✅ Energy conservation checking
 
 ### Coming Soon (v1.1)
 - 🔄 Chemistry-specific parameter sets (LFP, NMC, NCA, LTO)
