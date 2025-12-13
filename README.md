@@ -568,6 +568,145 @@ Temperature (°C)    Action
 
 ---
 
+## BMS Middleware, Hardware Adapters & OEM Integration
+
+To support real-world deployment, this repository now includes a production-grade Battery Management System (BMS) middleware layer and OEM-friendly integration scaffolding. These additions bridge the HLV physics engine to actual vehicle hardware, ECUs, and torque management systems without vendor lock-in.
+
+What’s Included
+🔧 HLV BMS Middleware v2.0
+
+A unified integration layer that connects:
+
+HLV core physics models
+
+Multi-cell pack intelligence
+
+Safety monitoring & diagnostics
+
+Vehicle systems (e.g. torque management)
+
+Key capabilities:
+
+Single-pack and full multi-cell operation
+
+Deterministic diagnostics (DiagnosticReport)
+
+Fail-closed safety behavior (stale/missing signal detection)
+
+Clean API for torque, power, and UI systems
+
+Header-only, real-time safe design
+
+📁 File:
+
+include/hlv_bms_middleware_v2.hpp
+
+🔌 Production-Lean Hardware Adapter
+
+A realistic, manufacturer-ready hardware adapter showing how to connect:
+
+CAN-based pack telemetry
+
+Optional SPI/I2C cell monitor ICs
+
+Contactor and balancing commands
+
+Time sources and safety checks
+
+This is not a dummy adapter — it reflects real OEM integration patterns while remaining portable across platforms.
+
+📁 File:
+
+src/hlv_bms_hardware_adapter.hpp
+
+
+OEMs typically:
+
+Implement a thin CAN transport backend
+
+Map signals to their existing DBC
+
+Plug directly into the HLV middleware
+
+📡 OEM CAN Mapping Reference
+
+A clear, neutral CAN mapping document defining:
+
+Required pack-level signals
+
+Example CAN IDs and scaling
+
+Freshness and safety expectations
+
+Actuator command semantics
+
+Integration checklist for deployment
+
+📁 Document:
+
+docs/oem_can_mapping.md
+
+🏗️ Architecture Overview
+
+A system-level view explaining how:
+
+Hardware → middleware → HLV physics → vehicle control
+
+Safety is enforced at multiple layers
+
+The system scales from bench testing to production EV packs
+
+📁 Document:
+
+docs/architecture_overview.md
+
+⚡ One-Page OEM Quick Start
+
+A concise, manufacturer-focused guide answering:
+
+What must be implemented
+
+Where to plug in hardware
+
+How to get running in minutes
+
+Designed for fast onboarding by OEM and Tier-1 engineers.
+
+📁 Document:
+
+docs/oem_quick_start.md
+
+🧪 Canonical Examples
+
+Two reference examples demonstrate correct usage patterns:
+
+Simple pack loop (single-pack equivalent)
+
+Multi-cell pack loop (96s EV-style pack, weak-cell detection)
+
+📁 Examples:
+
+examples/simple_bms_loop.cpp
+examples/multicell_pack_loop.cpp
+
+Why This Matters
+
+These additions elevate the HLV Battery Enhancement Library from a theoretical and algorithmic breakthrough to a deployable, system-level solution:
+
+OEM-friendly
+
+Safety-aware
+
+Hardware-agnostic
+
+Torque-system compatible
+
+Ready for real vehicles, not just simulations
+
+HLV is no longer just battery intelligence — it is now a complete integration framework for next-generation EV platforms.
+
+---
+
 ## License
 
 MIT License - See main project LICENSE file
@@ -577,8 +716,8 @@ MIT License - See main project LICENSE file
 ## Authors
 
 - **Don Michael Feeney Jr.** - Physics implementation, System Design & Developer
-- **Claude (Anthropic)** - Code generation & optimization Assistant
-
+- **Claude (Anthropic)** - Coder and optimization Assistant
+- **ChatGPT (OpenAI)** - Coder and optimization Assistant
 ---
 
 ## Version History
