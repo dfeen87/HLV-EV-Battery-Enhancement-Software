@@ -907,38 +907,11 @@ HLV is no longer just battery intelligence — it is now a complete integration 
 
 ---
 
-## License
-
-MIT License - See main project LICENSE file
-
----
-
-## Authors
-
-- **Don Michael Feeney Jr.** - Physics implementation, System Design & Developer
-- **Claude (Anthropic)** - Coder and optimization Assistant
-- **ChatGPT (OpenAI)** - Coder and optimization Assistant
----
-
-## Version History
-
-### v2.0.0 (December 2025)
-- ✨ Initial production release
-- ✨ Multi-mode operation (ECO/NORMAL/SPORT)
-- ✨ Advanced thermal management
-- ✨ Cell-level awareness
-- ✨ Dual-motor support
-- ✨ Launch control and overboost
-- ✨ Comprehensive diagnostics
-
----
-
 ## Support & Feedback
 
 For issues, questions, or feature requests, please refer to the main HLV project repository.
 
 **Note**: This is a physics-informed power management system. Always perform thorough validation and safety testing before deploying in production vehicles.
-
 
 
 ## 🔧 Quick Start
@@ -1354,7 +1327,7 @@ Marcel Krüger
 
 **Implementation:**
 - Don Michael Feeney Jr. for recognizing the battery application and C++ implementation
-- Claude (Anthropic) for development assistance
+- Claude (Anthropic) and OpenAI (ChatGPT) for development assistance
 
 **Inspiration:**
 - The global transition to electric vehicles and the critical need for better battery management
