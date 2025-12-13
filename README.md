@@ -684,10 +684,22 @@ This design augments existing brake-by-wire, ABS, and ESC systems without replac
 
 **Result:** A unified system where energy is intelligently stored, delivered, and recovered under a single HLV-based framework.
 
-Yes — we can absolutely do this **cleanly, responsibly, and credibly** 👍
-The key is to **never imply free energy or perpetual motion**, but to clearly show that **external charging demand is reduced** because energy is continuously recovered and reintegrated.
+---
 
-Below is a **ready-to-drop Markdown section** for your README that does exactly that.
+## 📡 Optional Telemetry Interface
+
+The HLV stack exposes an optional, read-only telemetry snapshot designed to make OEM integration easier without imposing any dashboard or UI assumptions.
+
+The telemetry struct provides a stable summary of:
+- battery state (SOC / SOH)
+- power flow (drive vs regenerative)
+- recovered energy
+- key HLV metrics (stress, entropy, confidence)
+- active limiting factors
+
+This interface is intended for dashboards, CAN mapping, logging, or cloud pipelines and does not participate in control decisions.
+
+Visualization, UX, and presentation remain fully owned by the automaker.
 
 ---
 
