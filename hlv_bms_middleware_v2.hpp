@@ -234,6 +234,30 @@ public:
     const DiagnosticReport& diagnostics() const { return diag_; }
     const DiagnosticReport* diagnostics_ptr() const { return &diag_; }
 
+// --------------------------------------------------------------------
+    // Optional Telemetry Snapshot (Non-Control, Read-Only)
+    // --------------------------------------------------------------------
+    hlv::HLVEnergyTelemetry snapshot() const {
+        hlv::HLVEnergyTelemetry t;
+
+        t.soc_percent = diag_.pack_soc_percent;
+        t.soh_percent = diag_.pack_soh_percent;
+
+        t.pack_power_kw = diag_.instantaneous_power_kw;
+        t.regen_power_kw = (diag_.instantaneous_power_kw < 0.0)
+                             ? -diag_.instantaneous_power_kw
+                             : 0.0;
+
+        t.recovered_energy_kwh = total_energy_in_kwh_;
+        t.hlv_metric_trace = diag_.hlv_metric_trace;
+        t.hlv_entropy = diag_.hlv_entropy;
+        t.hlv_confidence = diag_.hlv_confidence;
+
+        t.limiting_factor = diag_.safety_fault ? "SAFETY" : "NONE";
+
+        return t;
+    }
+
 private:
     void update_diagnostics(double dt) {
         auto& s = enhanced_.state;
@@ -257,3 +281,5 @@ private:
 } // namespace hlv_plugin
 
 #endif
+
+
