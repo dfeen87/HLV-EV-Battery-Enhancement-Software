@@ -201,22 +201,30 @@ private:
     double min_cell_voltage_;
     double max_cell_voltage_;
     double voltage_imbalance_;
+    double min_cell_temperature_;
+    double max_cell_temperature_;
+    double temperature_spread_;
     
     void update_pack_statistics() {
         pack_voltage_ = 0.0;
         average_temperature_ = 0.0;
         min_cell_voltage_ = 1e6;
         max_cell_voltage_ = -1e6;
+        min_cell_temperature_ = 1e6;
+        max_cell_temperature_ = -1e6;
         
         for (const auto& cell : cells_) {
             pack_voltage_ += cell.state.voltage;
             average_temperature_ += cell.state.temperature;
             min_cell_voltage_ = std::min(min_cell_voltage_, cell.state.voltage);
             max_cell_voltage_ = std::max(max_cell_voltage_, cell.state.voltage);
+            min_cell_temperature_ = std::min(min_cell_temperature_, cell.state.temperature);
+            max_cell_temperature_ = std::max(max_cell_temperature_, cell.state.temperature);
         }
         
         average_temperature_ /= cells_.size();
         voltage_imbalance_ = max_cell_voltage_ - min_cell_voltage_;
+        temperature_spread_ = max_cell_temperature_ - min_cell_temperature_;
     }
     
     void detect_weak_cells() {
@@ -236,8 +244,17 @@ private:
     
 public:
     MultiCellPack(int num_cells, const ChemistryProfile& chemistry)
-        : chemistry_(chemistry), 
-          coupling_(HLVConfig()) {
+        : chemistry_(chemistry),
+          coupling_(HLVConfig()),
+          pack_voltage_(0.0),
+          pack_current_(0.0),
+          average_temperature_(0.0),
+          min_cell_voltage_(0.0),
+          max_cell_voltage_(0.0),
+          voltage_imbalance_(0.0),
+          min_cell_temperature_(0.0),
+          max_cell_temperature_(0.0),
+          temperature_spread_(0.0) {
         cells_.resize(num_cells);
         for (int i = 0; i < num_cells; ++i) {
             cells_[i].cell_id = i;
@@ -282,6 +299,7 @@ public:
     double get_pack_voltage() const { return pack_voltage_; }
     double get_voltage_imbalance() const { return voltage_imbalance_; }
     double get_average_temperature() const { return average_temperature_; }
+    double get_temperature_spread() const { return temperature_spread_; }
     
     std::vector<int> get_weak_cell_ids() const {
         std::vector<int> weak_ids;
@@ -621,6 +639,14 @@ public:
     
     std::vector<int> get_weak_cells() const {
         return pack_->get_weak_cell_ids();
+    }
+
+    double get_voltage_imbalance() const {
+        return pack_->get_voltage_imbalance();
+    }
+
+    double get_temperature_spread() const {
+        return pack_->get_temperature_spread();
     }
 };
 

@@ -68,30 +68,30 @@ struct MiddlewareConfig {
 
 struct DiagnosticReport {
     // Timing information
-    double last_update_time_ms;
-    double average_update_time_ms;
+    double last_update_time_ms = 0.0;
+    double average_update_time_ms = 0.0;
     
     // Health metrics
-    double pack_health_percent;
-    double estimated_remaining_cycles;
-    double degradation_rate_per_cycle;
+    double pack_health_percent = 0.0;
+    double estimated_remaining_cycles = 0.0;
+    double degradation_rate_per_cycle = 0.0;
     
     // Multi-cell specific (empty if single battery mode)
     std::vector<int> weak_cell_ids;
-    double voltage_imbalance_mv;
-    double temperature_spread_celsius;
+    double voltage_imbalance_mv = 0.0;
+    double temperature_spread_celsius = 0.0;
     
     // Warnings and alerts
-    bool degradation_warning;
-    bool thermal_warning;
-    bool imbalance_warning;
-    bool weak_cell_warning;
+    bool degradation_warning = false;
+    bool thermal_warning = false;
+    bool imbalance_warning = false;
+    bool weak_cell_warning = false;
     
     // HLV metrics
-    double metric_trace;
-    double phi_magnitude;
-    double entropy_level;
-    double hlv_confidence;
+    double metric_trace = 0.0;
+    double phi_magnitude = 0.0;
+    double entropy_level = 0.0;
+    double hlv_confidence = 0.0;
 };
 
 // ============================================================================
@@ -169,8 +169,10 @@ private:
             last_diagnostic_.weak_cell_warning = 
                 !last_diagnostic_.weak_cell_ids.empty();
             
-            // TODO: Get voltage imbalance and temperature spread from advanced system
-            // These would come from MultiCellPack::get_voltage_imbalance() etc.
+            last_diagnostic_.voltage_imbalance_mv =
+                advanced_system_->get_voltage_imbalance() * 1000.0;
+            last_diagnostic_.temperature_spread_celsius =
+                advanced_system_->get_temperature_spread();
         }
         
         // Thermal warning (simplified - would use chemistry-specific limits)
