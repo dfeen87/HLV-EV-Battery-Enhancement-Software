@@ -30,6 +30,8 @@
 #include <vector>
 #include <string>
 #include <memory>
+#include <algorithm>
+#include <cmath>
 
 namespace hlv_plugin {
 
@@ -114,6 +116,8 @@ private:
     DiagnosticReport last_diagnostic_;
     double total_update_time_ms_;
     int update_count_;
+
+    hlv::advanced::ChemistryLibrary chemistry_lib_;
     
     // Timing helpers
     double get_time_ms() const {
@@ -173,10 +177,23 @@ private:
                 advanced_system_->get_voltage_imbalance() * 1000.0;
             last_diagnostic_.temperature_spread_celsius =
                 advanced_system_->get_temperature_spread();
+            last_diagnostic_.metric_trace = advanced_system_->get_metric_trace();
+            last_diagnostic_.phi_magnitude = advanced_system_->get_phi_magnitude();
+            last_diagnostic_.entropy_level = advanced_system_->get_entropy_level();
+            last_diagnostic_.hlv_confidence = advanced_system_->get_ml_confidence();
         }
         
         // Thermal warning (simplified - would use chemistry-specific limits)
-        last_diagnostic_.thermal_warning = false; // TODO: implement
+        const auto& profile = chemistry_lib_.get_profile(config_.chemistry);
+        if (config_.mode == MiddlewareConfig::Mode::SINGLE_BATTERY && single_state) {
+            last_diagnostic_.thermal_warning =
+                single_state->state.temperature >= profile.max_safe_temperature;
+        } else if (config_.mode == MiddlewareConfig::Mode::MULTI_CELL_PACK) {
+            last_diagnostic_.thermal_warning =
+                advanced_system_->get_max_cell_temperature() >= profile.max_safe_temperature;
+        } else {
+            last_diagnostic_.thermal_warning = false;
+        }
         
         // Imbalance warning for multi-cell packs
         if (config_.mode == MiddlewareConfig::Mode::MULTI_CELL_PACK) {
@@ -346,11 +363,32 @@ public:
         if (config_.mode == MiddlewareConfig::Mode::SINGLE_BATTERY) {
             return core_hlv_->get_optimal_charging();
         } else {
-            // TODO: Implement optimal charging for multi-cell packs
-            // Would need to consider cell balancing
-            throw std::runtime_error(
-                "Optimal charging for multi-cell packs not yet implemented"
-            );
+            const auto& chemistry_profile = chemistry_lib_.get_profile(config_.chemistry);
+            hlv::OptimalChargingProfile profile_out;
+
+            const double max_current =
+                chemistry_profile.max_charge_rate * config_.nominal_capacity_ah;
+            profile_out.recommended_current_limit = max_current;
+            profile_out.recommended_voltage_limit =
+                chemistry_profile.max_voltage_per_cell * config_.series_cells;
+            profile_out.recommended_temperature = chemistry_profile.optimal_temperature;
+            profile_out.max_safe_current = max_current;
+            profile_out.max_safe_voltage =
+                chemistry_profile.max_voltage_per_cell * config_.series_cells;
+
+            const double temperature_delta = std::abs(
+                advanced_system_->get_average_temperature() -
+                chemistry_profile.optimal_temperature);
+            profile_out.degradation_impact = std::clamp(
+                temperature_delta / chemistry_profile.max_safe_temperature, 0.0, 1.0);
+
+            if (profile_out.recommended_current_limit > 0.0) {
+                profile_out.estimated_charge_time =
+                    (config_.nominal_capacity_ah / profile_out.recommended_current_limit) * 60.0;
+            } else {
+                profile_out.estimated_charge_time = 0.0;
+            }
+            return profile_out;
         }
     }
     
