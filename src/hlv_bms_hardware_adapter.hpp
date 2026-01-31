@@ -114,6 +114,17 @@ struct OEMSignalMap {
 
     // Staleness thresholds
     double max_signal_age_s = 0.50;       // conservative default: 500ms
+
+    // Optional range validation (disabled by default)
+    bool enable_range_validation = false;
+    double pack_voltage_min = 0.0;        // V
+    double pack_voltage_max = 1000.0;     // V
+    double pack_current_min = -2000.0;    // A
+    double pack_current_max = 2000.0;     // A
+    double pack_temp_min = -40.0;         // °C
+    double pack_temp_max = 120.0;         // °C
+    double pack_soc_min = 0.0;            // %
+    double pack_soc_max = 100.0;          // %
 };
 
 /* ============================================================================
@@ -278,13 +289,22 @@ public:
             f.data[b] = static_cast<uint8_t>((mask >> (8 * b)) & 0xFF);
         }
 
-        (void)can_.send(f);
+        if (!can_.send(f)) {
+            can_send_failures_.fetch_add(1, std::memory_order_relaxed);
+        }
+    }
+
+    uint32_t can_send_failures() const {
+        return can_send_failures_.load(std::memory_order_relaxed);
     }
 
 private:
     /* ===================== FRAME HANDLING ===================== */
 
     void handle_frame(const CANFrame& f) {
+        if (f.dlc < 2) {
+            return;
+        }
         const double t = now_seconds();
 
         // OEM NOTE:
@@ -293,18 +313,29 @@ private:
         //   - int16 little-endian for signed current/temp
         // Modify decode_* to match your DBC.
         if (f.id == map_.pack_voltage_id) {
-            set_signal(pack_voltage_, decode_u16_le(f) * map_.pack_voltage_scale, t);
+            double value = decode_u16_le(f) * map_.pack_voltage_scale;
+            set_signal(pack_voltage_, apply_range_limits(value, map_.pack_voltage_min, map_.pack_voltage_max), t);
         } else if (f.id == map_.pack_current_id) {
-            set_signal(pack_current_, decode_i16_le(f) * map_.pack_current_scale, t);
+            double value = decode_i16_le(f) * map_.pack_current_scale;
+            set_signal(pack_current_, apply_range_limits(value, map_.pack_current_min, map_.pack_current_max), t);
         } else if (f.id == map_.pack_temp_id) {
-            set_signal(pack_temp_, decode_i16_le(f) * map_.pack_temp_scale, t);
+            double value = decode_i16_le(f) * map_.pack_temp_scale;
+            set_signal(pack_temp_, apply_range_limits(value, map_.pack_temp_min, map_.pack_temp_max), t);
         } else if (f.id == map_.pack_soc_id) {
-            set_signal(pack_soc_, decode_u16_le(f) * map_.pack_soc_scale, t);
+            double value = decode_u16_le(f) * map_.pack_soc_scale;
+            set_signal(pack_soc_, apply_range_limits(value, map_.pack_soc_min, map_.pack_soc_max), t);
         }
 
         // OEM NOTE:
         // If your architecture streams cell voltages/temps on CAN, decode here.
         // Many OEMs instead use SPI/I2C telemetry, so this is left as a plug point.
+    }
+
+    double apply_range_limits(double value, double min_value, double max_value) const {
+        if (!map_.enable_range_validation) {
+            return value;
+        }
+        return std::clamp(value, min_value, max_value);
     }
 
     static uint16_t decode_u16_le(const CANFrame& f) {
@@ -341,7 +372,9 @@ private:
         f.dlc = 2;
         f.data[0] = discharge ? 1 : 0;
         f.data[1] = charge ? 1 : 0;
-        (void)can_.send(f);
+        if (!can_.send(f)) {
+            can_send_failures_.fetch_add(1, std::memory_order_relaxed);
+        }
     }
 
 private:
@@ -363,6 +396,7 @@ private:
     std::atomic<double> now_s_{0.0};
     std::atomic<bool> discharge_enabled_{true};
     std::atomic<bool> charge_enabled_{true};
+    std::atomic<uint32_t> can_send_failures_{0};
 };
 
 } // namespace hlv_plugin
