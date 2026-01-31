@@ -30,6 +30,9 @@
 #include <cmath>
 #include <memory>
 #include <functional>
+#include <fstream>
+#include <sstream>
+#include <stdexcept>
 
 namespace hlv {
 namespace advanced {
@@ -188,6 +191,35 @@ struct CellState {
     bool is_weak_cell;         // Flagged as problematic
 };
 
+// ============================================================================
+// GPU ACCELERATION INTERFACE (for large packs)
+// ============================================================================
+
+#ifdef HLV_USE_GPU
+// Placeholder for GPU acceleration
+// In production: use CUDA/OpenCL for parallel cell updates
+namespace gpu {
+
+class GPUAccelerator {
+public:
+    void update_cells_parallel(std::vector<CellState>& cells,
+                               HLVCoupling& coupling,
+                               double dt) {
+        // GPU kernel placeholder with CPU fallback
+        // Pseudocode:
+        // - Copy cell states to GPU memory
+        // - Launch kernel: one thread per cell
+        // - Each thread runs HLVCoupling::update()
+        // - Copy results back to CPU
+        for (auto& cell : cells) {
+            coupling.update(cell.state, dt);
+        }
+    }
+};
+
+} // namespace gpu
+#endif
+
 class MultiCellPack {
 private:
     std::vector<CellState> cells_;
@@ -285,10 +317,16 @@ public:
             double v_norm = (cell_voltages[i] - chemistry_.min_voltage_per_cell) /
                            (chemistry_.max_voltage_per_cell - chemistry_.min_voltage_per_cell);
             cells_[i].state.state_of_charge = std::clamp(v_norm, 0.0, 1.0);
-            
-            // Update HLV dynamics for this cell
-            coupling_.update(cells_[i].state, dt);
         }
+
+#ifdef HLV_USE_GPU
+        gpu::GPUAccelerator accelerator;
+        accelerator.update_cells_parallel(cells_, coupling_, dt);
+#else
+        for (auto& cell : cells_) {
+            coupling_.update(cell.state, dt);
+        }
+#endif
         
         update_pack_statistics();
         detect_weak_cells();
@@ -300,6 +338,8 @@ public:
     double get_voltage_imbalance() const { return voltage_imbalance_; }
     double get_average_temperature() const { return average_temperature_; }
     double get_temperature_spread() const { return temperature_spread_; }
+    double get_min_cell_temperature() const { return min_cell_temperature_; }
+    double get_max_cell_temperature() const { return max_cell_temperature_; }
     
     std::vector<int> get_weak_cell_ids() const {
         std::vector<int> weak_ids;
@@ -484,8 +524,51 @@ public:
     
     // In production: load pre-trained weights from file
     void load_weights(const std::string& path) {
-        // TODO: Implement weight loading from trained model
-        (void)path;
+        std::ifstream input(path);
+        if (!input.is_open()) {
+            throw std::runtime_error("Unable to open ML weights file: " + path);
+        }
+
+        std::vector<double> values;
+        std::string line;
+        while (std::getline(input, line)) {
+            if (line.empty() || line[0] == '#') {
+                continue;
+            }
+            std::istringstream stream(line);
+            double value = 0.0;
+            while (stream >> value) {
+                values.push_back(value);
+            }
+        }
+
+        const size_t expected =
+            static_cast<size_t>(hidden_size_ * input_size_) +
+            static_cast<size_t>(hidden_size_) +
+            static_cast<size_t>(output_size_ * hidden_size_) +
+            static_cast<size_t>(output_size_);
+
+        if (values.size() != expected) {
+            throw std::runtime_error("Unexpected ML weights size");
+        }
+
+        size_t index = 0;
+        for (int i = 0; i < hidden_size_; ++i) {
+            for (int j = 0; j < input_size_; ++j) {
+                layer1_weights_[i][j] = values[index++];
+            }
+        }
+        for (int i = 0; i < hidden_size_; ++i) {
+            layer1_bias_[i] = values[index++];
+        }
+        for (int i = 0; i < output_size_; ++i) {
+            for (int j = 0; j < hidden_size_; ++j) {
+                layer2_weights_[i][j] = values[index++];
+            }
+        }
+        for (int i = 0; i < output_size_; ++i) {
+            layer2_bias_[i] = values[index++];
+        }
     }
 };
 
@@ -546,31 +629,6 @@ public:
 };
 
 // ============================================================================
-// GPU ACCELERATION INTERFACE (for large packs)
-// ============================================================================
-
-#ifdef HLV_USE_GPU
-// Placeholder for GPU acceleration
-// In production: use CUDA/OpenCL for parallel cell updates
-namespace gpu {
-
-class GPUAccelerator {
-public:
-    void update_cells_parallel(std::vector<CellState>& cells, double dt) {
-        // TODO: Implement GPU kernel for parallel HLV updates
-        // Pseudocode:
-        // - Copy cell states to GPU memory
-        // - Launch kernel: one thread per cell
-        // - Each thread runs HLVCoupling::update()
-        // - Copy results back to CPU
-        (void)cells; (void)dt;
-    }
-};
-
-} // namespace gpu
-#endif
-
-// ============================================================================
 // ADVANCED FEATURES INTEGRATION CLASS
 // ============================================================================
 
@@ -586,13 +644,29 @@ private:
     bool use_kalman_;
     bool use_ml_;
     bool contribute_to_fleet_;
+    double nominal_capacity_ah_;
+
+    double last_metric_trace_;
+    double last_phi_magnitude_;
+    double last_entropy_;
+    double last_ml_confidence_;
+    std::vector<double> last_ml_prediction_;
+    double last_filtered_soc_;
+    double last_filtered_degradation_;
     
 public:
     AdvancedHLVSystem()
         : chemistry_type_(ChemistryType::NMC),
           use_kalman_(false),
           use_ml_(false),
-          contribute_to_fleet_(false) {}
+          contribute_to_fleet_(false),
+          nominal_capacity_ah_(0.0),
+          last_metric_trace_(0.0),
+          last_phi_magnitude_(0.0),
+          last_entropy_(0.0),
+          last_ml_confidence_(0.0),
+          last_filtered_soc_(0.0),
+          last_filtered_degradation_(0.0) {}
     
     void init(ChemistryType chemistry, 
              double capacity_ah,
@@ -605,6 +679,7 @@ public:
         use_kalman_ = enable_kalman;
         use_ml_ = enable_ml;
         contribute_to_fleet_ = enable_fleet;
+        nominal_capacity_ah_ = capacity_ah;
         
         // Initialize multi-cell pack
         auto profile = chemistry_lib_.get_profile(chemistry);
@@ -627,14 +702,104 @@ public:
                double dt) {
         
         // Update all cells with HLV dynamics
-        pack_->update_all_cells(cell_voltages, cell_temperatures, 
-                               pack_current, dt);
-        
-        // TODO: Add Kalman filtering, ML corrections, fleet learning
+        pack_->update_all_cells(cell_voltages, cell_temperatures,
+                                pack_current, dt);
+
+        const auto& cells = pack_->get_cells();
+        HLVState average_state;
+        average_state.temperature = 0.0;
+        average_state.voltage = 0.0;
+        average_state.current = 0.0;
+        average_state.state_of_charge = 0.0;
+        average_state.entropy = 0.0;
+        average_state.cycle_count = 0.0;
+        average_state.degradation = 0.0;
+        average_state.phi_magnitude = 0.0;
+        average_state.capacity_fade = 0.0;
+
+        last_metric_trace_ = 0.0;
+        for (const auto& cell : cells) {
+            average_state.temperature += cell.state.temperature;
+            average_state.voltage += cell.state.voltage;
+            average_state.current += cell.state.current;
+            average_state.state_of_charge += cell.state.state_of_charge;
+            average_state.entropy += cell.state.entropy;
+            average_state.cycle_count += cell.state.cycle_count;
+            average_state.degradation += cell.state.degradation;
+            average_state.phi_magnitude += cell.state.phi_magnitude;
+            average_state.capacity_fade += cell.state.capacity_fade;
+            last_metric_trace_ += cell.state.g_eff.trace();
+        }
+
+        const double cell_count = static_cast<double>(cells.size());
+        if (cell_count > 0.0) {
+            average_state.temperature /= cell_count;
+            average_state.voltage /= cell_count;
+            average_state.current /= cell_count;
+            average_state.state_of_charge /= cell_count;
+            average_state.entropy /= cell_count;
+            average_state.cycle_count /= cell_count;
+            average_state.degradation /= cell_count;
+            average_state.phi_magnitude /= cell_count;
+            average_state.capacity_fade /= cell_count;
+            last_metric_trace_ /= cell_count;
+        }
+        last_phi_magnitude_ = average_state.phi_magnitude;
+        last_entropy_ = average_state.entropy;
+
+        if (use_kalman_ && kalman_) {
+            kalman_->predict(average_state, dt);
+            kalman_->update(average_state.state_of_charge,
+                            average_state.capacity_fade);
+            last_filtered_soc_ = kalman_->get_filtered_soc();
+            last_filtered_degradation_ = kalman_->get_filtered_degradation();
+        }
+
+        if (use_ml_ && ml_model_) {
+            MLFeatures features{
+                average_state.state_of_charge,
+                average_state.voltage,
+                average_state.current,
+                average_state.temperature,
+                average_state.cycle_count,
+                last_metric_trace_,
+                average_state.phi_magnitude,
+                average_state.entropy,
+                average_state.degradation
+            };
+            last_ml_prediction_ = ml_model_->predict(features);
+            last_ml_confidence_ =
+                (last_ml_prediction_.size() >= 3) ? last_ml_prediction_[2] : 0.0;
+        }
+
+        if (contribute_to_fleet_) {
+            auto health = pack_->get_pack_health(100.0);
+            AnonymizedBatteryData data{
+                chemistry_type_,
+                nominal_capacity_ah_,
+                static_cast<int>(std::round(average_state.cycle_count)),
+                average_state.temperature,
+                health.degradation_rate,
+                last_metric_trace_
+            };
+            fleet_aggregator_.add_battery_data(data);
+        }
     }
     
     HealthPrediction get_pack_health(double cycles_ahead = 100.0) const {
-        return pack_->get_pack_health(cycles_ahead);
+        auto health = pack_->get_pack_health(cycles_ahead);
+        if (use_ml_ && last_ml_prediction_.size() >= 2) {
+            const double degradation_correction = last_ml_prediction_[0];
+            const double cycles_correction = last_ml_prediction_[1];
+            health.degradation_rate = std::max(0.0,
+                health.degradation_rate + degradation_correction);
+            health.remaining_capacity_percent = std::clamp(
+                health.remaining_capacity_percent - degradation_correction * 100.0,
+                0.0, 100.0);
+            health.cycles_to_80_percent = std::max(0.0,
+                health.cycles_to_80_percent + cycles_correction);
+        }
+        return health;
     }
     
     std::vector<int> get_weak_cells() const {
@@ -648,6 +813,21 @@ public:
     double get_temperature_spread() const {
         return pack_->get_temperature_spread();
     }
+
+    double get_average_temperature() const {
+        return pack_->get_average_temperature();
+    }
+
+    double get_max_cell_temperature() const {
+        return pack_->get_max_cell_temperature();
+    }
+
+    double get_metric_trace() const { return last_metric_trace_; }
+    double get_phi_magnitude() const { return last_phi_magnitude_; }
+    double get_entropy_level() const { return last_entropy_; }
+    double get_ml_confidence() const { return last_ml_confidence_; }
+    double get_filtered_soc() const { return last_filtered_soc_; }
+    double get_filtered_degradation() const { return last_filtered_degradation_; }
 };
 
 } // namespace advanced
