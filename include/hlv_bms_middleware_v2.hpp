@@ -3,6 +3,7 @@
 
 #include "hlv_battery_enhancement.hpp"
 #include "hlv_advanced_features.hpp"
+#include "hlv_energy_telemetry.hpp"
 
 #include <vector>
 #include <array>
@@ -35,6 +36,8 @@ struct DiagnosticReport {
     double pack_soc_percent = 100.0;
     double estimated_range_km = 0.0;
     double cycles_to_eol = 0.0;
+    double pack_health_percent = 100.0;
+    double estimated_remaining_cycles = 0.0;
 
     int total_cells = 1;
     int weak_cell_count = 0;
@@ -63,6 +66,12 @@ struct DiagnosticReport {
     double instantaneous_power_kw = 0.0;
     double average_efficiency = 0.95;
     double energy_throughput_kwh = 0.0;
+    double last_update_time_ms = 0.0;
+    double average_update_time_ms = 0.0;
+    double degradation_rate_per_cycle = 0.0;
+    double metric_trace = 2.0;
+    double phi_magnitude = 0.0;
+    double entropy_level = 0.0;
 
     double time_since_init_s = 0.0;
     int update_count = 0;
@@ -93,7 +102,7 @@ struct SafetyLimits {
 /* ================= CONFIG ================= */
 
 struct MiddlewareConfig {
-    enum class Mode { SIMPLE, MULTI_CELL_PACK, ADVANCED_ML };
+    enum class Mode { SIMPLE, SINGLE_BATTERY = SIMPLE, MULTI_CELL_PACK, ADVANCED_ML };
 
     Mode mode = Mode::SIMPLE;
     hlv::advanced::ChemistryType chemistry = hlv::advanced::ChemistryType::NMC;
@@ -169,6 +178,7 @@ class HLVBMSMiddleware {
     bool initialized_ = false;
     double time_s_ = 0.0;
     int updates_ = 0;
+    double total_update_time_ms_ = 0.0;
 
     double energy_in_kwh_ = 0.0;
     double energy_out_kwh_ = 0.0;
@@ -193,7 +203,8 @@ public:
         hlv_core_ = std::make_unique<hlv::HLVEnhancement>();
         hlv_core_->init(config_.hlv_config);
 
-        if (cfg.mode != MiddlewareConfig::Mode::SIMPLE) {
+        if (cfg.mode == MiddlewareConfig::Mode::MULTI_CELL_PACK ||
+            cfg.mode == MiddlewareConfig::Mode::ADVANCED_ML) {
             pack_ = std::make_unique<hlv::advanced::MultiCellPack>(
                 cfg.series_cells,
                 hlv::advanced::ChemistryLibrary().get_profile(cfg.chemistry));
@@ -233,6 +244,42 @@ public:
 
     const DiagnosticReport& diagnostics() const { return diag_; }
     const DiagnosticReport* diagnostics_ptr() const { return &diag_; }
+    DiagnosticReport get_diagnostics() const { return diag_; }
+
+    hlv::HealthPrediction get_health_forecast(double cycles_ahead = 100.0) {
+        if (!initialized_) throw std::runtime_error("Middleware not initialized");
+
+        if (config_.mode == MiddlewareConfig::Mode::SIMPLE ||
+            config_.mode == MiddlewareConfig::Mode::SINGLE_BATTERY) {
+            return hlv_core_->get_health_forecast(cycles_ahead);
+        }
+
+        if (!pack_) {
+            throw std::runtime_error("Multi-cell pack not initialized");
+        }
+
+        return pack_->get_pack_health(cycles_ahead);
+    }
+
+    std::string get_status_summary() const {
+        std::string status = "HLV BMS Status:\n";
+        status += "  Mode: " + std::string(
+            config_.mode == MiddlewareConfig::Mode::SIMPLE ||
+            config_.mode == MiddlewareConfig::Mode::SINGLE_BATTERY
+                ? "Single Battery"
+                : "Multi-Cell Pack"
+        ) + "\n";
+        status += "  Health: " + std::to_string(diag_.pack_health_percent) + "%\n";
+        status += "  Remaining Cycles: " + std::to_string(diag_.estimated_remaining_cycles) + "\n";
+        status += "  Update Count: " + std::to_string(diag_.update_count) + "\n";
+
+        if (diag_.degradation_warning || diag_.thermal_warning ||
+            diag_.weak_cell_warning || diag_.voltage_warning || diag_.safety_fault) {
+            status += "  ⚠️  WARNINGS ACTIVE\n";
+        }
+
+        return status;
+    }
 
 // --------------------------------------------------------------------
     // Optional Telemetry Snapshot (Non-Control, Read-Only)
@@ -248,7 +295,7 @@ public:
                              ? -diag_.instantaneous_power_kw
                              : 0.0;
 
-        t.recovered_energy_kwh = total_energy_in_kwh_;
+        t.recovered_energy_kwh = energy_in_kwh_;
         t.hlv_metric_trace = diag_.hlv_metric_trace;
         t.hlv_entropy = diag_.hlv_entropy;
         t.hlv_confidence = diag_.hlv_confidence;
@@ -264,11 +311,40 @@ private:
 
         diag_.pack_soc_percent = s.state_of_charge * 100.0;
         diag_.pack_soh_percent = (1.0 - s.degradation) * 100.0;
+        diag_.pack_health_percent = diag_.pack_soh_percent;
         diag_.instantaneous_power_kw = (s.voltage * s.current) / 1000.0;
         diag_.hlv_metric_trace = s.g_eff.trace();
         diag_.hlv_entropy = s.entropy;
         diag_.hlv_phi_magnitude = s.phi_magnitude;
         diag_.hlv_confidence = enhanced_.hlv_confidence;
+        diag_.metric_trace = diag_.hlv_metric_trace;
+        diag_.phi_magnitude = diag_.hlv_phi_magnitude;
+        diag_.entropy_level = diag_.hlv_entropy;
+        diag_.energy_throughput_kwh = energy_in_kwh_ + energy_out_kwh_;
+        diag_.last_update_time_ms = dt * 1000.0;
+        total_update_time_ms_ += diag_.last_update_time_ms;
+        if (updates_ > 0) {
+            diag_.average_update_time_ms = total_update_time_ms_ / updates_;
+        }
+        if (s.cycle_count > 0.0) {
+            diag_.degradation_rate_per_cycle = s.degradation / s.cycle_count;
+        } else {
+            diag_.degradation_rate_per_cycle = 0.0;
+        }
+
+        if (pack_) {
+            diag_.total_cells = static_cast<int>(pack_->get_cells().size());
+            diag_.weak_cell_ids = pack_->get_weak_cell_ids();
+            diag_.weak_cell_count = static_cast<int>(diag_.weak_cell_ids.size());
+            diag_.voltage_imbalance_mv = pack_->get_voltage_imbalance() * 1000.0;
+            diag_.average_cell_temp_c = pack_->get_average_temperature();
+            diag_.min_cell_temp_c = pack_->get_min_cell_temperature();
+            diag_.max_cell_temp_c = pack_->get_max_cell_temperature();
+            diag_.weak_cell_warning = diag_.weak_cell_count > 0;
+            diag_.thermal_warning = diag_.max_cell_temp_c > config_.safety_limits.max_cell_temp;
+        }
+
+        diag_.estimated_remaining_cycles = std::max(0.0, (1.0 - s.degradation) * 2000.0);
 
         if (config_.enable_safety_monitoring)
             diag_.safety_fault = !safety_.check(s, diag_);
@@ -281,5 +357,3 @@ private:
 } // namespace hlv_plugin
 
 #endif
-
-
