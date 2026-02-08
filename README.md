@@ -1097,6 +1097,29 @@ g++ -std=c++17 -O3 hlv_benchmark.cpp -o hlv_bench
 
 ---
 
+## ✅ Continuous Integration
+
+The GitHub Actions CI pipeline validates that the library builds cleanly and that
+deterministic simulation smoke tests run without hardware dependencies. CI is
+intentionally limited to deterministic, repeatable checks to avoid flaky results.
+
+**What CI validates**
+- C++17 build of the core library via a deterministic example compile.
+- Simulation smoke test using the `basic_integration.cpp` example.
+
+**What CI does NOT validate**
+- Real hardware or live battery packs.
+- Timing/performance benchmarks or non-deterministic workloads.
+
+**Reproduce CI locally**
+```bash
+mkdir -p build
+c++ -std=c++17 -O2 -Iinclude examples/basic_integration.cpp -o build/basic_integration
+./build/basic_integration
+```
+
+---
+
 ## 🔬 The Physics Behind HLV
 
 ### Core Concept: Dual-State Battery Model
