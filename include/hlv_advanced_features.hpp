@@ -20,6 +20,7 @@
 #ifndef HLV_ADVANCED_FEATURES_HPP
 #define HLV_ADVANCED_FEATURES_HPP
 
+#include "hlv_battery_core.hpp"
 #include "hlv_battery_enhancement.hpp"
 #include <vector>
 #include <array>
