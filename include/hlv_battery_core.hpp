@@ -43,8 +43,8 @@
  * ============================================================================
  */
 
-#ifndef HLV_BATTERY_ENHANCEMENT_HPP
-#define HLV_BATTERY_ENHANCEMENT_HPP
+#ifndef HLV_BATTERY_CORE_HPP
+#define HLV_BATTERY_CORE_HPP
 
 #include <cmath>
 #include <vector>
@@ -570,7 +570,7 @@ public:
 
 } // namespace hlv
 
-#endif // HLV_BATTERY_ENHANCEMENT_HPP
+#endif // HLV_BATTERY_CORE_HPP
 
 // ============================================================================
 // EXAMPLE INTEGRATION

@@ -1,6 +1,7 @@
 #ifndef HLV_BMS_MIDDLEWARE_V2_HPP
 #define HLV_BMS_MIDDLEWARE_V2_HPP
 
+#include "hlv_battery_core.hpp"
 #include "hlv_battery_enhancement.hpp"
 #include "hlv_advanced_features.hpp"
 #include "hlv_energy_telemetry.hpp"
