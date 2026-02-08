@@ -373,7 +373,7 @@ public:
     }
     
     // Predict future degradation using HLV dynamics
-    HealthPrediction predict_health(const HLVState& state, double horizon_cycles) {
+    HealthPrediction predict_health(const HLVState& state, double horizon_cycles) const {
         HealthPrediction pred;
         
         // Project degradation forward using current coupling dynamics
