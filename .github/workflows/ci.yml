@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up C++ toolchain
+        run: |
+          c++ --version
+          cmake --version
+
+      - name: Install dependencies
+        run: echo "No external dependencies to install."
+
+      - name: Build simulation smoke test
+        run: |
+          mkdir -p build
+          c++ -std=c++17 -O2 -Iinclude examples/basic_integration.cpp -o build/basic_integration
+
+      - name: Run simulation smoke test
+        run: ./build/basic_integration
