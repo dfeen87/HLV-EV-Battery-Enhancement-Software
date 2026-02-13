@@ -1,0 +1,1 @@
+/home/runner/work/HLV-EV-Battery-Enhancement-Software/.codeql-scratch/dbs/cpp/working/autobuild/bin/c++ -O3 -DNDEBUG -Wl,--dependency-file=CMakeFiles/test_middleware.dir/link.d CMakeFiles/test_middleware.dir/tests/test_middleware.cpp.o -o test_middleware

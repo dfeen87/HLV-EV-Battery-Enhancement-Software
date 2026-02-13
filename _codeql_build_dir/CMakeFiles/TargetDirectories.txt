@@ -1,0 +1,15 @@
+/home/runner/work/HLV-EV-Battery-Enhancement-Software/HLV-EV-Battery-Enhancement-Software/_codeql_build_dir/CMakeFiles/basic_integration.dir
+/home/runner/work/HLV-EV-Battery-Enhancement-Software/HLV-EV-Battery-Enhancement-Software/_codeql_build_dir/CMakeFiles/test_core.dir
+/home/runner/work/HLV-EV-Battery-Enhancement-Software/HLV-EV-Battery-Enhancement-Software/_codeql_build_dir/CMakeFiles/test_advanced.dir
+/home/runner/work/HLV-EV-Battery-Enhancement-Software/HLV-EV-Battery-Enhancement-Software/_codeql_build_dir/CMakeFiles/test_middleware.dir
+/home/runner/work/HLV-EV-Battery-Enhancement-Software/HLV-EV-Battery-Enhancement-Software/_codeql_build_dir/CMakeFiles/benchmark_update.dir
+/home/runner/work/HLV-EV-Battery-Enhancement-Software/HLV-EV-Battery-Enhancement-Software/_codeql_build_dir/CMakeFiles/benchmark_multicell.dir
+/home/runner/work/HLV-EV-Battery-Enhancement-Software/HLV-EV-Battery-Enhancement-Software/_codeql_build_dir/CMakeFiles/package.dir
+/home/runner/work/HLV-EV-Battery-Enhancement-Software/HLV-EV-Battery-Enhancement-Software/_codeql_build_dir/CMakeFiles/package_source.dir
+/home/runner/work/HLV-EV-Battery-Enhancement-Software/HLV-EV-Battery-Enhancement-Software/_codeql_build_dir/CMakeFiles/test.dir
+/home/runner/work/HLV-EV-Battery-Enhancement-Software/HLV-EV-Battery-Enhancement-Software/_codeql_build_dir/CMakeFiles/edit_cache.dir
+/home/runner/work/HLV-EV-Battery-Enhancement-Software/HLV-EV-Battery-Enhancement-Software/_codeql_build_dir/CMakeFiles/rebuild_cache.dir
+/home/runner/work/HLV-EV-Battery-Enhancement-Software/HLV-EV-Battery-Enhancement-Software/_codeql_build_dir/CMakeFiles/list_install_components.dir
+/home/runner/work/HLV-EV-Battery-Enhancement-Software/HLV-EV-Battery-Enhancement-Software/_codeql_build_dir/CMakeFiles/install.dir
+/home/runner/work/HLV-EV-Battery-Enhancement-Software/HLV-EV-Battery-Enhancement-Software/_codeql_build_dir/CMakeFiles/install/local.dir
+/home/runner/work/HLV-EV-Battery-Enhancement-Software/HLV-EV-Battery-Enhancement-Software/_codeql_build_dir/CMakeFiles/install/strip.dir
