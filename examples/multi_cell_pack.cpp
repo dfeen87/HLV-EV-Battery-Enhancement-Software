@@ -54,7 +54,7 @@ public:
         }
         
         // Make a few cells deliberately weaker (simulate manufacturing defects)
-        if (num_cells_ > 10) {
+        if (num_cells_ > 5) {
             cell_capacities_[5] = 0.92;   // Weak cell
             cell_resistances_[5] = 0.015;
         }
