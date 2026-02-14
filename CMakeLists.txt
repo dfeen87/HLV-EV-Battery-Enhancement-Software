@@ -80,12 +80,15 @@ if(HLV_BUILD_EXAMPLES)
     add_executable(basic_integration examples/basic_integration.cpp)
     target_link_libraries(basic_integration PRIVATE hlv_battery)
 
+    add_executable(rest_api_server examples/rest_api_server.cpp)
+    target_link_libraries(rest_api_server PRIVATE hlv_battery pthread)
+
     # Note: multi_cell_pack.cpp currently has API mismatches and is disabled
     # add_executable(multi_cell_pack examples/multi_cell_pack.cpp)
     # target_link_libraries(multi_cell_pack PRIVATE hlv_battery)
 
     install(
-        TARGETS basic_integration
+        TARGETS basic_integration rest_api_server
         RUNTIME DESTINATION bin/examples
     )
 endif()
