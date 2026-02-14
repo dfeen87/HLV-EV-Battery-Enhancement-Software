@@ -159,7 +159,9 @@ int main() {
     
     // Initialize torque manager
     std::cout << "Initializing HLV Torque Manager...\n";
+    hlv::drive::TorqueConfig torque_config;
     hlv::drive::HLVTorqueManager torque_mgr;
+    torque_mgr.init(torque_config);
     
     // Initialize regen manager
     std::cout << "Initializing HLV Regen Manager...\n";
