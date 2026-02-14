@@ -677,29 +677,31 @@ private:
         json.add_array_end();
         
         json.add_number("voltage_imbalance_mv", current_state_.diagnostics.voltage_imbalance_mv);
-        json.add_number("temperature_spread_celsius", 
-            current_state_.diagnostics.temperature_spread_celsius);
+        
+        // Calculate temperature spread from min/max
+        double temp_spread = current_state_.diagnostics.max_cell_temp_c - 
+                            current_state_.diagnostics.min_cell_temp_c;
+        json.add_number("temperature_spread_celsius", temp_spread);
         
         // Warnings
         json.add_object_start("warnings");
         json.add_bool("degradation", current_state_.diagnostics.degradation_warning);
         json.add_bool("thermal", current_state_.diagnostics.thermal_warning);
-        json.add_bool("imbalance", current_state_.diagnostics.imbalance_warning);
+        json.add_bool("imbalance", current_state_.diagnostics.balancing_required);
         json.add_bool("weak_cell", current_state_.diagnostics.weak_cell_warning);
         json.add_object_end();
         
         // HLV metrics
         json.add_object_start("hlv_metrics");
-        json.add_number("metric_trace", current_state_.diagnostics.metric_trace);
-        json.add_number("phi_magnitude", current_state_.diagnostics.phi_magnitude);
-        json.add_number("entropy_level", current_state_.diagnostics.entropy_level);
+        json.add_number("metric_trace", current_state_.diagnostics.hlv_metric_trace);
+        json.add_number("phi_magnitude", current_state_.diagnostics.hlv_phi_magnitude);
+        json.add_number("entropy_level", current_state_.diagnostics.hlv_entropy);
         json.add_number("confidence", current_state_.diagnostics.hlv_confidence);
         json.add_object_end();
         
-        // Timing
-        json.add_number("last_update_time_ms", current_state_.diagnostics.last_update_time_ms);
-        json.add_number("average_update_time_ms", 
-            current_state_.diagnostics.average_update_time_ms);
+        // Additional fields
+        json.add_number("total_cells", current_state_.diagnostics.total_cells);
+        json.add_number("weak_cell_count", current_state_.diagnostics.weak_cell_count);
         
         HttpResponse response;
         response.body = json.build();
@@ -773,7 +775,7 @@ private:
         
         // Cell protection (based on diagnostics)
         safety.cell_protection_ok = !current_state_.diagnostics.weak_cell_warning &&
-                                    !current_state_.diagnostics.imbalance_warning;
+                                    !current_state_.diagnostics.balancing_required;
     }
 };
 

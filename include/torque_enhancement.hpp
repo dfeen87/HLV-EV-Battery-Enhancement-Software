@@ -197,6 +197,9 @@ struct HLVTorqueWeights {
     bool enable_predictive_limiting = true;
     double forecast_horizon_cycles = 50.0;   // Look ahead N cycles
     double forecast_safety_margin = 1.2;     // 20% safety margin
+    
+    // Cell-aware limiting (for multi-cell packs)
+    bool enable_cell_aware_limiting = true;
 };
 
 // ============================================================================

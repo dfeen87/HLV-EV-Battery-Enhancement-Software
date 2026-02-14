@@ -131,9 +131,10 @@ BatterySensors simulate_battery(double time, const VehicleState& vehicle) {
         sensors.current = 0.0;
     }
     
-    // Temperature varies with load
+    // Temperature varies with load (keep within safe range -20 to 60°C)
     double heat_load = std::abs(sensors.current * sensors.voltage) / 1000.0;  // kW
-    sensors.temperature = 25.0 + heat_load * 2.0 + 5.0 * std::sin(time * 0.1);
+    double base_temp = 25.0 + heat_load * 0.5 + 5.0 * std::sin(time * 0.1);
+    sensors.temperature = std::max(-10.0, std::min(55.0, base_temp));
     
     return sensors;
 }
@@ -163,7 +164,7 @@ int main() {
     // Initialize regen manager
     std::cout << "Initializing HLV Regen Manager...\n";
     hlv::drive::RegenConfig regen_config;
-    hlv::drive::RegenManager regen_mgr(regen_config);
+    hlv::drive::HLVRegenBrakingManager regen_mgr(regen_config);
     
     // Initialize and start REST API server
     std::cout << "Starting REST API server on 0.0.0.0:8080...\n";
@@ -233,17 +234,15 @@ int main() {
             );
             
             // Compute regen limits
-            hlv::drive::RegenInputs regen_inputs;
-            regen_inputs.vehicle_speed_kph = vehicle.speed_kph;
-            regen_inputs.motor_rpm = vehicle.motor_rpm;
-            regen_inputs.brake_request_0_to_1 = vehicle.brake_position;
-            regen_inputs.abs_active = vehicle.abs_active;
-            regen_inputs.esc_active = vehicle.esc_active;
-            
             auto regen_result = regen_mgr.compute_regen_limit(
                 enhanced_state,
                 &diagnostics,
-                regen_inputs
+                vehicle.brake_position,
+                vehicle.speed_kph,
+                vehicle.motor_rpm,
+                vehicle.abs_active,
+                false,  // wheel_slip
+                dt
             );
             
             // Update energy tracking
