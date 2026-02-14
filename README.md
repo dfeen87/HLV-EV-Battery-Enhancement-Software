@@ -50,6 +50,7 @@ HLV-Enhanced BMS: Physical State ⟷ Informational State → Coupled Dynamics �
 - ✅ **Predictive health monitoring** - Cycles to 80% capacity, end-of-life estimates
 - ✅ **Optimal charging profiles** - Minimize degradation using geometric constraints
 - ✅ **Early warning system** - Detects accelerating degradation before traditional methods
+- ✅ **REST API Observability** - Read-only HTTP/JSON API for real-time monitoring (NEW!)
 
 ---
 
@@ -139,6 +140,45 @@ This enables continuous improvement across large deployments.
 
 ### 6. **GPU Acceleration (Experimental)**
 For large packs or high‑frequency BMS loops, the advanced module includes a GPU interface stub for parallel per‑cell updates.
+
+---
+
+### 7. **REST API for Observability**
+A lightweight HTTP/JSON REST API provides read-only access to all HLV metrics for real-time monitoring and integration with dashboards, telemetry systems, and cloud platforms.
+
+**Key Features:**
+- **Read-only (GET endpoints only)** - Safe for automotive use, no control surfaces
+- **Thread-safe** - Mutex-protected state snapshots
+- **Non-blocking** - Runs in dedicated thread, preserves real-time control performance
+- **Comprehensive metrics** - Battery state (Ψ, Φ), diagnostics, torque/regen limits, energy cycles
+- **Network accessible** - Binds to 0.0.0.0:8080 for LAN-wide access
+- **Zero dependencies** - Pure C++17 with POSIX sockets
+
+**Example Usage:**
+```bash
+# Start the REST API server
+./rest_api_server
+
+# Query battery state
+curl http://localhost:8080/api/battery | jq .
+
+# Get diagnostics
+curl http://localhost:8080/api/diagnostics
+
+# Monitor torque limits
+curl http://localhost:8080/api/torque
+```
+
+**Available Endpoints:**
+- `GET /health` - Server health check
+- `GET /api/battery` - Complete battery state (Ψ physical, Φ informational, HLV metrics)
+- `GET /api/torque` - Torque limits and limiting factors
+- `GET /api/regen` - Regen limits and charge acceptance
+- `GET /api/limits` - All system limits consolidated
+- `GET /api/diagnostics` - Pack diagnostics (cells, thermal, voltage, warnings)
+- `GET /api/energy_cycle` - Energy metrics (drive, regen, losses, efficiency)
+
+See [REST API Documentation](docs/REST_API.md) for complete endpoint specifications and integration examples.
 
 ---
 # HLV Torque Enhancement Module v2.0
