@@ -542,7 +542,7 @@ private:
     
     // Cell-aware scaling (if multi-cell pack detected)
     double compute_cell_scaling(const hlv_plugin::DiagnosticReport* diag) const {
-        if (!config_.hlv_weights.enable_cell_aware_limiting || !diag) {
+        if (!diag) {
             return 1.0;
         }
         
