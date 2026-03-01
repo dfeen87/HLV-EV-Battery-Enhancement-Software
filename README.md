@@ -1348,6 +1348,8 @@ Marcel Krüger
 - Marcel Krüger for developing the Helix-Light-Vortex Theory and its mathematical formulation
 - The HLV-RFP research group for rigorous peer review
 
+I would like to acknowledge **Microsoft Copilot**, **Anthropic Claude**, and **OpenAI ChatGPT** for their meaningful assistance in refining concepts, improving clarity, and strengthening the overall quality of this work.
+
 **Implementation:**
 - Don Michael Feeney Jr. for recognizing the battery application and C++ implementation
 - Claude (Anthropic) and OpenAI (ChatGPT) for development assistance
