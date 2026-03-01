@@ -12,6 +12,55 @@ This library implements the **Helix-Light-Vortex (HLV) Theory** developed by phy
 
 ---
 
+## 📋 Table of Contents
+
+- [Why This Matters](#-why-this-matters)
+- [Key Features](#-key-features)
+- [Performance](#-performance)
+- [Advanced Features & Examples](#-advanced-features--examples)
+  - [Advanced Capabilities](#-advanced-capabilities)
+- [HLV Torque Enhancement Module v2.0](#hlv-torque-enhancement-module-v20)
+  - [Overview](#overview)
+  - [Key Features](#key-features)
+  - [Architecture](#architecture)
+  - [Torque Computation Pipeline](#torque-computation-pipeline)
+  - [Integration Examples](#integration-examples)
+  - [Configuration](#configuration)
+  - [Diagnostics and Monitoring](#diagnostics-and-monitoring)
+  - [Safety Features](#safety-features)
+  - [Performance Characteristics](#performance-characteristics)
+  - [Benefits Over Traditional Torque Limiting](#benefits-over-traditional-torque-limiting)
+  - [Requirements](#requirements)
+  - [Thread Safety](#thread-safety)
+- [BMS Middleware, Hardware Adapters & OEM Integration](#bms-middleware-hardware-adapters--oem-integration)
+- [Intelligent Regenerative Braking](#-intelligent-regenerative-braking-hlv-regen-module)
+- [Closed-Loop Energy Recovery](#-closed-loop-energy-recovery-battery--torque--braking--battery)
+- [Optional Telemetry Interface](#-optional-telemetry-interface)
+- [Closed-Cycle Energy Recovery (v1.3.0)](#-closed-cycle-energy-recovery-hlv-v130)
+- [Energy Balance Model](#-energy-balance-model)
+- [Regen as Controlled Charging](#-regen-as-controlled-charging)
+- [From "Closed Loop" to "Energy Cycle"](#-from-closed-loop-to-energy-cycle)
+- [Reduced External Charging Demand](#-reduced-external-charging-demand)
+- [Conceptual Energy Flow](#-conceptual-energy-flow)
+- [What This Enables](#-what-this-enables)
+- [Support & Feedback](#support--feedback)
+- [Quick Start](#-quick-start)
+- [Integration Guide](#-integration-guide)
+- [Validation & Testing](#-validation--testing)
+- [Continuous Integration](#-continuous-integration)
+- [The Physics Behind HLV](#-the-physics-behind-hlv)
+- [Theoretical Foundation](#-theoretical-foundation)
+- [Use Cases](#-use-cases)
+- [Module Architecture](#-architecture)
+- [Safety & Reliability](#-safety--reliability)
+- [Commercial Support & Collaboration](#-commercial-support--collaboration)
+- [Roadmap](#-roadmap)
+- [Acknowledgments](#-acknowledgments)
+- [License](#-license)
+- [Get Involved](#-get-involved)
+
+---
+
 ## 🚀 Why This Matters
 
 Modern batteries aren't just chemical systems—they're **information-processing systems**. Every charge cycle, thermal event, and load pattern creates information that affects future performance. Current BMS systems track this implicitly. **HLV makes it explicit.**
