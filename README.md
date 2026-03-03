@@ -2,7 +2,6 @@
 
 ## Breakthrough Battery Management Through Fundamental Physics
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![C++17](https://img.shields.io/badge/C%2B%2B-17-blue.svg)](https://isocpp.org/)
 [![Status: Production Ready](https://img.shields.io/badge/Status-Production%20Ready-green.svg)]()
 
@@ -1338,56 +1337,30 @@ SoC
 
 ### Validation Against Real Data
 
-(Coming soon: Results from validation against public EV battery datasets)
-
----
-
-## 🤝 Commercial Support & Collaboration
-
-While this library is **freely available under MIT license**, we offer:
-
-### For Automakers & Battery Manufacturers
-- 🔧 **Custom parameter tuning** for specific battery chemistries (LFP, NMC, LTO, etc.)
-- 🚀 **Integration support** with existing BMS platforms
-- 📊 **Validation studies** using your proprietary battery data
-- 🔬 **Collaborative research** on advanced HLV features
-- 💼 **Production deployment consulting**
-
-### For Researchers
-- 📝 **Academic collaboration** on HLV theory and applications
-- 🧪 **Access to validation datasets** (where permissible)
-- 🎓 **Joint publications** on HLV battery physics
-
-### Contact
-
-**Implementation & Integration:**
-Don Michael Feeney Jr.
-- LinkedIn: [Your LinkedIn]
-- Email: [Your Email]
-
-**Theoretical Physics & HLV Theory:**
-Marcel Krüger
-- Email: marcelkrueger092@gmail.com
-- ORCID: 0009-0002-5709-9729
-- Organization: Helix-Light-Vortex Research for Fundamental Physics (HLV-RFP), Meiningen, Germany
-
 ---
 
 ## 🗺️ Roadmap
 
-### Coming Soon (v1.1)
+### Coming Soon
 - 🔄 Chemistry-specific parameter sets (LFP, NMC, NCA, LTO)
 - 🔄 Advanced thermal modeling
 - 🔄 Multi-cell pack support
 - 🔄 Kalman filter integration
 - 🔄 Unit test suite
 
-### Future (v2.0)
+### Future
 - 📊 Machine learning integration (HLV + ML hybrid)
 - 🌐 Fleet-wide learning (anonymized data aggregation)
 - 🔮 Quantum corrections for low-temperature operation
 - ⚡ GPU acceleration for large battery packs
 - 📱 Mobile/embedded optimized version
+
+---
+
+## License
+
+This project is available for **non‑commercial use only** under the terms of the included LICENSE file.  
+Commercial use requires a separate paid license.
 
 ---
 
@@ -1402,12 +1375,6 @@ Marcel Krüger
 - The belief that fundamental physics can solve real-world engineering problems
 
 I would like to acknowledge **Microsoft Copilot**, **Anthropic Claude**, and **OpenAI ChatGPT** for their meaningful assistance in refining concepts, improving clarity, and strengthening the overall quality of this work.
-
----
-
-## 📄 License
-
-MIT License - see [LICENSE](LICENSE) file for details
 
 ---
 
