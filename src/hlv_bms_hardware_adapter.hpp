@@ -1,4 +1,5 @@
-#pragma once
+#ifndef HLV_BMS_HARDWARE_ADAPTER_HPP
+#define HLV_BMS_HARDWARE_ADAPTER_HPP
 /*
  * ============================================================================
  * HLV BMS Hardware Adapter – Production-lean Reference Implementation
@@ -400,3 +401,5 @@ private:
 };
 
 } // namespace hlv_plugin
+
+#endif // HLV_BMS_HARDWARE_ADAPTER_HPP

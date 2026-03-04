@@ -1,6 +1,6 @@
 /*
  * ============================================================================
- * HLV BATTERY ENHANCEMENT LIBRARY v1.1
+ * HLV BATTERY ENHANCEMENT LIBRARY v1.2
  * ============================================================================
  * 
  * Implementation of Marcel Krüger's Helix-Light-Vortex (HLV) Theory
@@ -9,13 +9,14 @@
  * Based on: "Mathematical Formulation of the U2→U1 Coupling in the 
  *            Helix-Light-Vortex Theory" (Krüger, 2025)
  * 
- * UPDATES IN v1.1:
- * - Added configuration validation
- * - Improved numerical stability checks
- * - Added coulomb counting integration
- * - Enhanced energy conservation validation
- * - Added state reset/persistence methods
- * - Better error handling and bounds checking
+ * UPDATES IN v1.2:
+ * - Fixed monotonic degradation accumulation bug (use cycle delta, not absolute)
+ * - Replaced exceptions in hot path with value clamping and input_clamped flag
+ * - Initialized all struct members with safe defaults
+ * - Added assert-based bounds checking to Matrix4x4::operator()
+ * - Strengthened HLVConfig::validate() with additional parameter checks
+ * - Enforced energy_conservation_tolerance to flag numerical instability
+ * - Version bump to 1.2.0
  * 
  * ARCHITECTURE:
  * ------------
@@ -38,7 +39,7 @@
  * AUTHORS: Don Michael Feeney Jr. & Claude (Anthropic)
  * DATE: December 2025
  * LICENSE: MIT
- * VERSION: 1.1.0
+ * VERSION: 1.2.0
  * 
  * ============================================================================
  */
@@ -53,6 +54,7 @@
 #include <stdexcept>
 #include <algorithm>
 #include <string>
+#include <cassert>
 
 namespace hlv {
 
@@ -61,7 +63,7 @@ namespace hlv {
 // ============================================================================
 
 constexpr int HLV_VERSION_MAJOR = 1;
-constexpr int HLV_VERSION_MINOR = 1;
+constexpr int HLV_VERSION_MINOR = 2;
 constexpr int HLV_VERSION_PATCH = 0;
 
 inline std::string get_version_string() {
@@ -104,6 +106,15 @@ struct HLVConfig {
         if (nominal_capacity_ah <= 0.0) return false;
         if (nominal_voltage <= 0.0) return false;
         if (max_temperature <= min_temperature) return false;
+        if (max_current <= 0.0) return false;
+        if (entropy_weight < 0.0 || entropy_weight > 1.0) return false;
+        if (landauer_beta <= 0.0) return false;
+        if (energy_conservation_tolerance <= 0.0) return false;
+        // Explicit zero check for max_temperature: prevents divide-by-zero in
+        // compute_phi_gradients (temp_factor = temperature / max_temperature).
+        // Note: max_temperature > min_temperature above does not exclude zero when
+        // min_temperature is negative (e.g. default -20.0).
+        if (max_temperature == 0.0) return false;
         return true;
     }
 };
@@ -123,8 +134,14 @@ public:
                 data[i][j] = (i == j) ? ((i == 0) ? -1.0 : 1.0) : 0.0;
     }
     
-    double& operator()(int i, int j) { return data[i][j]; }
-    const double& operator()(int i, int j) const { return data[i][j]; }
+    double& operator()(int i, int j) {
+        assert(i >= 0 && i < 4 && j >= 0 && j < 4 && "Matrix4x4 index out of bounds");
+        return data[i][j];
+    }
+    const double& operator()(int i, int j) const {
+        assert(i >= 0 && i < 4 && j >= 0 && j < 4 && "Matrix4x4 index out of bounds");
+        return data[i][j];
+    }
     
     // Compute trace
     double trace() const {
@@ -200,27 +217,27 @@ struct HLVState {
 // ============================================================================
 
 struct HealthPrediction {
-    double remaining_capacity_percent;  // Predicted remaining capacity
-    double cycles_to_80_percent;        // Cycles until 80% capacity
-    double estimated_eol_cycles;        // End-of-life estimate
-    double confidence;                  // Prediction confidence [0,1]
-    bool warning_triggered;             // Early degradation warning
+    double remaining_capacity_percent = 0.0;  // Predicted remaining capacity
+    double cycles_to_80_percent = 0.0;        // Cycles until 80% capacity
+    double estimated_eol_cycles = 0.0;        // End-of-life estimate
+    double confidence = 0.0;                  // Prediction confidence [0,1]
+    bool warning_triggered = false;           // Early degradation warning
     
     // Additional metrics
-    double degradation_rate;            // Per-cycle degradation rate
-    double time_to_80_percent_years;    // Time estimate (assuming 1 cycle/day)
+    double degradation_rate = 0.0;            // Per-cycle degradation rate
+    double time_to_80_percent_years = 0.0;    // Time estimate (assuming 1 cycle/day)
 };
 
 struct OptimalChargingProfile {
-    double recommended_current_limit;   // Optimal current (A)
-    double recommended_voltage_limit;   // Optimal voltage (V)
-    double recommended_temperature;     // Target temp (°C)
-    double estimated_charge_time;       // Time to full (minutes)
-    double degradation_impact;          // Impact on lifetime (normalized)
+    double recommended_current_limit = 0.0;   // Optimal current (A)
+    double recommended_voltage_limit = 0.0;   // Optimal voltage (V)
+    double recommended_temperature = 25.0;    // Target temp (°C); 25°C is standard ambient charging temperature
+    double estimated_charge_time = 0.0;       // Time to full (minutes)
+    double degradation_impact = 0.0;          // Impact on lifetime (normalized)
     
     // Safety margins
-    double max_safe_current;            // Absolute current limit
-    double max_safe_voltage;            // Absolute voltage limit
+    double max_safe_current = 0.0;            // Absolute current limit
+    double max_safe_voltage = 0.0;            // Absolute voltage limit
 };
 
 struct EnhancedState {
@@ -229,6 +246,7 @@ struct EnhancedState {
     OptimalChargingProfile charging;    // Optimal charging
     bool degradation_warning;           // Critical warning flag
     double hlv_confidence;              // Overall confidence in HLV prediction
+    bool input_clamped = false;         // True if sensor inputs were clamped to safe range
     
     // Diagnostics
     double energy_conservation_error;   // Should be near zero
@@ -290,11 +308,13 @@ private:
         // Coulomb counting for accurate cycle tracking
         double charge_delta = std::abs(state.current) * dt / 3600.0; // Ah
         state.charge_throughput_ah += charge_delta;
+        double prev_cycle_count = state.cycle_count;
         state.cycle_count = state.charge_throughput_ah / 
                            (2.0 * config_.nominal_capacity_ah);
         
         // Degradation model (simplified empirical model + HLV correction)
-        double base_degradation = state.cycle_count * 0.0001; // 0.01% per cycle baseline
+        double cycle_delta = state.cycle_count - prev_cycle_count;
+        double base_degradation = cycle_delta * 0.0001; // 0.01% per cycle baseline
         double thermal_degradation = temp_contrib * 0.0005 * dt;
         double hlv_correction = state.g_eff.trace() * 0.00001; // Metric coupling effect
         
@@ -338,10 +358,7 @@ public:
     // Main update function - call once per BMS cycle
     void update(HLVState& state, double dt) {
         if (dt < config_.tau_min) {
-            throw std::runtime_error(
-                "Update interval below tau_min (bit-erasure regime): dt=" + 
-                std::to_string(dt) + ", tau_min=" + std::to_string(config_.tau_min)
-            );
+            return;  // Skip update: interval below tau_min (bit-erasure regime)
         }
         
         // Validate input state
@@ -492,13 +509,18 @@ public:
             throw std::runtime_error("HLVEnhancement not initialized. Call init() first.");
         }
         
-        // Bounds checking
+        // Bounds checking: clamp inputs and set flag instead of throwing
+        bool input_clamped = false;
         if (std::abs(current) > config_.max_current) {
-            throw std::runtime_error("Current exceeds max_current limit");
+            current = std::copysign(config_.max_current, current);
+            input_clamped = true;
         }
-        if (temperature > config_.max_temperature || 
-            temperature < config_.min_temperature) {
-            throw std::runtime_error("Temperature outside safe range");
+        if (temperature > config_.max_temperature) {
+            temperature = config_.max_temperature;
+            input_clamped = true;
+        } else if (temperature < config_.min_temperature) {
+            temperature = config_.min_temperature;
+            input_clamped = true;
         }
         
         // Update physical state from sensors
@@ -524,8 +546,10 @@ public:
         result.charging = coupling_.optimize_charging(state_);
         result.degradation_warning = result.health.warning_triggered;
         result.hlv_confidence = result.health.confidence;
+        result.input_clamped = input_clamped;
         result.energy_conservation_error = energy_error;
-        result.numerical_stability = state_.is_valid() && state_.g_eff.is_stable();
+        result.numerical_stability = state_.is_valid() && state_.g_eff.is_stable() &&
+            (energy_error <= config_.energy_conservation_tolerance);
         
         return result;
     }
