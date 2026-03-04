@@ -1,4 +1,7 @@
-#pragma once
+#ifndef HLV_ENERGY_TELEMETRY_HPP
+#define HLV_ENERGY_TELEMETRY_HPP
+
+#include <string>
 
 namespace hlv {
 
@@ -37,7 +40,9 @@ struct HLVEnergyTelemetry {
     double hlv_confidence = 0.0;
 
     // Control context
-    const char* limiting_factor = "NONE"; // e.g. SOC, THERMAL, CELL, ABS
+    std::string limiting_factor = "NONE"; // e.g. SOC, THERMAL, CELL, ABS
 };
 
 } // namespace hlv
+
+#endif // HLV_ENERGY_TELEMETRY_HPP

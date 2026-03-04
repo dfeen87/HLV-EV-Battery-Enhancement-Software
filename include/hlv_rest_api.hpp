@@ -53,6 +53,7 @@
 #include <mutex>
 #include <memory>
 #include <cstring>
+#include <cstdio>
 #include <ctime>
 #include <map>
 #include <functional>
@@ -154,7 +155,15 @@ private:
                 case '\n': result += "\\n"; break;
                 case '\r': result += "\\r"; break;
                 case '\t': result += "\\t"; break;
-                default: result += c; break;
+                default:
+                    if (static_cast<unsigned char>(c) < 0x20) {
+                        char buf[8];
+                        std::snprintf(buf, sizeof(buf), "\\u%04x", static_cast<unsigned char>(c));
+                        result += buf;
+                    } else {
+                        result += c;
+                    }
+                    break;
             }
         }
         return result;
@@ -230,6 +239,7 @@ struct HttpResponse {
         ss << "Content-Length: " << body.length() << "\r\n";
         ss << "Connection: close\r\n";
         ss << "Access-Control-Allow-Origin: *\r\n";
+        ss << "X-Content-Type-Options: nosniff\r\n";
         ss << "\r\n";
         ss << body;
         return ss.str();
@@ -267,6 +277,11 @@ public:
     ~RestApiServer() {
         stop();
     }
+    
+    RestApiServer(const RestApiServer&) = delete;
+    RestApiServer& operator=(const RestApiServer&) = delete;
+    RestApiServer(RestApiServer&&) = delete;
+    RestApiServer& operator=(RestApiServer&&) = delete;
     
     // Start the API server in a background thread
     bool start() {
@@ -432,7 +447,7 @@ private:
         
         // Send response
         std::string response_str = response.to_string();
-        send(client_socket, response_str.c_str(), response_str.length(), 0);
+        send(client_socket, response_str.c_str(), response_str.length(), MSG_NOSIGNAL);
         
         if (response.status_code == 200) {
             successful_requests_++;
@@ -457,6 +472,14 @@ private:
         // Only allow GET requests
         if (request.method != "GET") {
             return create_error_response(405, "Method Not Allowed");
+        }
+        
+        // Path normalization: reject suspicious paths
+        const std::string& path = request.path;
+        if (path.find("..") != std::string::npos ||
+            path.find("//") != std::string::npos ||
+            path.find('%') != std::string::npos) {
+            return create_error_response(400, "Bad Request");
         }
         
         // Route to handlers
