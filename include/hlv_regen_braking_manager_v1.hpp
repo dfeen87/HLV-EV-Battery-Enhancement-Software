@@ -44,7 +44,7 @@
  *
  * AUTHORS: Don Michael Feeney Jr. + Lex
  * DATE: December 2025
- * LICENSE: MIT
+ * LICENSE: Non-Commercial
  * VERSION: 1.0.0
  * ============================================================================
  */
