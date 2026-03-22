@@ -32,7 +32,7 @@
  *
  * AUTHORS: Don Michael Feeney Jr.
  * DATE: February 2026
- * LICENSE: MIT
+ * LICENSE: Non-Commercial
  * VERSION: 1.0.0
  *
  * ============================================================================
