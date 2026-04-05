@@ -1,7 +1,7 @@
 # HLV Battery Management System  
 ## Architecture Overview
 
-**Version:** 1.0  
+**Version:** 3.1.1  
 **Audience:** OEMs, Tier-1 suppliers, system architects, safety engineers  
 **Scope:** Conceptual and software architecture (not hardware schematics)
 
@@ -50,6 +50,7 @@ The HLV BMS is designed around four core principles:
 
 The system is organized into five logical layers:
 
+```
 +--------------------------------------------------+
 | Vehicle Systems |
 | (Torque Control, Power Limits, UI, Telemetry) |
@@ -78,6 +79,7 @@ The system is organized into five logical layers:
 | Physical Battery Hardware |
 | - Cells, contactors, sensors, BMS ICs |
 +--------------------------------------------------+
+```
 
 
 ---

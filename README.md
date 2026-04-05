@@ -4,8 +4,7 @@
 
 [![C++17](https://img.shields.io/badge/C%2B%2B-17-blue.svg)](https://isocpp.org/)
 [![Status: Production Ready](https://img.shields.io/badge/Status-Production%20Ready-green.svg)]()
-
-> *"What if your battery management system understood the deep structure of information and energy?"*
+[![Version](https://img.shields.io/badge/Version-3.1.1-blue.svg)]()
 
 This library implements the **Helix-Light-Vortex (HLV) Theory** developed by physicist Marcel Krüger to create next-generation battery management capabilities. By treating batteries as dual-state systems—where physical state (Ψ) and informational state (Φ) are dynamically coupled—we achieve earlier degradation detection, better health prediction, and optimized charging strategies.
 
@@ -17,7 +16,7 @@ This library implements the **Helix-Light-Vortex (HLV) Theory** developed by phy
 - [Key Features](#-key-features)
 - [Performance](#-performance)
 - [Advanced Features & Examples](#-advanced-features--examples)
-  - [Advanced Capabilities](#-advanced-capabilities)
+  - [Advanced Capabilities](#️-advanced-capabilities)
 - [HLV Torque Enhancement Module v2.0](#hlv-torque-enhancement-module-v20)
   - [Overview](#overview)
   - [Key Features](#key-features)
@@ -35,7 +34,7 @@ This library implements the **Helix-Light-Vortex (HLV) Theory** developed by phy
 - [Intelligent Regenerative Braking](#-intelligent-regenerative-braking-hlv-regen-module)
 - [Closed-Loop Energy Recovery](#-closed-loop-energy-recovery-battery--torque--braking--battery)
 - [Optional Telemetry Interface](#-optional-telemetry-interface)
-- [Closed-Cycle Energy Recovery (v1.3.0)](#-closed-cycle-energy-recovery-hlv-v130)
+- [Closed-Cycle Energy Recovery](#-closed-cycle-energy-recovery)
 - [Energy Balance Model](#-energy-balance-model)
 - [Regen as Controlled Charging](#-regen-as-controlled-charging)
 - [From "Closed Loop" to "Energy Cycle"](#-from-closed-loop-to-energy-cycle)
@@ -52,7 +51,6 @@ This library implements the **Helix-Light-Vortex (HLV) Theory** developed by phy
 - [Use Cases](#-use-cases)
 - [Module Architecture](#-architecture)
 - [Safety & Reliability](#-safety--reliability)
-- [Commercial Support & Collaboration](#-commercial-support--collaboration)
 - [Roadmap](#-roadmap)
 - [Acknowledgments](#-acknowledgments)
 - [License](#-license)
@@ -112,15 +110,13 @@ HLV-Enhanced BMS: Physical State ⟷ Informational State → Coupled Dynamics �
 | Integration Time | <1 hour | For experienced BMS engineers |
 
 ---
-# 🔧 Advanced Features & Examples
+## 🔧 Advanced Features & Examples
 
 The HLV Battery Enhancement Library includes a suite of advanced capabilities designed for real‑world EV deployment, multi‑cell pack analysis, and high‑fidelity state estimation. These features extend the core HLV physics engine and provide engineers with deeper visibility, better diagnostics, and more accurate long‑term predictions.
 
 This module is fully modular — you can enable only what your platform requires. All advanced features are demonstrated in the `/examples` directory for quick experimentation and integration.
 
----
-
-## ⚙️ Advanced Capabilities
+### ⚙️ Advanced Capabilities
 
 ### 1. **Chemistry‑Specific Optimization**
 The library includes a full chemistry profile system for **LFP, NMC, NCA, LTO**, and custom chemistries.  
@@ -189,9 +185,9 @@ This enables continuous improvement across large deployments.
 For large packs or high‑frequency BMS loops, the advanced module includes a GPU interface stub for parallel per‑cell updates.
 
 ---
-# HLV Torque Enhancement Module v2.0
+## HLV Torque Enhancement Module v2.0
 
-## Overview
+### Overview
 
 The **HLV Torque Enhancement Module** is a production-ready, physics-informed torque management system for electric vehicles. It translates HLV battery intelligence into safe, dynamic, and performance-aware torque limits that protect battery health while maximizing vehicle performance.
 
@@ -204,7 +200,7 @@ Unlike traditional torque limiters that only consider instantaneous power limits
 
 ---
 
-## Key Features
+### Key Features
 
 ### 🚗 Multi-Mode Operation
 - **Drive Modes**: ECO, NORMAL, SPORT, CUSTOM
@@ -244,7 +240,7 @@ Unlike traditional torque limiters that only consider instantaneous power limits
 
 ---
 
-## Architecture
+### Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -274,7 +270,7 @@ Unlike traditional torque limiters that only consider instantaneous power limits
 
 ---
 
-## Torque Computation Pipeline
+### Torque Computation Pipeline
 
 The module uses a multi-factor scaling approach:
 
@@ -297,7 +293,7 @@ Each factor is computed independently and clamped to safe ranges, ensuring no si
 
 ---
 
-## Integration Examples
+### Integration Examples
 
 ### Basic Integration (Single Motor, Simple BMS)
 
@@ -438,7 +434,7 @@ void launch_control_handler() {
 
 ---
 
-## Configuration
+### Configuration
 
 ### Drive Modes
 
@@ -476,7 +472,7 @@ Adjust these weights to tune the balance between performance and battery longevi
 
 ---
 
-## Diagnostics and Monitoring
+### Diagnostics and Monitoring
 
 ### Real-Time Metrics
 
@@ -529,7 +525,7 @@ if (result.weak_cell_derate_active) std::cout << "  - Weak Cells\n";
 
 ---
 
-## Safety Features
+### Safety Features
 
 ### Multiple Protection Layers
 
@@ -567,7 +563,7 @@ Temperature (°C)    Action
 
 ---
 
-## Performance Characteristics
+### Performance Characteristics
 
 ### Typical Performance (400 Nm Peak Motor)
 
@@ -588,7 +584,7 @@ Temperature (°C)    Action
 
 ---
 
-## Benefits Over Traditional Torque Limiting
+### Benefits Over Traditional Torque Limiting
 
 | Feature | Traditional Limiter | HLV Torque Manager |
 |---------|-------------------|-------------------|
@@ -601,16 +597,16 @@ Temperature (°C)    Action
 
 ---
 
-## Requirements
+### Requirements
 
 - **C++11** or later
-- **HLV Battery Enhancement Library** v1.1+
+- **HLV Battery Enhancement Library** v3.1.1+
 - **HLV BMS Middleware** v2.0+ (for multi-cell support)
 - Real-time operating system (recommended for control loops < 10ms)
 
 ---
 
-## Thread Safety
+### Thread Safety
 
 ⚠️ **Not thread-safe by default.** The torque manager maintains internal state and should be called from a single control thread. If multi-threaded access is required, implement external synchronization.
 
@@ -618,81 +614,51 @@ Temperature (°C)    Action
 
 ## BMS Middleware, Hardware Adapters & OEM Integration
 
-To support real-world deployment, this repository now includes a production-grade Battery Management System (BMS) middleware layer and OEM-friendly integration scaffolding. These additions bridge the HLV physics engine to actual vehicle hardware, ECUs, and torque management systems without vendor lock-in.
+This repository includes a production-grade BMS middleware layer and OEM-friendly integration scaffolding that bridges the HLV physics engine to real vehicle hardware, ECUs, and torque management systems without vendor lock-in.
 
-What’s Included
-🔧 HLV BMS Middleware v2.0
+### 🔧 HLV BMS Middleware v2.0
 
 A unified integration layer that connects:
 
-HLV core physics models
-
-Multi-cell pack intelligence
-
-Safety monitoring & diagnostics
-
-Vehicle systems (e.g. torque management)
+- HLV core physics models
+- Multi-cell pack intelligence
+- Safety monitoring & diagnostics
+- Vehicle systems (e.g. torque management)
 
 Key capabilities:
 
-Single-pack and full multi-cell operation
+- Single-pack and full multi-cell operation
+- Deterministic diagnostics (`DiagnosticReport`)
+- Fail-closed safety behavior (stale/missing signal detection)
+- Clean API for torque, power, and UI systems
+- Header-only, real-time safe design
 
-Deterministic diagnostics (DiagnosticReport)
+📁 `include/hlv_bms_middleware_v2.hpp`
 
-Fail-closed safety behavior (stale/missing signal detection)
-
-Clean API for torque, power, and UI systems
-
-Header-only, real-time safe design
-
-📁 File:
-
-include/hlv_bms_middleware_v2.hpp
-
-🔌 Production-Lean Hardware Adapter
+### 🔌 Production-Lean Hardware Adapter
 
 A realistic, manufacturer-ready hardware adapter showing how to connect:
 
-CAN-based pack telemetry
+- CAN-based pack telemetry
+- Optional SPI/I2C cell monitor ICs
+- Contactor and balancing commands
+- Time sources and safety checks
 
-Optional SPI/I2C cell monitor ICs
+This is not a stub — it reflects real OEM integration patterns while remaining portable across platforms. OEMs typically implement a thin CAN transport backend, map signals to their DBC, and plug directly into the HLV middleware.
 
-Contactor and balancing commands
+📁 `src/hlv_bms_hardware_adapter.hpp`
 
-Time sources and safety checks
-
-This is not a dummy adapter — it reflects real OEM integration patterns while remaining portable across platforms.
-
-📁 File:
-
-src/hlv_bms_hardware_adapter.hpp
-
-
-OEMs typically:
-
-Implement a thin CAN transport backend
-
-Map signals to their existing DBC
-
-Plug directly into the HLV middleware
-
-📡 OEM CAN Mapping Reference
+### 📡 OEM CAN Mapping Reference
 
 A clear, neutral CAN mapping document defining:
 
-Required pack-level signals
+- Required pack-level signals
+- Example CAN IDs and scaling
+- Freshness and safety expectations
+- Actuator command semantics
+- Integration checklist for deployment
 
-Example CAN IDs and scaling
-
-Freshness and safety expectations
-
-Actuator command semantics
-
-Integration checklist for deployment
-
-📁 Document:
-
-docs/oem_can_mapping.md
+📁 `docs/oem_can_mapping.md`
 
 ---
 
@@ -751,7 +717,7 @@ Visualization, UX, and presentation remain fully owned by the automaker.
 
 ---
 
-## 🔄 Closed-Cycle Energy Recovery (HLV v1.3.0)
+## 🔄 Closed-Cycle Energy Recovery
 
 Traditional EV systems treat driving, braking, and charging as loosely connected subsystems.  
 With **HLV v1.3.0**, these phases are unified into a **continuous energy cycle** where energy is intentionally recovered, conditioned, and reintegrated into the battery state.
@@ -892,66 +858,31 @@ External charging remains necessary.
 HLV simply ensures that energy already paid for during motion is **not unnecessarily wasted**.
 
 
+
 ---
 
-🏗️ Architecture Overview
+### 🏗️ Architecture Overview
 
-A system-level view explaining how:
+A system-level view explaining how hardware, middleware, HLV physics, and vehicle control connect — including multi-layer safety enforcement and deployment modes from bench testing to production EV packs.
 
-Hardware → middleware → HLV physics → vehicle control
+📁 `docs/architecture_overview.md`
 
-Safety is enforced at multiple layers
+### ⚡ OEM Quick Start
 
-The system scales from bench testing to production EV packs
+A concise, manufacturer-focused guide covering:
 
-📁 Document:
+- What must be implemented
+- Where to plug in hardware
+- How to reach a running integration in 15–30 minutes
 
-docs/architecture_overview.md
+📁 `docs/oem_quick_start.md`
 
-⚡ One-Page OEM Quick Start
+### 🧪 Canonical Examples
 
-A concise, manufacturer-focused guide answering:
+Two reference examples demonstrating correct usage patterns:
 
-What must be implemented
-
-Where to plug in hardware
-
-How to get running in minutes
-
-Designed for fast onboarding by OEM and Tier-1 engineers.
-
-📁 Document:
-
-docs/oem_quick_start.md
-
-🧪 Canonical Examples
-
-Two reference examples demonstrate correct usage patterns:
-
-Simple pack loop (single-pack equivalent)
-
-Multi-cell pack loop (96s EV-style pack, weak-cell detection)
-
-📁 Examples:
-
-examples/simple_bms_loop.cpp
-examples/multicell_pack_loop.cpp
-
-Why This Matters
-
-These additions elevate the HLV Battery Enhancement Library from a theoretical and algorithmic breakthrough to a deployable, system-level solution:
-
-OEM-friendly
-
-Safety-aware
-
-Hardware-agnostic
-
-Torque-system compatible
-
-Ready for real vehicles, not just simulations
-
-HLV is no longer just battery intelligence — it is now a complete integration framework for next-generation EV platforms.
+- Simple pack loop (single-pack equivalent): `examples/simple_bms_loop.cpp`
+- Multi-cell pack loop (96s EV-style pack, weak-cell detection): `examples/multicell_pack_loop.cpp`
 
 ---
 
@@ -1129,18 +1060,19 @@ Energy balance error: 2.3e-12 J
 (Should be near zero for Landauer compliance)
 ```
 
-### Unit Tests (Coming Soon)
+### Unit Tests
 
 ```bash
-g++ -std=c++17 -O3 hlv_tests.cpp -o hlv_tests
-./hlv_tests
+cmake -B build && cmake --build build
+ctest --test-dir build --output-on-failure
 ```
 
-### Benchmark (Coming Soon)
+### Benchmarks
 
 ```bash
-g++ -std=c++17 -O3 hlv_benchmark.cpp -o hlv_bench
-./hlv_bench
+cmake -B build -DHLV_BUILD_BENCHMARKS=ON && cmake --build build
+./build/benchmark_update
+./build/benchmark_multicell
 ```
 
 ---
@@ -1335,18 +1267,16 @@ SoC
 - ✅ **Graceful degradation** - Falls back to physical state only if Φ update fails
 - ✅ **Exception safety** - No memory leaks, strong exception guarantee
 
-### Validation Against Real Data
-
 ---
 
 ## 🗺️ Roadmap
 
-### Coming Soon
-- 🔄 Chemistry-specific parameter sets (LFP, NMC, NCA, LTO)
-- 🔄 Advanced thermal modeling
-- 🔄 Multi-cell pack support
-- 🔄 Kalman filter integration
-- 🔄 Unit test suite
+### Delivered in v3.1.1
+- ✅ Chemistry-specific parameter sets (LFP, NMC, NCA, LTO)
+- ✅ Advanced thermal modeling
+- ✅ Multi-cell pack support
+- ✅ Kalman filter integration
+- ✅ Unit test suite
 
 ### Future
 - 📊 Machine learning integration (HLV + ML hybrid)
@@ -1397,21 +1327,3 @@ I would like to acknowledge **Microsoft Copilot**, **Anthropic Claude**, and **O
 🚀 **Build** the next generation of battery management together
 
 ---
-
-## 🌟 Why This Matters
-
-Electric vehicles are the future. But range anxiety, battery degradation, and charging times remain barriers to adoption. 
-
-**Better battery management = longer-lasting batteries = more affordable EVs = faster transition to sustainable transportation.**
-
-HLV provides a **physics-first approach** to battery management. Not just empirical curve-fitting, but **fundamental understanding** of how batteries age, degrade, and can be optimized.
-
-This is Marcel Krüger's theoretical physics meeting real-world engineering. This is science working for humanity.
-
-**Let's build better batteries together.** 🔋⚡🌍
-
----
-
-*"The best way to predict the future is to invent it." - Alan Kay*
-
-*"The best way to optimize a battery is to understand its physics." - HLV Theory*

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.15)
 
 project(
     HLV_Battery_Enhancement
-    VERSION 1.1.1
+    VERSION 3.1.1
     DESCRIPTION "HLV Theory Battery Management & BMS Middleware"
     LANGUAGES CXX
 )

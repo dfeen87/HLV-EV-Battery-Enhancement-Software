@@ -223,8 +223,3 @@ OEMs are encouraged to:
 **Questions / Integration Support:**  
 Contact: `dfeen87@gmail.com`
 
-
-
-- **Type:** Unsigned 16-bit
-- **Endianness:** Little-endian
-- **Scaling:**  
