@@ -16,7 +16,7 @@ This library implements the **Helix-Light-Vortex (HLV) Theory** developed by phy
 - [Key Features](#-key-features)
 - [Performance](#-performance)
 - [Advanced Features & Examples](#-advanced-features--examples)
-  - [Advanced Capabilities](#️-advanced-capabilities)
+  - [Advanced Capabilities](#-advanced-capabilities)
 - [HLV Torque Enhancement Module v2.0](#hlv-torque-enhancement-module-v20)
   - [Overview](#overview)
   - [Key Features](#key-features)
