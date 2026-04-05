@@ -45,23 +45,7 @@ Optionally:
 
 A production-lean reference adapter is provided:
 
-src/hlv_bms_hardware_adapter.hpp
-
-
-Most OEMs adapt this file rather than starting from scratch.
-
----
-
-## 3. CAN Integration (Typical Path)
-
-### Step 1 – Map your DBC
-Edit `OEMSignalMap` in the hardware adapter:
-- Replace CAN IDs with your DBC values
-- Verify scaling and sign conventions
-- Confirm endianness
-
-Reference:
-
+`src/hlv_bms_hardware_adapter.hpp`
 
 Most OEMs adapt this file rather than starting from scratch.
 
@@ -75,10 +59,7 @@ Edit `OEMSignalMap` in the hardware adapter:
 - Verify scaling and sign conventions
 - Confirm endianness
 
-Reference:
-
-docs/oem_can_mapping.md
-
+Reference: `docs/oem_can_mapping.md`
 
 ---
 
@@ -92,19 +73,25 @@ Only two functions are required:
 ```cpp
 bool send(const CANFrame&);
 std::optional<CANFrame> receive();
+```
 
-Step 3 – Poll and Update
+### Step 3 – Poll and Update
 
 In your ECU/BMS main loop (or CAN thread):
 
+```cpp
 adapter.set_now_seconds(t);
 adapter.poll_can();
 adapter.refresh_cells_from_backend(); // if applicable
+```
 
-4. Connecting to the Middleware
+---
+
+## 4. Connecting to the Middleware
 
 Once telemetry is available, integration is straightforward:
 
+```cpp
 auto voltage = adapter.read_pack_voltage();
 auto current = adapter.read_pack_current();
 auto temp    = adapter.read_pack_temperature();
@@ -113,78 +100,74 @@ auto soc     = adapter.estimate_soc();
 auto enhanced = bms.enhance_cycle(
     voltage, current, temp, soc, dt
 );
+```
 
 Diagnostics are always available:
 
+```cpp
 const auto& diag = bms.get_diagnostics();
+```
 
-5. Safety Expectations
+---
+
+## 5. Safety Expectations
 
 The middleware enforces fail-closed behavior:
 
-Missing signals → fault
-
-Stale signals → fault
-
-Out-of-range values → fault
+- Missing signals → fault
+- Stale signals → fault
+- Out-of-range values → fault
 
 On fault:
-
-Control outputs should be derated or disabled
-
-Higher-level safety controllers take precedence
+- Control outputs should be derated or disabled
+- Higher-level safety controllers take precedence
 
 HLV middleware never overrides OEM safety logic.
 
-6. Optional Enhancements (Later)
+---
+
+## 6. Optional Enhancements (Later)
 
 After basic integration, OEMs may enable:
 
-Multi-cell monitoring
-
-Weak-cell detection
-
-Voltage imbalance alerts
-
-Health forecasting
-
-Fleet telemetry
-
-Kalman-filtered state estimation
+- Multi-cell monitoring
+- Weak-cell detection
+- Voltage imbalance alerts
+- Health forecasting
+- Fleet telemetry
+- Kalman-filtered state estimation
 
 All are optional and require no API changes.
 
-7. Validation Before Deployment
+---
+
+## 7. Validation Before Deployment
 
 Before field use, OEMs should verify:
 
- Signal freshness under load
+- [ ] Signal freshness under load
+- [ ] Fault behavior on signal loss
+- [ ] Scaling correctness
+- [ ] Temperature edge cases
+- [ ] Degraded pack scenarios
+- [ ] Safe interaction with torque / power limits
 
- Fault behavior on signal loss
+---
 
- Scaling correctness
+## 8. Where to Look Next
 
- Temperature edge cases
+| Resource | Location |
+|---|---|
+| Architecture overview | `docs/architecture_overview.md` |
+| CAN mapping reference | `docs/oem_can_mapping.md` |
+| Simple pack example | `examples/simple_bms_loop.cpp` |
+| Multi-cell pack example | `examples/multicell_pack_loop.cpp` |
 
- Degraded pack scenarios
+---
 
- Safe interaction with torque / power limits
-
-8. Where to Look Next
-
-Architecture overview
-→ docs/architecture_overview.md
-
-CAN mapping reference
-→ docs/oem_can_mapping.md
-
-Example loops
-→ examples/simple_bms_loop.cpp
-→ examples/multicell_pack_loop.cpp
-
-9. Support & Contact
+## 9. Support & Contact
 
 For integration questions or collaboration:
 
-Don Michael Feeney Jr.
+Don Michael Feeney Jr.  
 📧 dfeen87@gmail.com

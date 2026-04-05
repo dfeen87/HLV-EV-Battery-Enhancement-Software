@@ -47,6 +47,7 @@ The module **only limits and advises** regenerative braking.
 
 
 
+```
 Brake Pedal
 ↓
 Brake Request Mapping (OEM)
@@ -67,6 +68,7 @@ Regen Torque Limit + Fraction
 └───────────────▲────────────────────┘
 │
 ABS / ESC / Actuators
+```
 
 
 ---
@@ -161,11 +163,13 @@ Diagnostics are intended for:
 
 A typical blending strategy:
 
+```
 Requested Brake Torque
 │
 ├── Regen Torque = min(requested, max_regen_torque)
 │
 └── Friction Torque = remainder
+```
 
 
 Pedal feel should be handled **upstream** of this module to ensure consistency.
