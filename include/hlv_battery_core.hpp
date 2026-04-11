@@ -558,10 +558,6 @@ public:
         
         if (config_.enable_feen_battery_integration) {
             double trust = feen_adapter_.compute_battery_trust_from_feen(state_.voltage);
-            std::cout << "[FEEN] Trust metric computed: " << trust << "\n";
-            if (trust == 1.0) {
-                std::cout << "[FEEN] Fallback or max trust reached.\n";
-            }
             result.feen_trust_metric = trust;
             result.hlv_confidence *= trust;
         }
