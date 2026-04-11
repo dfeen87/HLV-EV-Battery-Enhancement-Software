@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cassert>
 #include <cmath>
+#include <limits>
 
 using namespace hlv;
 
