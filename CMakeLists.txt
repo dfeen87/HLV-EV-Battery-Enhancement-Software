@@ -29,19 +29,22 @@ option(HLV_BUILD_TESTS "Build unit tests" ON)
 option(HLV_BUILD_BENCHMARKS "Build performance benchmarks" ON)
 option(HLV_USE_GPU "Enable GPU acceleration (CUDA)" OFF)
 option(HLV_INSTALL "Generate install target" ON)
+option(HLV_ENABLE_FEEN "Enable FEEN integration" OFF)
 
 # ============================================================================
 # Header-Only Library Target
 # ============================================================================
 
 include(FetchContent)
-set(FEEN_BUILD_PYTHON OFF CACHE BOOL "Disable FEEN python" FORCE)
-FetchContent_Declare(
-    feen
-    GIT_REPOSITORY https://github.com/dfeen87/feen.git
-    GIT_TAG v3.8.1
-)
-FetchContent_MakeAvailable(feen)
+if(HLV_ENABLE_FEEN)
+    set(FEEN_BUILD_PYTHON OFF CACHE BOOL "Disable FEEN python" FORCE)
+    FetchContent_Declare(
+        feen
+        GIT_REPOSITORY https://github.com/dfeen87/feen.git
+        GIT_TAG v3.8.1
+    )
+    FetchContent_MakeAvailable(feen)
+endif()
 
 add_library(hlv_battery INTERFACE)
 
@@ -51,12 +54,15 @@ target_include_directories(hlv_battery INTERFACE
 )
 
 target_compile_features(hlv_battery INTERFACE cxx_std_17)
-target_link_libraries(hlv_battery INTERFACE $<BUILD_INTERFACE:feen>)
+if(HLV_ENABLE_FEEN)
+    target_link_libraries(hlv_battery INTERFACE $<BUILD_INTERFACE:feen>)
+endif()
 
 # Public compile definitions (available to consumers)
 target_compile_definitions(hlv_battery INTERFACE
     HLV_BMS_MIDDLEWARE_ENABLED
     HLV_HEADER_ONLY
+    $<$<BOOL:${HLV_ENABLE_FEEN}>:HLV_ENABLE_FEEN>
 )
 
 # Warnings (applied per-target, not globally)
