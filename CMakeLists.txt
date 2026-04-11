@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.15)
 
 project(
     HLV_Battery_Enhancement
-    VERSION 3.1.1
+    VERSION 3.2.0
     DESCRIPTION "HLV Theory Battery Management & BMS Middleware"
     LANGUAGES CXX
 )
@@ -34,6 +34,15 @@ option(HLV_INSTALL "Generate install target" ON)
 # Header-Only Library Target
 # ============================================================================
 
+include(FetchContent)
+set(FEEN_BUILD_PYTHON OFF CACHE BOOL "Disable FEEN python" FORCE)
+FetchContent_Declare(
+    feen
+    GIT_REPOSITORY https://github.com/dfeen87/feen.git
+    GIT_TAG v3.8.1
+)
+FetchContent_MakeAvailable(feen)
+
 add_library(hlv_battery INTERFACE)
 
 target_include_directories(hlv_battery INTERFACE
@@ -42,6 +51,7 @@ target_include_directories(hlv_battery INTERFACE
 )
 
 target_compile_features(hlv_battery INTERFACE cxx_std_17)
+target_link_libraries(hlv_battery INTERFACE $<BUILD_INTERFACE:feen>)
 
 # Public compile definitions (available to consumers)
 target_compile_definitions(hlv_battery INTERFACE
@@ -104,6 +114,10 @@ if(HLV_BUILD_TESTS)
     add_executable(test_core tests/test_core.cpp)
     target_link_libraries(test_core PRIVATE hlv_battery)
     add_test(NAME test_core COMMAND test_core)
+
+    add_executable(test_feen_integration tests/test_feen_integration.cpp)
+    target_link_libraries(test_feen_integration PRIVATE hlv_battery)
+    add_test(NAME test_feen_integration COMMAND test_feen_integration)
 
     add_executable(test_advanced tests/test_advanced.cpp)
     target_link_libraries(test_advanced PRIVATE hlv_battery)

@@ -1,7 +1,7 @@
 # HLV Battery Management System  
 ## Architecture Overview
 
-**Version:** 3.1.1  
+**Version:** 3.2.0
 **Audience:** OEMs, Tier-1 suppliers, system architects, safety engineers  
 **Scope:** Conceptual and software architecture (not hardware schematics)
 
