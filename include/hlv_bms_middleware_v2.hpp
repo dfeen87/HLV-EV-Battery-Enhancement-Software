@@ -325,9 +325,9 @@ private:
         diag_.entropy_level = diag_.hlv_entropy;
         diag_.energy_throughput_kwh = energy_in_kwh_ + energy_out_kwh_;
         diag_.last_update_time_ms = dt * 1000.0;
-        const int next_update_count = updates_ + 1;
+        const double next_update_count = static_cast<double>(updates_ + 1);
         total_update_time_ms_ += diag_.last_update_time_ms;
-        diag_.average_update_time_ms = total_update_time_ms_ / next_update_count;
+        diag_.average_update_time_ms = total_update_time_ms_ / std::max(1.0, next_update_count);
         if (s.cycle_count > 0.0) {
             diag_.degradation_rate_per_cycle = s.degradation / s.cycle_count;
         } else {
@@ -337,8 +337,10 @@ private:
         diag_.weak_cell_warning = false;
         diag_.thermal_warning = false;
         diag_.balancing_required = false;
-        diag_.voltage_warning = (s.voltage < config_.safety_limits.min_pack_voltage) ||
-                                (s.voltage > config_.safety_limits.max_pack_voltage);
+        bool imbalance_out_of_bounds = false;
+        const bool pack_voltage_out_of_bounds =
+            (s.voltage < config_.safety_limits.min_pack_voltage) ||
+            (s.voltage > config_.safety_limits.max_pack_voltage);
 
         if (pack_) {
             diag_.total_cells = static_cast<int>(pack_->get_cells().size());
@@ -352,8 +354,9 @@ private:
             diag_.thermal_warning = diag_.max_cell_temp_c > config_.safety_limits.max_cell_temp;
             diag_.balancing_required =
                 diag_.voltage_imbalance_mv > config_.safety_limits.max_voltage_imbalance_mv;
-            diag_.voltage_warning = diag_.voltage_warning || diag_.balancing_required;
+            imbalance_out_of_bounds = diag_.balancing_required;
         }
+        diag_.voltage_warning = pack_voltage_out_of_bounds || imbalance_out_of_bounds;
 
         diag_.estimated_remaining_cycles = std::max(0.0, (1.0 - s.degradation) * 2000.0);
 
