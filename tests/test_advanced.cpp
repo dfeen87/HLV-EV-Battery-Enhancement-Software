@@ -63,11 +63,11 @@ bool test_chemistry_profiles() {
     auto nmc = lib.get_profile(hlv::advanced::ChemistryType::NMC);
     auto nca = lib.get_profile(hlv::advanced::ChemistryType::NCA);
     
-    assert(lfp.name == "LFP");
-    assert(nmc.name == "NMC");
-    assert(nca.name == "NCA");
+    assert(lfp.name == "Lithium Iron Phosphate");
+    assert(nmc.name == "Nickel Manganese Cobalt");
+    assert(nca.name == "Nickel Cobalt Aluminum");
     
-    assert(lfp.nominal_voltage < nmc.nominal_voltage);
+    assert(lfp.nominal_voltage_per_cell < nmc.nominal_voltage_per_cell);
     
     std::cout << " PASS\n";
     return true;
