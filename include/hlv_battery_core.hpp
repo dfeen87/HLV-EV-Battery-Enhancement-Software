@@ -50,11 +50,20 @@
 #include <cmath>
 #include <vector>
 #include <array>
+#include <iostream>
 #include <memory>
 #include <stdexcept>
 #include <algorithm>
 #include <string>
 #include <cassert>
+
+#ifndef HLV_ENABLE_FEEN
+#define HLV_ENABLE_FEEN 0
+#endif
+
+#if HLV_ENABLE_FEEN
+#include "battery_feen_adapter/battery_feen_adapter.hpp"
+#endif
 
 namespace hlv {
 
@@ -82,6 +91,7 @@ constexpr double ELECTRON_CHARGE = 1.602176634e-19; // e (C)
 
 // Default HLV coupling parameters (tunable per battery chemistry)
 struct HLVConfig {
+    bool enable_feen_battery_integration = false;
     double lambda = 1e-6;           // Coupling strength λ
     double tau_min = 0.01;          // Minimum update interval (s)
     double phi_decay_rate = 0.001;  // Information decay rate
@@ -241,6 +251,7 @@ struct OptimalChargingProfile {
 };
 
 struct EnhancedState {
+    double feen_trust_metric = -1.0;    // FEEN trust metric (if enabled)
     HLVState state;                     // Full HLV state
     HealthPrediction health;            // Health prediction
     OptimalChargingProfile charging;    // Optimal charging
@@ -471,6 +482,7 @@ public:
 
 class HLVEnhancement {
 private:
+    BatteryFeenAdapter feen_adapter_;
     HLVConfig config_;
     HLVCoupling coupling_;
     HLVState state_;
@@ -551,6 +563,11 @@ public:
         result.numerical_stability = state_.is_valid() && state_.g_eff.is_stable() &&
             (energy_error <= config_.energy_conservation_tolerance);
         
+        if (config_.enable_feen_battery_integration) {
+            double trust = feen_adapter_.compute_battery_trust_from_feen(state_.voltage);
+            result.feen_trust_metric = trust;
+            result.hlv_confidence *= trust;
+        }
         return result;
     }
     
@@ -580,6 +597,7 @@ public:
     
     // Reset state (for testing or after battery replacement)
     void reset_state() {
+        feen_adapter_.reset();
         state_ = HLVState();
         state_.lambda = config_.lambda;
         initial_energy_ = 0.0;
