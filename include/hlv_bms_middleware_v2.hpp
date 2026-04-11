@@ -190,6 +190,8 @@ public:
     void init(double capacity_ah, double voltage_v) {
         config_.nominal_capacity_ah = capacity_ah;
         config_.nominal_voltage = voltage_v;
+        config_.hlv_config.nominal_capacity_ah = capacity_ah;
+        config_.hlv_config.nominal_voltage = voltage_v;
 
         hlv_core_ = std::make_unique<hlv::HLVEnhancement>();
         hlv_core_->init(config_.hlv_config);
@@ -323,15 +325,22 @@ private:
         diag_.entropy_level = diag_.hlv_entropy;
         diag_.energy_throughput_kwh = energy_in_kwh_ + energy_out_kwh_;
         diag_.last_update_time_ms = dt * 1000.0;
+        const double next_update_count = static_cast<double>(updates_ + 1);
         total_update_time_ms_ += diag_.last_update_time_ms;
-        if (updates_ > 0) {
-            diag_.average_update_time_ms = total_update_time_ms_ / updates_;
-        }
+        diag_.average_update_time_ms = total_update_time_ms_ / std::max(1.0, next_update_count);
         if (s.cycle_count > 0.0) {
             diag_.degradation_rate_per_cycle = s.degradation / s.cycle_count;
         } else {
             diag_.degradation_rate_per_cycle = 0.0;
         }
+
+        diag_.weak_cell_warning = false;
+        diag_.thermal_warning = false;
+        diag_.balancing_required = false;
+        bool imbalance_out_of_bounds = false;
+        const bool pack_voltage_out_of_bounds =
+            (s.voltage < config_.safety_limits.min_pack_voltage) ||
+            (s.voltage > config_.safety_limits.max_pack_voltage);
 
         if (pack_) {
             diag_.total_cells = static_cast<int>(pack_->get_cells().size());
@@ -343,7 +352,11 @@ private:
             diag_.max_cell_temp_c = pack_->get_max_cell_temperature();
             diag_.weak_cell_warning = diag_.weak_cell_count > 0;
             diag_.thermal_warning = diag_.max_cell_temp_c > config_.safety_limits.max_cell_temp;
+            diag_.balancing_required =
+                diag_.voltage_imbalance_mv > config_.safety_limits.max_voltage_imbalance_mv;
+            imbalance_out_of_bounds = diag_.balancing_required;
         }
+        diag_.voltage_warning = pack_voltage_out_of_bounds || imbalance_out_of_bounds;
 
         diag_.estimated_remaining_cycles = std::max(0.0, (1.0 - s.degradation) * 2000.0);
 

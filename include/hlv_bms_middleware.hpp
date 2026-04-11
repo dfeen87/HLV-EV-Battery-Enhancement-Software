@@ -21,8 +21,8 @@
  * ============================================================================
  */
 
-#ifndef HLV_BMS_MIDDLEWARE_V2_HPP
-#define HLV_BMS_MIDDLEWARE_V2_HPP
+#ifndef HLV_BMS_MIDDLEWARE_HPP
+#define HLV_BMS_MIDDLEWARE_HPP
 
 #include "hlv_battery_enhancement.hpp"
 #include "hlv_advanced_features.hpp"
@@ -471,7 +471,7 @@ public:
 
 } // namespace hlv_plugin
 
-#endif // HLV_BMS_MIDDLEWARE_V2_HPP
+#endif // HLV_BMS_MIDDLEWARE_HPP
 
 /*
  * ============================================================================

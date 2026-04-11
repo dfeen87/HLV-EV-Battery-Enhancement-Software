@@ -61,9 +61,7 @@
 #define HLV_ENABLE_FEEN 0
 #endif
 
-#if HLV_ENABLE_FEEN
 #include "battery_feen_adapter/battery_feen_adapter.hpp"
-#endif
 
 namespace hlv {
 

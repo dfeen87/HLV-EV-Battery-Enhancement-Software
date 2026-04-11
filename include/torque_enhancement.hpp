@@ -932,7 +932,7 @@ public:
  * EXAMPLE USAGE - BASIC INTEGRATION
  * ============================================================================
  *
- * #include "hlv_torque_enhancement_v2.hpp"
+ * #include "torque_enhancement.hpp"
  * #include "hlv_bms_middleware_v2.hpp"
  *
  * // Initialize systems

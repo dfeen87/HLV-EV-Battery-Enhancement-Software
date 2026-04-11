@@ -298,7 +298,7 @@ Each factor is computed independently and clamped to safe ranges, ensuring no si
 ### Basic Integration (Single Motor, Simple BMS)
 
 ```cpp
-#include "hlv_torque_enhancement_v2.hpp"
+#include "torque_enhancement.hpp"
 #include "hlv_bms_middleware_v2.hpp"
 
 // Initialize BMS
