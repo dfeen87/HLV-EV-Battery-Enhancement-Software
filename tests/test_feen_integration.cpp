@@ -91,8 +91,8 @@ bool test_determinism() {
 bool test_version_consistency() {
     std::cout << "Testing version consistency..." << std::flush;
 
-    // Check main version string
-    assert(HLVEnhancement::get_version() == "3.2.0");
+    // Check main version string against the library's source of truth
+    assert(HLVEnhancement::get_version() == get_version_string());
 
     std::cout << " PASS\n";
     return true;
