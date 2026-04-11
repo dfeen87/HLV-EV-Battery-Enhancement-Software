@@ -51,12 +51,19 @@
 #include <vector>
 #include <array>
 #include <iostream>
-#include "battery_feen_adapter/battery_feen_adapter.hpp"
 #include <memory>
 #include <stdexcept>
 #include <algorithm>
 #include <string>
 #include <cassert>
+
+#ifndef HLV_ENABLE_FEEN
+#define HLV_ENABLE_FEEN 0
+#endif
+
+#if HLV_ENABLE_FEEN
+#include "battery_feen_adapter/battery_feen_adapter.hpp"
+#endif
 
 namespace hlv {
 
