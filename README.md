@@ -2,6 +2,7 @@
 
 ## Breakthrough Battery Management Through Fundamental Physics
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![C++17](https://img.shields.io/badge/C%2B%2B-17-blue.svg)](https://isocpp.org/)
 [![Status: Production Ready](https://img.shields.io/badge/Status-Production%20Ready-green.svg)]()
 [![Version](https://img.shields.io/badge/Version-3.2.0-blue.svg)]()
