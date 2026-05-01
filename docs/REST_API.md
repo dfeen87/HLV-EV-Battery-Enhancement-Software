@@ -503,7 +503,7 @@ See the `examples/` directory for complete working examples:
 
 ## License
 
-Non-Commercial License - See LICENSE file for details
+MIT License - See LICENSE file for details
 
 ## Authors
 

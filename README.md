@@ -1289,8 +1289,8 @@ SoC
 
 ## License
 
-This project is available for **non‑commercial use only** under the terms of the included LICENSE file.  
-Commercial use requires a separate paid license.
+This project is 100% open-source and available under the terms of the MIT License.
+See the [LICENSE](LICENSE) file for full details.
 
 ---
 
@@ -1305,6 +1305,11 @@ Commercial use requires a separate paid license.
 - The belief that fundamental physics can solve real-world engineering problems
 
 I would like to acknowledge **Microsoft Copilot**, **Anthropic Claude**, and **OpenAI ChatGPT** for their meaningful assistance in refining concepts, improving clarity, and strengthening the overall quality of this work.
+
+---
+
+## Enterprise Consulting & Integration
+This architecture is fully open-source under the MIT License. If your organization requires custom scaling, proprietary integration, or dedicated technical consulting to deploy these models at an enterprise level, please reach out at: dfeen87@gmail.com
 
 ---
 

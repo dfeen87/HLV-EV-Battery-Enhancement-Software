@@ -25,7 +25,7 @@
  *
  * AUTHORS: Don Michael Feeney Jr. & Claude (Anthropic)
  * DATE: December 2025
- * LICENSE: Non-Commercial
+ * LICENSE: MIT
  * VERSION: 2.0.0
  *
  * ============================================================================
