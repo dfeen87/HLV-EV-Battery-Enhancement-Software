@@ -46,6 +46,8 @@ template <typename T, std::size_t Capacity = 1024>
 class SPSCQueue {
     static_assert((Capacity != 0) && ((Capacity & (Capacity - 1)) == 0),
                   "Capacity must be a non-zero power of 2");
+    static_assert(std::is_trivially_copyable_v<T>,
+                  "SPSCQueue<T>: T must be trivially copyable for lock-free safety");
 
 public:
     SPSCQueue() : head_(0), tail_(0) {}
@@ -63,7 +65,7 @@ public:
      * @param item The item to push.
      * @return true if pushed successfully, false if the queue is full.
      */
-    bool push(const T& item) {
+    [[nodiscard]] bool push(const T& item) {
         std::size_t tail = tail_.load(std::memory_order_relaxed);
         std::size_t next_tail = (tail + 1) & mask_;
 
@@ -82,7 +84,7 @@ public:
      * @param item The reference to store the popped item.
      * @return true if popped successfully, false if the queue is empty.
      */
-    bool pop(T& item) {
+    [[nodiscard]] bool pop(T& item) {
         std::size_t head = head_.load(std::memory_order_relaxed);
 
         // If head == tail, queue is empty
@@ -115,6 +117,12 @@ public:
     HLVWNNBridge() = default;
     ~HLVWNNBridge() = default;
 
+    // Non-copyable and non-movable: owns a lock-free queue with producer/consumer state
+    HLVWNNBridge(const HLVWNNBridge&) = delete;
+    HLVWNNBridge& operator=(const HLVWNNBridge&) = delete;
+    HLVWNNBridge(HLVWNNBridge&&) = delete;
+    HLVWNNBridge& operator=(HLVWNNBridge&&) = delete;
+
     /**
      * @brief Ingests an EnhancedState and DiagnosticReport from HLVBMSMiddleware,
      *        translates them to WNNThermodynamicPayload, and pushes to queue.
@@ -123,7 +131,7 @@ public:
      * @param diag The diagnostic report from the BMS.
      * @return true if pushed to the queue successfully, false if full.
      */
-    bool update_telemetry(const hlv::EnhancedState& state,
+    [[nodiscard]] bool update_telemetry(const hlv::EnhancedState& state,
                           const hlv_plugin::DiagnosticReport& diag) {
         WNNThermodynamicPayload payload{};
 
@@ -149,7 +157,7 @@ public:
      * @param payload The reference to store the popped payload.
      * @return true if a payload was retrieved, false if the queue is empty.
      */
-    bool consume_payload(WNNThermodynamicPayload& payload) {
+    [[nodiscard]] bool consume_payload(WNNThermodynamicPayload& payload) {
         return queue_.pop(payload);
     }
 
