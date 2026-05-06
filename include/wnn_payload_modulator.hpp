@@ -1,5 +1,5 @@
-#ifndef WNN_PAYLOAD_MODULATOR_HPP
-#define WNN_PAYLOAD_MODULATOR_HPP
+#ifndef HLV_WNN_PAYLOAD_MODULATOR_HPP
+#define HLV_WNN_PAYLOAD_MODULATOR_HPP
 
 #include <chrono>
 #include <cmath>
@@ -37,12 +37,18 @@ class WNNPayloadModulator {
 public:
     explicit WNNPayloadModulator(HLVWNNBridge& bridge) : bridge_(bridge) {}
 
+    // Non-copyable and non-movable: holds a non-owning reference to HLVWNNBridge
+    WNNPayloadModulator(const WNNPayloadModulator&) = delete;
+    WNNPayloadModulator& operator=(const WNNPayloadModulator&) = delete;
+    WNNPayloadModulator(WNNPayloadModulator&&) = delete;
+    WNNPayloadModulator& operator=(WNNPayloadModulator&&) = delete;
+
     /**
      * @brief Polls the telemetry from the bridge's lock-free ring buffer.
      * Non-blocking, zero-latency hot path.
      * @return True if a new payload was ingested, false otherwise.
      */
-    bool poll_telemetry() {
+    [[nodiscard]] bool poll_telemetry() {
         return bridge_.consume_payload(latest_payload_);
     }
 
@@ -54,8 +60,10 @@ public:
      * RK4 phase coherence, preventing chaotic stochastic noise mid-step.
      *
      * Formula: salt = fmod(t * golden_ratio, 2*pi)
+     *
+     * @param t Simulation time in seconds. Must be finite and non-negative.
      */
-    long double calculate_spiral_time_salt(long double t) const {
+    [[nodiscard]] long double calculate_spiral_time_salt(long double t) const {
         // Golden ratio conjugate
         constexpr long double phi = 1.6180339887498948482L;
 
@@ -72,7 +80,7 @@ public:
      * γ is modulated by voltage and SoC.
      * phase_shift is modulated by entropy and metric trace, plus the spiral time salt.
      */
-    long double calculate_forcing(long double t, long double base_gamma, long double base_omega) const {
+    [[nodiscard]] long double calculate_forcing(long double t, long double base_gamma, long double base_omega) const {
         // Amplitude modulation
         long double gamma = base_gamma;
         if (latest_payload_.voltage > 0.0L) {
@@ -92,7 +100,7 @@ public:
         return gamma * std::cos(base_omega * t + phase_shift);
     }
 
-    const WNNThermodynamicPayload& get_latest_payload() const {
+    [[nodiscard]] const WNNThermodynamicPayload& get_latest_payload() const {
         return latest_payload_;
     }
 
@@ -118,8 +126,15 @@ public:
     WNNTransductionEngine(WNNPayloadModulator& modulator, const DuffingParams& params)
         : modulator_(modulator), params_(params) {}
 
+    // Non-copyable and non-movable: holds a non-owning reference to WNNPayloadModulator
+    WNNTransductionEngine(const WNNTransductionEngine&) = delete;
+    WNNTransductionEngine& operator=(const WNNTransductionEngine&) = delete;
+    WNNTransductionEngine(WNNTransductionEngine&&) = delete;
+    WNNTransductionEngine& operator=(WNNTransductionEngine&&) = delete;
+
     /**
      * @brief Integrates the state forward by dt using Kahan-summed RK4.
+     * @param dt Time step in seconds. Must be positive and finite.
      */
     void step(long double dt) {
         // Poll for fresh telemetry without blocking
@@ -154,9 +169,9 @@ public:
         kahan_add(time_, dt);
     }
 
-    long double get_x() const { return state_x_.value; }
-    long double get_v() const { return state_v_.value; }
-    long double get_time() const { return time_.value; }
+    [[nodiscard]] long double get_x() const { return state_x_.value; }
+    [[nodiscard]] long double get_v() const { return state_v_.value; }
+    [[nodiscard]] long double get_time() const { return time_.value; }
 
 private:
     /**
@@ -178,4 +193,4 @@ private:
 
 } // namespace hlv_wnn
 
-#endif // WNN_PAYLOAD_MODULATOR_HPP
+#endif // HLV_WNN_PAYLOAD_MODULATOR_HPP

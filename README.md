@@ -35,6 +35,8 @@ This library implements the **Helix-Light-Vortex (HLV) Theory** developed by phy
 - [Intelligent Regenerative Braking](#-intelligent-regenerative-braking-hlv-regen-module)
 - [Closed-Loop Energy Recovery](#-closed-loop-energy-recovery-battery--torque--braking--battery)
 - [Optional Telemetry Interface](#-optional-telemetry-interface)
+- [Optional WNN Integration Layer](#-optional-wnn-integration-layer)
+- [Repository Structure](#-repository-structure)
 - [Closed-Cycle Energy Recovery](#-closed-cycle-energy-recovery)
 - [Energy Balance Model](#-energy-balance-model)
 - [Regen as Controlled Charging](#-regen-as-controlled-charging)
@@ -718,6 +720,91 @@ Visualization, UX, and presentation remain fully owned by the automaker.
 
 ---
 
+## 🧮 Optional WNN Integration Layer
+
+The repository includes an **optional WNN (Weighted Neural Network / Wave-Node Network) integration layer** that bridges HLV telemetry to an external WNN daemon for advanced phase-modulation and chaotic dynamics analysis. This layer is entirely optional — it adds no overhead to systems that do not use it.
+
+### Components
+
+| File | Role |
+|------|------|
+| `include/hlv_wnn_telemetry_bridge.hpp` | Bridge between HLV BMS middleware and the WNN daemon |
+| `include/wnn_payload_modulator.hpp` | Duffing oscillator transduction engine driven by HLV telemetry |
+
+### Architecture
+
+```
+HLVBMSMiddleware                  WNN Daemon
+  (producer thread)                (consumer thread)
+        │                                │
+        │  update_telemetry()            │
+        ▼                                │
+  ┌─────────────────────┐               │
+  │  HLVWNNBridge       │               │
+  │  SPSCQueue<payload> │◄──────────────┤ consume_payload()
+  └─────────────────────┘               │
+                                        ▼
+                             WNNPayloadModulator
+                              poll_telemetry()
+                              calculate_forcing()
+                                        │
+                                        ▼
+                             WNNTransductionEngine
+                              step(dt) via RK4
+```
+
+### `hlv_wnn_telemetry_bridge.hpp`
+
+- Defines `WNNThermodynamicPayload` — a tightly packed struct carrying both the physical state (Ψ: voltage, current, temperature, SoC) and the informational state (Φ: entropy, metric trace, HLV confidence) as `long double` values.
+- Provides `SPSCQueue<T, Capacity>` — a lock-free, single-producer single-consumer ring buffer (capacity must be a power of two) that passes payloads from the BMS thread to the WNN daemon without blocking.
+- Provides `HLVWNNBridge` — a standalone adapter that translates `hlv::EnhancedState` + `hlv_plugin::DiagnosticReport` into payloads and enqueues them. The WNN daemon calls `consume_payload()` to drain the queue.
+
+### `wnn_payload_modulator.hpp`
+
+- Defines `KahanState` and `kahan_add()` — compensated summation primitives used throughout to prevent floating-point drift over long integration runs.
+- Provides `WNNPayloadModulator` — polls the bridge for fresh telemetry and computes the Spiral-Time phase salt and the modulated Duffing forcing function `γ cos(ωt + φ)`, where γ and φ are shaped by voltage, SoC, entropy, and metric trace.
+- Provides `WNNTransductionEngine` — a 4th-order Runge-Kutta integrator for the Duffing oscillator `ẍ + δẋ − αx + βx³ = γ cos(ωt + φ)`, with Kahan-summed state accumulation for numerical determinism over millions of steps.
+
+### Quick Start
+
+```cpp
+#include "hlv_wnn_telemetry_bridge.hpp"
+#include "wnn_payload_modulator.hpp"
+
+// Shared bridge (lifetime must exceed both threads)
+hlv_wnn::HLVWNNBridge bridge;
+
+// --- Producer side (BMS thread) ---
+hlv_plugin::HLVBMSMiddleware bms;
+bms.init(75.0, 400.0);
+
+auto enhanced = bms.enhance_cycle(voltage, current, temperature, soc, dt);
+auto diag     = bms.get_diagnostics();
+(void)bridge.update_telemetry(enhanced, diag);  // returns false when full
+
+// --- Consumer side (WNN daemon thread) ---
+hlv_wnn::WNNPayloadModulator modulator(bridge);
+hlv_wnn::WNNTransductionEngine engine(modulator, {});
+
+while (running) {
+    engine.step(1e-4L);  // 100 µs step
+    long double x = engine.get_x();
+    long double v = engine.get_v();
+}
+```
+
+### Notes
+
+- Both `HLVWNNBridge`, `WNNPayloadModulator`, and `WNNTransductionEngine` are **non-copyable and non-movable** by design; pass by reference or pointer.
+- `SPSCQueue` enforces at compile time that `T` is trivially copyable, guaranteeing safe lock-free operation.
+- All public methods that return a success/failure `bool` are marked `[[nodiscard]]` — always check queue-full and queue-empty conditions.
+- The WNN layer has **no runtime dependency** on the rest of the HLV stack; it is activated simply by including its headers.
+
+📁 `include/hlv_wnn_telemetry_bridge.hpp`  
+📁 `include/wnn_payload_modulator.hpp`
+
+---
+
 ## 🔄 Closed-Cycle Energy Recovery
 
 Traditional EV systems treat driving, braking, and charging as loosely connected subsystems.  
@@ -884,6 +971,60 @@ Two reference examples demonstrating correct usage patterns:
 
 - Simple pack loop (single-pack equivalent): `examples/simple_bms_loop.cpp`
 - Multi-cell pack loop (96s EV-style pack, weak-cell detection): `examples/multicell_pack_loop.cpp`
+
+---
+
+## 📁 Repository Structure
+
+```
+HLV-EV-Battery-Enhancement-Software/
+├── include/                              # Public header-only API
+│   ├── hlv_battery_enhancement.hpp       # Core HLV dual-state physics engine
+│   ├── hlv_battery_core.hpp              # Foundational battery types and state
+│   ├── hlv_bms_interfaces.hpp            # Abstract BMS interface definitions
+│   ├── hlv_bms_middleware.hpp            # BMS middleware v1
+│   ├── hlv_bms_middleware_v2.hpp         # BMS middleware v2 (multi-cell, diagnostics)
+│   ├── hlv_advanced_features.hpp         # Chemistry profiles, Kalman, multi-cell pack
+│   ├── torque_enhancement.hpp            # HLV Torque Enhancement Module v2.0
+│   ├── hlv_regen_braking_manager_v1.hpp  # Intelligent regenerative braking manager
+│   ├── hlv_energy_recovery_coordinator_v1.hpp  # Closed-loop energy recovery
+│   ├── hlv_energy_stack.hpp              # Layered energy accounting stack
+│   ├── hlv_energy_telemetry.hpp          # Read-only telemetry snapshot interface
+│   ├── hlv_rest_api.hpp                  # Optional REST API surface
+│   ├── hlv_wnn_telemetry_bridge.hpp      # [Optional] WNN bridge & SPSC queue
+│   ├── wnn_payload_modulator.hpp         # [Optional] Duffing/RK4 WNN transduction
+│   └── battery_feen_adapter/
+│       └── battery_feen_adapter.hpp      # Third-party battery adapter shim
+├── src/
+│   └── hlv_bms_hardware_adapter.hpp      # OEM hardware adapter (CAN/SPI/I2C)
+├── examples/                             # Reference integration examples
+│   ├── basic_integration.cpp             # Minimal single-pack HLV usage (CI smoke test)
+│   ├── simple_bms_loop.cpp               # Simple BMS control loop
+│   ├── multi_cell_pack.cpp               # Multi-cell pack with advanced features
+│   ├── multicell_pack_loop.cpp           # 96s pack loop with weak-cell detection
+│   ├── regen_braking_loop.cpp            # Regen braking integration example
+│   ├── closed_loop_regen_charging.cpp    # Closed-loop energy recovery example
+│   ├── rest_api_server.cpp               # Embedded REST API server example
+│   └── rest_api_client.py                # Python REST API client example
+├── tests/                                # Unit test suite
+│   ├── test_core.cpp
+│   ├── test_advanced.cpp
+│   ├── test_middleware.cpp
+│   └── test_feen_integration.cpp
+├── benchmarks/                           # Performance benchmarks
+│   ├── benchmark_update.cpp
+│   └── benchmark_multicell.cpp
+├── docs/                                 # Reference documentation
+│   ├── architecture_overview.md
+│   ├── oem_can_mapping.md
+│   ├── oem_quick_start.md
+│   ├── regen_braking_overview.md
+│   ├── REST_API.md
+│   └── simulation_observations.md
+├── cmake/                                # CMake helpers
+├── CMakeLists.txt
+└── LICENSE
+```
 
 ---
 
