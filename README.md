@@ -797,6 +797,80 @@ while (running) {
 }
 ```
 
+---
+
+## ⚡ Quick Start for EV Owners
+
+HLV 4.0 is designed for EV owners who want deeper insight into their vehicle’s battery behavior, stress levels, regen efficiency, and enhancement readiness. The software runs **on your computer**, not inside the vehicle, and **does not modify vehicle firmware**. It provides real‑time modeling, diagnostics, and performance recommendations based on your EV’s profile.
+
+### **1. Install Requirements**
+Make sure your computer has:
+
+- C++17‑compatible compiler  
+- CMake ≥ 3.16  
+- Python 3.8+  
+- Git + Make  
+
+Linux/macOS example:
+
+```bash
+sudo apt install build-essential cmake git python3 python3-pip
+```
+
+### **2. Clone the HLV Repository**
+```bash
+git clone https://github.com/dfeen87/HLV-EV-Battery-Enhacement-Software.git
+cd hlv-enhancement
+```
+
+### **3. Build the Core System**
+```bash
+mkdir build
+cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release
+make -j4
+```
+
+This produces the HLV CLI tool, shared library, and Python interface.
+
+### **4. Install the Python Module**
+```bash
+pip install ./python
+```
+
+### **5. Run Vehicle Diagnostics**
+```bash
+hlv --vehicle <model> --diagnostics
+```
+
+Example:
+
+```bash
+hlv --vehicle tesla_model3_lr --diagnostics
+```
+
+You’ll get:
+
+- pack health checks  
+- SOC + voltage validation  
+- thermal envelope analysis  
+- stress + confidence indicators  
+- enhancement readiness score  
+
+### **6. View Enhancement Recommendations**
+```bash
+hlv --vehicle <model> --enhance
+```
+
+This provides torque/regen optimization insights, stress‑aware driving guidance, and SOC window recommendations.
+
+### **7. Update When Needed**
+```bash
+make update
+```
+
+---
+
 ### Notes
 
 - Both `HLVWNNBridge`, `WNNPayloadModulator`, and `WNNTransductionEngine` are **non-copyable and non-movable** by design; pass by reference or pointer.
