@@ -1,0 +1,22 @@
+{
+  "install_policy": {
+    "target_os": [
+      "linux",
+      "darwin"
+    ],
+    "require_sudo_install": true,
+    "allow_unsupported_firmware_override": false,
+    "allow_unsupported_hardware_override": true,
+    "hardware_interfaces": {
+      "required_any": [
+        "can0",
+        "spi0",
+        "vcan0",
+        "simulation"
+      ]
+    },
+    "python_version": {
+      "min": "3.8"
+    }
+  }
+}

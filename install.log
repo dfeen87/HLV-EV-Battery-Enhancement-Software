@@ -1,0 +1,137 @@
+=== Starting Pre-Flight Diagnostics ===
+Host OS detected: Linux 6.8.0
+Python Version detected: 3.12.13
+✓ Environment and OS verification PASSED.
+✓ Hardware check: Simulation interface available (Simulation Mode)
+Loaded vehicle status from: /app/config/vehicle_status.json
+Vehicle parameters to evaluate:
+  Model:            Tesla_Model_3_LR
+  Firmware Version: v2024.12.15
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          355.0V
+  SOC:              65.0%
+✓ Model 'Tesla_Model_3_LR' is verified and fully supported (Tesla Model 3 Long Range).
+✓ Firmware 'v2024.12.15' matches supported profile requirements.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Starting Pre-Flight Diagnostics ===
+Host OS detected: Linux 6.8.0
+Python Version detected: 3.12.13
+✓ Environment and OS verification PASSED.
+✓ Hardware check: Simulation interface available (Simulation Mode)
+Loaded vehicle status from: /app/config/vehicle_status.json
+Vehicle parameters to evaluate:
+  Model:            Tesla_Model_3_LR
+  Firmware Version: v2024.12.15
+  Battery SOH:      92.5%
+  Temperature:      50.0°C
+  Voltage:          355.0V
+  SOC:              65.0%
+✓ Model 'Tesla_Model_3_LR' is verified and fully supported (Tesla Model 3 Long Range).
+✓ Firmware 'v2024.12.15' matches supported profile requirements.
+CRITICAL: Diagnostics failed with the following safety violations:
+  - Battery temperature (50.0°C) is outside safe range (allowed: 0.0°C to 45.0°C)
+Installation or execution blocked for vehicle safety.
+=== Starting Pre-Flight Diagnostics ===
+Host OS detected: Linux 6.8.0
+Python Version detected: 3.12.13
+✓ Environment and OS verification PASSED.
+✓ Hardware check: Simulation interface available (Simulation Mode)
+Loaded vehicle status from: /app/config/vehicle_status.json
+Vehicle parameters to evaluate:
+  Model:            Tesla_Model_3_LR
+  Firmware Version: v2024.12.15
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          355.0V
+  SOC:              65.0%
+✓ Model 'Tesla_Model_3_LR' is verified and fully supported (Tesla Model 3 Long Range).
+✓ Firmware 'v2024.12.15' matches supported profile requirements.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Starting Pre-Flight Diagnostics ===
+Host OS detected: Linux 6.8.0
+Python Version detected: 3.12.13
+✓ Environment and OS verification PASSED.
+✓ Hardware check: Simulation interface available (Simulation Mode)
+Loaded vehicle status from: /app/config/vehicle_status.json
+Vehicle parameters to evaluate:
+  Model:            Tesla_Model_3_LR
+  Firmware Version: v2024.12.15
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          355.0V
+  SOC:              65.0%
+✓ Model 'Tesla_Model_3_LR' is verified and fully supported (Tesla Model 3 Long Range).
+✓ Firmware 'v2024.12.15' matches supported profile requirements.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Starting Pre-Flight Diagnostics ===
+Host OS detected: Linux 6.8.0
+Python Version detected: 3.12.13
+✓ Environment and OS verification PASSED.
+✓ Hardware check: Simulation interface available (Simulation Mode)
+Loaded vehicle status from: /app/config/vehicle_status.json
+Vehicle parameters to evaluate:
+  Model:            Tesla_Model_3_LR
+  Firmware Version: v2024.12.15
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          355.0V
+  SOC:              65.0%
+✓ Model 'Tesla_Model_3_LR' is verified and fully supported (Tesla Model 3 Long Range).
+✓ Firmware 'v2024.12.15' matches supported profile requirements.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Starting Pre-Flight Diagnostics ===
+Host OS detected: Linux 6.8.0
+Python Version detected: 3.12.3
+✓ Environment and OS verification PASSED.
+✓ Hardware check: Simulation interface available (Simulation Mode)
+Loaded vehicle status from: /app/config/vehicle_status.json
+Vehicle parameters to evaluate:
+  Model:            Tesla_Model_3_LR
+  Firmware Version: v2024.12.15
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          355.0V
+  SOC:              65.0%
+✓ Model 'Tesla_Model_3_LR' is verified and fully supported (Tesla Model 3 Long Range).
+✓ Firmware 'v2024.12.15' matches supported profile requirements.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Starting Pre-Flight Diagnostics ===
+Host OS detected: Linux 6.8.0
+Python Version detected: 3.12.3
+✓ Environment and OS verification PASSED.
+✓ Hardware check: Simulation interface available (Simulation Mode)
+Loaded vehicle status from: /app/config/vehicle_status.json
+Vehicle parameters to evaluate:
+  Model:            Tesla_Model_3_LR
+  Firmware Version: v2024.12.15
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          355.0V
+  SOC:              65.0%
+✓ Model 'Tesla_Model_3_LR' is verified and fully supported (Tesla Model 3 Long Range).
+✓ Firmware 'v2024.12.15' matches supported profile requirements.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Starting Pre-Flight Diagnostics ===
+Host OS detected: Linux 6.8.0
+Python Version detected: 3.12.3
+✓ Environment and OS verification PASSED.
+✓ Hardware check: Simulation interface available (Simulation Mode)
+Loaded vehicle status from: /app/config/vehicle_status.json
+Vehicle parameters to evaluate:
+  Model:            Tesla_Model_3_LR
+  Firmware Version: v2024.12.15
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          355.0V
+  SOC:              65.0%
+✓ Model 'Tesla_Model_3_LR' is verified and fully supported (Tesla Model 3 Long Range).
+✓ Firmware 'v2024.12.15' matches supported profile requirements.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+=== Pre-Flight Diagnostics Completed Successfully ===

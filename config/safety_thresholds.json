@@ -1,0 +1,18 @@
+{
+  "safety_thresholds": {
+    "battery_soh": {
+      "min_percent": 80.0,
+      "description": "Minimum State of Health required to qualify for battery enhancement."
+    },
+    "temperature_c": {
+      "min": 0.0,
+      "max": 45.0,
+      "description": "Safe operating temperature window during diagnostic checks."
+    },
+    "soc_percent": {
+      "min": 20.0,
+      "max": 90.0,
+      "description": "State of Charge window allowed during installation/flashing to avoid extreme charge states."
+    }
+  }
+}

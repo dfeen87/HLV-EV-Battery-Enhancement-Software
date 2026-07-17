@@ -1,0 +1,8 @@
+{
+  "model": "Tesla_Model_3_LR",
+  "firmware_version": "v2024.12.15",
+  "battery_soh": 92.5,
+  "temperature_c": 25.0,
+  "voltage_v": 355.0,
+  "soc": 65.0
+}
