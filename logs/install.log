@@ -758,7 +758,7 @@ Vehicle parameters to evaluate:
 -- =======================================
 -- HLV Battery Enhancement Build Summary
 -- =======================================
--- Version:        3.2.0
+-- Version:        4.0.0
 -- Build Type:     Release
 -- C++ Standard:   17
 --
@@ -842,8 +842,8 @@ Vehicle parameters to evaluate:
 [devbox] Running command: cmake --build build
 [devbox] ✓ Updated code compiled successfully. Deploying to /opt/hlv_enhancement...
 [devbox] SUCCESS: Software update completed successfully and deployed.
-[2026-07-17 13:05:03] VERSION: 3.2.0 | ACTION: static-analysis | STATUS: SUCCESS | INFO: Passed cppcheck and clang-tidy analysis
-[2026-07-17 13:05:04] VERSION: 3.2.0 | ACTION: verify | STATUS: SUCCESS | INFO: Environment verification passed successfully
+[2026-07-17 13:05:03] VERSION: 4.0.0 | ACTION: static-analysis | STATUS: SUCCESS | INFO: Passed cppcheck and clang-tidy analysis
+[2026-07-17 13:05:04] VERSION: 4.0.0 | ACTION: verify | STATUS: SUCCESS | INFO: Environment verification passed successfully
 === Starting Pre-Flight Diagnostics ===
 === Starting Pre-Flight Diagnostics ===
 Host OS detected: Linux 6.8.0
@@ -880,7 +880,7 @@ Vehicle parameters to evaluate:
 ✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
 === Pre-Flight Diagnostics Completed Successfully ===
 === Pre-Flight Diagnostics Completed Successfully ===
-[2026-07-17 13:06:43] VERSION: 3.2.0 | ACTION: diagnostics | STATUS: SUCCESS | INFO: Battery diagnostics passed
+[2026-07-17 13:06:43] VERSION: 4.0.0 | ACTION: diagnostics | STATUS: SUCCESS | INFO: Battery diagnostics passed
 === Starting Pre-Flight Diagnostics ===
 === Starting Pre-Flight Diagnostics ===
 Host OS detected: Linux 6.8.0
@@ -953,7 +953,7 @@ Vehicle parameters to evaluate:
 ✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
 === Pre-Flight Diagnostics Completed Successfully ===
 === Pre-Flight Diagnostics Completed Successfully ===
-[2026-07-17 13:08:54] VERSION: 3.2.0 | ACTION: install | STATUS: SUCCESS | INFO: HLV EV Software suite successfully installed to /opt/hlv_enhancement
+[2026-07-17 13:08:54] VERSION: 4.0.0 | ACTION: install | STATUS: SUCCESS | INFO: HLV EV Software suite successfully installed to /opt/hlv_enhancement
 === Starting Pre-Flight Diagnostics ===
 === Starting Pre-Flight Diagnostics ===
 Host OS detected: Linux 6.8.0
@@ -990,8 +990,8 @@ Vehicle parameters to evaluate:
 ✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
 === Pre-Flight Diagnostics Completed Successfully ===
 === Pre-Flight Diagnostics Completed Successfully ===
-[2026-07-17 14:09:21] VERSION: 3.2.0 | ACTION: install | STATUS: SUCCESS | INFO: HLV EV Software suite successfully installed to /opt/hlv_enhancement
-[2026-07-17 14:09:22] VERSION: 3.2.0 | ACTION: rollback | STATUS: SUCCESS | INFO: HLV Software suite rolled back successfully
+[2026-07-17 14:09:21] VERSION: 4.0.0 | ACTION: install | STATUS: SUCCESS | INFO: HLV EV Software suite successfully installed to /opt/hlv_enhancement
+[2026-07-17 14:09:22] VERSION: 4.0.0 | ACTION: rollback | STATUS: SUCCESS | INFO: HLV Software suite rolled back successfully
 === Starting Pre-Flight Diagnostics ===
 === Starting Pre-Flight Diagnostics ===
 Host OS detected: Linux 6.8.0
@@ -1031,7 +1031,7 @@ CRITICAL: Diagnostics failed with the following safety violations:
 Installation or execution blocked for vehicle safety.
 Installation or execution blocked for vehicle safety.
 CRITICAL: Pre-flight diagnostics failed. Installation is BLOCKED for safety reasons.
-[2026-07-17 14:09:22] VERSION: 3.2.0 | ACTION: install | STATUS: FAILED | INFO: Pre-flight diagnostics failed. Installation blocked.
+[2026-07-17 14:09:22] VERSION: 4.0.0 | ACTION: install | STATUS: FAILED | INFO: Pre-flight diagnostics failed. Installation blocked.
 === Starting Pre-Flight Diagnostics ===
 === Starting Pre-Flight Diagnostics ===
 Host OS detected: Linux 6.8.0
@@ -1068,7 +1068,7 @@ Vehicle parameters to evaluate:
 ✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
 === Pre-Flight Diagnostics Completed Successfully ===
 === Pre-Flight Diagnostics Completed Successfully ===
-[2026-07-17 14:09:23] VERSION: 3.2.0 | ACTION: install | STATUS: SUCCESS | INFO: HLV EV Software suite successfully installed to /opt/hlv_enhancement
+[2026-07-17 14:09:23] VERSION: 4.0.0 | ACTION: install | STATUS: SUCCESS | INFO: HLV EV Software suite successfully installed to /opt/hlv_enhancement
 === Starting Pre-Flight Diagnostics ===
 === Starting Pre-Flight Diagnostics ===
 Host OS detected: Linux 6.8.0
@@ -1623,8 +1623,8 @@ Vehicle parameters to evaluate:
 ✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
 === Pre-Flight Diagnostics Completed Successfully ===
 === Pre-Flight Diagnostics Completed Successfully ===
-[2026-07-17 14:13:14] VERSION: 3.2.0 | ACTION: install | STATUS: SUCCESS | INFO: HLV EV Software suite successfully installed to /opt/hlv_enhancement
-[2026-07-17 14:13:14] VERSION: 3.2.0 | ACTION: rollback | STATUS: SUCCESS | INFO: HLV Software suite rolled back successfully
+[2026-07-17 14:13:14] VERSION: 4.0.0 | ACTION: install | STATUS: SUCCESS | INFO: HLV EV Software suite successfully installed to /opt/hlv_enhancement
+[2026-07-17 14:13:14] VERSION: 4.0.0 | ACTION: rollback | STATUS: SUCCESS | INFO: HLV Software suite rolled back successfully
 === Starting Pre-Flight Diagnostics ===
 === Starting Pre-Flight Diagnostics ===
 Host OS detected: Linux 6.8.0
@@ -1664,7 +1664,7 @@ CRITICAL: Diagnostics failed with the following safety violations:
 Installation or execution blocked for vehicle safety.
 Installation or execution blocked for vehicle safety.
 CRITICAL: Pre-flight diagnostics failed. Installation is BLOCKED for safety reasons.
-[2026-07-17 14:13:15] VERSION: 3.2.0 | ACTION: install | STATUS: FAILED | INFO: Pre-flight diagnostics failed. Installation blocked.
+[2026-07-17 14:13:15] VERSION: 4.0.0 | ACTION: install | STATUS: FAILED | INFO: Pre-flight diagnostics failed. Installation blocked.
 === Starting Pre-Flight Diagnostics ===
 === Starting Pre-Flight Diagnostics ===
 Host OS detected: Linux 6.8.0
@@ -1701,7 +1701,7 @@ Vehicle parameters to evaluate:
 ✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
 === Pre-Flight Diagnostics Completed Successfully ===
 === Pre-Flight Diagnostics Completed Successfully ===
-[2026-07-17 14:13:16] VERSION: 3.2.0 | ACTION: install | STATUS: SUCCESS | INFO: HLV EV Software suite successfully installed to /opt/hlv_enhancement
+[2026-07-17 14:13:16] VERSION: 4.0.0 | ACTION: install | STATUS: SUCCESS | INFO: HLV EV Software suite successfully installed to /opt/hlv_enhancement
 === Starting Pre-Flight Diagnostics ===
 === Starting Pre-Flight Diagnostics ===
 Host OS detected: Linux 6.8.0
