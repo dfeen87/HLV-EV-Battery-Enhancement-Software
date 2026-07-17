@@ -1,6 +1,8 @@
-# HLV Battery Enhancement Library
+# HLV Battery Enhancement Sofware
 
 ## Breakthrough Battery Management Through Fundamental Physics
+
+> HLV delivers a fusion of Battery Intelligence Engine, Dual‑State Energy Modeling, and Predictive Power Management, creating a truly Physics‑Driven BMS for real‑time EV optimization.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![C++17](https://img.shields.io/badge/C%2B%2B-17-blue.svg)](https://isocpp.org/)
