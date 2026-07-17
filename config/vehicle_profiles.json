@@ -1,0 +1,183 @@
+{
+  "supported_vehicles": {
+    "Tesla_Model_3_LR": {
+      "model_name": "Tesla Model 3 Long Range",
+      "chemistry": "NMC",
+      "nominal_voltage_v": 360.0,
+      "voltage_range": {
+        "min": 300.0,
+        "max": 410.0
+      },
+      "supported_firmware_versions": [
+        "v2024.8.*",
+        "v2024.12.*",
+        "v2024.20.*",
+        "v2025.*"
+      ]
+    },
+    "Tesla_Model_3_SR": {
+      "model_name": "Tesla Model 3 Standard Range",
+      "chemistry": "LFP",
+      "nominal_voltage_v": 320.0,
+      "voltage_range": {
+        "min": 280.0,
+        "max": 360.0
+      },
+      "supported_firmware_versions": [
+        "v2024.8.*",
+        "v2024.12.*",
+        "v2024.20.*",
+        "v2025.*"
+      ]
+    },
+    "Tesla_Model_Y_LR": {
+      "model_name": "Tesla Model Y Long Range",
+      "chemistry": "NMC",
+      "nominal_voltage_v": 360.0,
+      "voltage_range": {
+        "min": 300.0,
+        "max": 410.0
+      },
+      "supported_firmware_versions": [
+        "v2024.8.*",
+        "v2024.12.*",
+        "v2024.20.*",
+        "v2025.*"
+      ]
+    },
+    "Tesla_Model_Y_SR": {
+      "model_name": "Tesla Model Y Standard Range",
+      "chemistry": "LFP",
+      "nominal_voltage_v": 320.0,
+      "voltage_range": {
+        "min": 280.0,
+        "max": 365.0
+      },
+      "supported_firmware_versions": [
+        "v2024.*",
+        "v2025.*"
+      ]
+    },
+    "Tesla_Model_S_Plaid": {
+      "model_name": "Tesla Model S Plaid",
+      "chemistry": "NMC",
+      "nominal_voltage_v": 400.0,
+      "voltage_range": {
+        "min": 340.0,
+        "max": 450.0
+      },
+      "supported_firmware_versions": [
+        "v2024.8.*",
+        "v2024.12.*",
+        "v2024.20.*",
+        "v2025.*"
+      ]
+    },
+    "Tesla_Model_X_LR": {
+      "model_name": "Tesla Model X Long Range",
+      "chemistry": "NMC",
+      "nominal_voltage_v": 400.0,
+      "voltage_range": {
+        "min": 340.0,
+        "max": 450.0
+      },
+      "supported_firmware_versions": [
+        "v2024.8.*",
+        "v2024.12.*",
+        "v2024.20.*",
+        "v2025.*"
+      ]
+    },
+    "Tesla_Cybertruck": {
+      "model_name": "Tesla Cybertruck",
+      "chemistry": "NMC",
+      "nominal_voltage_v": 816.0,
+      "voltage_range": {
+        "min": 680.0,
+        "max": 920.0
+      },
+      "supported_firmware_versions": [
+        "v2024.*",
+        "v2025.*"
+      ]
+    },
+    "GM_Hummer_EV": {
+      "model_name": "GM Hummer EV",
+      "chemistry": "NMC",
+      "nominal_voltage_v": 800.0,
+      "voltage_range": {
+        "min": 600.0,
+        "max": 900.0
+      },
+      "supported_firmware_versions": [
+        "GM_ULT_v1.*",
+        "GM_ULT_v2.*"
+      ]
+    },
+    "GM_Hummer_electric": {
+      "model_name": "GM Hummer electric",
+      "chemistry": "NMC",
+      "nominal_voltage_v": 800.0,
+      "voltage_range": {
+        "min": 600.0,
+        "max": 900.0
+      },
+      "supported_firmware_versions": [
+        "GM_ULT_v1.*",
+        "GM_ULT_v2.*"
+      ]
+    },
+    "Ford_Fusion_Energi": {
+      "model_name": "Ford Fusion Energi",
+      "chemistry": "NMC",
+      "nominal_voltage_v": 325.0,
+      "voltage_range": {
+        "min": 270.0,
+        "max": 370.0
+      },
+      "supported_firmware_versions": [
+        "F_FW_v2.*",
+        "F_FW_v3.*"
+      ]
+    },
+    "Ford_Fusion": {
+      "model_name": "Ford Fusion",
+      "chemistry": "NMC",
+      "nominal_voltage_v": 325.0,
+      "voltage_range": {
+        "min": 270.0,
+        "max": 370.0
+      },
+      "supported_firmware_versions": [
+        "F_FW_v2.*",
+        "F_FW_v3.*"
+      ]
+    },
+    "Hyundai_Ioniq_5": {
+      "model_name": "Hyundai Ioniq 5",
+      "chemistry": "NMC",
+      "nominal_voltage_v": 697.0,
+      "voltage_range": {
+        "min": 580.0,
+        "max": 800.0
+      },
+      "supported_firmware_versions": [
+        "H_NE_v1.2.*",
+        "H_NE_v2.0.*"
+      ]
+    },
+    "Nissan_Leaf_ePlus": {
+      "model_name": "Nissan Leaf e+",
+      "chemistry": "NMC",
+      "nominal_voltage_v": 350.0,
+      "voltage_range": {
+        "min": 300.0,
+        "max": 405.0
+      },
+      "supported_firmware_versions": [
+        "N_L_v4.*",
+        "N_L_v5.*"
+      ]
+    }
+  }
+}

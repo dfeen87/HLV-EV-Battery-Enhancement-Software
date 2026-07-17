@@ -1,0 +1,696 @@
+=== Starting Pre-Flight Diagnostics ===
+=== Starting Pre-Flight Diagnostics ===
+Host OS detected: Linux 6.8.0
+Host OS detected: Linux 6.8.0
+Python Version detected: 3.12.13
+Python Version detected: 3.12.13
+✓ Environment and OS verification PASSED.
+✓ Environment and OS verification PASSED.
+✓ Hardware check: Simulation interface available (Simulation Mode)
+✓ Hardware check: Simulation interface available (Simulation Mode)
+Loaded vehicle status from: /app/config/vehicle_status.json
+Loaded vehicle status from: /app/config/vehicle_status.json
+Vehicle parameters to evaluate:
+  Model:            Tesla_Model_3_LR
+  Firmware Version: v2024.12.15
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          355.0V
+  SOC:              65.0%
+Vehicle parameters to evaluate:
+  Model:            Tesla_Model_3_LR
+  Firmware Version: v2024.12.15
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          355.0V
+  SOC:              65.0%
+✓ Model 'Tesla_Model_3_LR' is verified and fully supported (Tesla Model 3 Long Range).
+✓ Model 'Tesla_Model_3_LR' is verified and fully supported (Tesla Model 3 Long Range).
+✓ Firmware 'v2024.12.15' matches supported profile requirements.
+✓ Firmware 'v2024.12.15' matches supported profile requirements.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Starting Pre-Flight Diagnostics ===
+=== Starting Pre-Flight Diagnostics ===
+Host OS detected: Linux 6.8.0
+Host OS detected: Linux 6.8.0
+Python Version detected: 3.12.13
+Python Version detected: 3.12.13
+✓ Environment and OS verification PASSED.
+✓ Environment and OS verification PASSED.
+✓ Hardware check: Simulation interface available (Simulation Mode)
+✓ Hardware check: Simulation interface available (Simulation Mode)
+Loaded vehicle status from: /app/config/vehicle_status.json
+Loaded vehicle status from: /app/config/vehicle_status.json
+Vehicle parameters to evaluate:
+  Model:            Tesla_Model_3_LR
+  Firmware Version: v2024.12.15
+  Battery SOH:      92.5%
+  Temperature:      50.0°C
+  Voltage:          355.0V
+  SOC:              65.0%
+Vehicle parameters to evaluate:
+  Model:            Tesla_Model_3_LR
+  Firmware Version: v2024.12.15
+  Battery SOH:      92.5%
+  Temperature:      50.0°C
+  Voltage:          355.0V
+  SOC:              65.0%
+✓ Model 'Tesla_Model_3_LR' is verified and fully supported (Tesla Model 3 Long Range).
+✓ Model 'Tesla_Model_3_LR' is verified and fully supported (Tesla Model 3 Long Range).
+✓ Firmware 'v2024.12.15' matches supported profile requirements.
+✓ Firmware 'v2024.12.15' matches supported profile requirements.
+CRITICAL: Diagnostics failed with the following safety violations:
+CRITICAL: Diagnostics failed with the following safety violations:
+  - Battery temperature (50.0°C) is outside safe range (allowed: 0.0°C to 45.0°C)
+  - Battery temperature (50.0°C) is outside safe range (allowed: 0.0°C to 45.0°C)
+Installation or execution blocked for vehicle safety.
+Installation or execution blocked for vehicle safety.
+=== Starting Pre-Flight Diagnostics ===
+=== Starting Pre-Flight Diagnostics ===
+Host OS detected: Linux 6.8.0
+Host OS detected: Linux 6.8.0
+Python Version detected: 3.12.13
+Python Version detected: 3.12.13
+✓ Environment and OS verification PASSED.
+✓ Environment and OS verification PASSED.
+✓ Hardware check: Simulation interface available (Simulation Mode)
+✓ Hardware check: Simulation interface available (Simulation Mode)
+Loaded vehicle status from: /app/config/vehicle_status.json
+Loaded vehicle status from: /app/config/vehicle_status.json
+Vehicle parameters to evaluate:
+  Model:            Tesla_Model_3_LR
+  Firmware Version: v2024.12.15
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          355.0V
+  SOC:              65.0%
+Vehicle parameters to evaluate:
+  Model:            Tesla_Model_3_LR
+  Firmware Version: v2024.12.15
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          355.0V
+  SOC:              65.0%
+✓ Model 'Tesla_Model_3_LR' is verified and fully supported (Tesla Model 3 Long Range).
+✓ Model 'Tesla_Model_3_LR' is verified and fully supported (Tesla Model 3 Long Range).
+✓ Firmware 'v2024.12.15' matches supported profile requirements.
+✓ Firmware 'v2024.12.15' matches supported profile requirements.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Starting Pre-Flight Diagnostics ===
+=== Starting Pre-Flight Diagnostics ===
+Host OS detected: Linux 6.8.0
+Host OS detected: Linux 6.8.0
+Python Version detected: 3.12.13
+Python Version detected: 3.12.13
+✓ Environment and OS verification PASSED.
+✓ Environment and OS verification PASSED.
+✓ Hardware check: Simulation interface available (Simulation Mode)
+✓ Hardware check: Simulation interface available (Simulation Mode)
+Loaded vehicle status from: /app/config/vehicle_status.json
+Loaded vehicle status from: /app/config/vehicle_status.json
+Vehicle parameters to evaluate:
+  Model:            Tesla_Model_3_LR
+  Firmware Version: v2024.12.15
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          355.0V
+  SOC:              65.0%
+Vehicle parameters to evaluate:
+  Model:            Tesla_Model_3_LR
+  Firmware Version: v2024.12.15
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          355.0V
+  SOC:              65.0%
+✓ Model 'Tesla_Model_3_LR' is verified and fully supported (Tesla Model 3 Long Range).
+✓ Model 'Tesla_Model_3_LR' is verified and fully supported (Tesla Model 3 Long Range).
+✓ Firmware 'v2024.12.15' matches supported profile requirements.
+✓ Firmware 'v2024.12.15' matches supported profile requirements.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Starting Pre-Flight Diagnostics ===
+=== Starting Pre-Flight Diagnostics ===
+Host OS detected: Linux 6.8.0
+Host OS detected: Linux 6.8.0
+Python Version detected: 3.12.13
+Python Version detected: 3.12.13
+✓ Environment and OS verification PASSED.
+✓ Environment and OS verification PASSED.
+✓ Hardware check: Simulation interface available (Simulation Mode)
+✓ Hardware check: Simulation interface available (Simulation Mode)
+Loaded vehicle status from: /app/config/vehicle_status.json
+Loaded vehicle status from: /app/config/vehicle_status.json
+Vehicle parameters to evaluate:
+  Model:            Tesla_Model_3_LR
+  Firmware Version: v2024.12.15
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          355.0V
+  SOC:              65.0%
+Vehicle parameters to evaluate:
+  Model:            Tesla_Model_3_LR
+  Firmware Version: v2024.12.15
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          355.0V
+  SOC:              65.0%
+✓ Model 'Tesla_Model_3_LR' is verified and fully supported (Tesla Model 3 Long Range).
+✓ Model 'Tesla_Model_3_LR' is verified and fully supported (Tesla Model 3 Long Range).
+✓ Firmware 'v2024.12.15' matches supported profile requirements.
+✓ Firmware 'v2024.12.15' matches supported profile requirements.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Starting Pre-Flight Diagnostics ===
+=== Starting Pre-Flight Diagnostics ===
+Host OS detected: Linux 6.8.0
+Host OS detected: Linux 6.8.0
+Python Version detected: 3.12.3
+Python Version detected: 3.12.3
+✓ Environment and OS verification PASSED.
+✓ Environment and OS verification PASSED.
+✓ Hardware check: Simulation interface available (Simulation Mode)
+✓ Hardware check: Simulation interface available (Simulation Mode)
+Loaded vehicle status from: /app/config/vehicle_status.json
+Loaded vehicle status from: /app/config/vehicle_status.json
+Vehicle parameters to evaluate:
+  Model:            Tesla_Model_3_LR
+  Firmware Version: v2024.12.15
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          355.0V
+  SOC:              65.0%
+Vehicle parameters to evaluate:
+  Model:            Tesla_Model_3_LR
+  Firmware Version: v2024.12.15
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          355.0V
+  SOC:              65.0%
+✓ Model 'Tesla_Model_3_LR' is verified and fully supported (Tesla Model 3 Long Range).
+✓ Model 'Tesla_Model_3_LR' is verified and fully supported (Tesla Model 3 Long Range).
+✓ Firmware 'v2024.12.15' matches supported profile requirements.
+✓ Firmware 'v2024.12.15' matches supported profile requirements.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Pre-Flight Diagnostics Completed Successfully ===
+[2026-07-17 11:54:58] SUCCESS: HLV EV Software suite successfully installed to /opt/hlv_enhancement.
+=== Starting Pre-Flight Diagnostics ===
+=== Starting Pre-Flight Diagnostics ===
+Host OS detected: Linux 6.8.0
+Host OS detected: Linux 6.8.0
+Python Version detected: 3.12.3
+Python Version detected: 3.12.3
+✓ Environment and OS verification PASSED.
+✓ Environment and OS verification PASSED.
+✓ Hardware check: Simulation interface available (Simulation Mode)
+✓ Hardware check: Simulation interface available (Simulation Mode)
+Loaded vehicle status from: /app/config/vehicle_status.json
+Loaded vehicle status from: /app/config/vehicle_status.json
+Vehicle parameters to evaluate:
+  Model:            Tesla_Model_3_LR
+  Firmware Version: v2024.12.15
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          355.0V
+  SOC:              65.0%
+Vehicle parameters to evaluate:
+  Model:            Tesla_Model_3_LR
+  Firmware Version: v2024.12.15
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          355.0V
+  SOC:              65.0%
+✓ Model 'Tesla_Model_3_LR' is verified and fully supported (Tesla Model 3 Long Range).
+✓ Model 'Tesla_Model_3_LR' is verified and fully supported (Tesla Model 3 Long Range).
+✓ Firmware 'v2024.12.15' matches supported profile requirements.
+✓ Firmware 'v2024.12.15' matches supported profile requirements.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Starting Pre-Flight Diagnostics ===
+=== Starting Pre-Flight Diagnostics ===
+Host OS detected: Linux 6.8.0
+Host OS detected: Linux 6.8.0
+Python Version detected: 3.12.3
+Python Version detected: 3.12.3
+✓ Environment and OS verification PASSED.
+✓ Environment and OS verification PASSED.
+✓ Hardware check: Simulation interface available (Simulation Mode)
+✓ Hardware check: Simulation interface available (Simulation Mode)
+Loaded vehicle status from: /app/config/vehicle_status.json
+Loaded vehicle status from: /app/config/vehicle_status.json
+Vehicle parameters to evaluate:
+  Model:            Tesla_Model_3_LR
+  Firmware Version: v2024.12.15
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          355.0V
+  SOC:              65.0%
+Vehicle parameters to evaluate:
+  Model:            Tesla_Model_3_LR
+  Firmware Version: v2024.12.15
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          355.0V
+  SOC:              65.0%
+✓ Model 'Tesla_Model_3_LR' is verified and fully supported (Tesla Model 3 Long Range).
+✓ Model 'Tesla_Model_3_LR' is verified and fully supported (Tesla Model 3 Long Range).
+✓ Firmware 'v2024.12.15' matches supported profile requirements.
+✓ Firmware 'v2024.12.15' matches supported profile requirements.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Pre-Flight Diagnostics Completed Successfully ===
+[2026-07-17 11:55:48] SUCCESS: HLV EV Software suite successfully installed to /opt/hlv_enhancement.
+[2026-07-17 11:55:48] SUCCESS: HLV Software suite successfully updated.
+=== Starting Pre-Flight Diagnostics ===
+=== Starting Pre-Flight Diagnostics ===
+Host OS detected: Linux 6.8.0
+Host OS detected: Linux 6.8.0
+Python Version detected: 3.12.3
+Python Version detected: 3.12.3
+✓ Environment and OS verification PASSED.
+✓ Environment and OS verification PASSED.
+✓ Hardware check: Simulation interface available (Simulation Mode)
+✓ Hardware check: Simulation interface available (Simulation Mode)
+Loaded vehicle status from: /opt/hlv_enhancement/config/vehicle_status.json
+Loaded vehicle status from: /opt/hlv_enhancement/config/vehicle_status.json
+Vehicle parameters to evaluate:
+  Model:            Tesla_Model_3_LR
+  Firmware Version: v2024.12.15
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          355.0V
+  SOC:              65.0%
+Vehicle parameters to evaluate:
+  Model:            Tesla_Model_3_LR
+  Firmware Version: v2024.12.15
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          355.0V
+  SOC:              65.0%
+✓ Model 'Tesla_Model_3_LR' is verified and fully supported (Tesla Model 3 Long Range).
+✓ Model 'Tesla_Model_3_LR' is verified and fully supported (Tesla Model 3 Long Range).
+✓ Firmware 'v2024.12.15' matches supported profile requirements.
+✓ Firmware 'v2024.12.15' matches supported profile requirements.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Pre-Flight Diagnostics Completed Successfully ===
+[2026-07-17 12:03:01] SUCCESS: HLV EV Software suite successfully installed to /opt/hlv_enhancement.
+=== Starting Pre-Flight Diagnostics ===
+=== Starting Pre-Flight Diagnostics ===
+Host OS detected: Linux 6.8.0
+Host OS detected: Linux 6.8.0
+Python Version detected: 3.12.13
+Python Version detected: 3.12.13
+✓ Environment and OS verification PASSED.
+✓ Environment and OS verification PASSED.
+✓ Hardware check: Simulation interface available (Simulation Mode)
+✓ Hardware check: Simulation interface available (Simulation Mode)
+Loaded vehicle status from: /opt/hlv_enhancement/config/vehicle_status.json
+Loaded vehicle status from: /opt/hlv_enhancement/config/vehicle_status.json
+Vehicle parameters to evaluate:
+  Model:            Tesla_Cybertruck
+  Firmware Version: v2024.12.1
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          800.0V
+  SOC:              65.0%
+Vehicle parameters to evaluate:
+  Model:            Tesla_Cybertruck
+  Firmware Version: v2024.12.1
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          800.0V
+  SOC:              65.0%
+✓ Model 'Tesla_Cybertruck' is verified and fully supported (Tesla Cybertruck).
+✓ Model 'Tesla_Cybertruck' is verified and fully supported (Tesla Cybertruck).
+✓ Firmware 'v2024.12.1' matches supported profile requirements.
+✓ Firmware 'v2024.12.1' matches supported profile requirements.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Starting Pre-Flight Diagnostics ===
+=== Starting Pre-Flight Diagnostics ===
+Host OS detected: Linux 6.8.0
+Host OS detected: Linux 6.8.0
+Python Version detected: 3.12.3
+Python Version detected: 3.12.3
+✓ Environment and OS verification PASSED.
+✓ Environment and OS verification PASSED.
+✓ Hardware check: Simulation interface available (Simulation Mode)
+✓ Hardware check: Simulation interface available (Simulation Mode)
+Loaded vehicle status from: /opt/hlv_enhancement/config/vehicle_status.json
+Loaded vehicle status from: /opt/hlv_enhancement/config/vehicle_status.json
+Vehicle parameters to evaluate:
+  Model:            Tesla_Model_3_LR
+  Firmware Version: v2024.12.15
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          355.0V
+  SOC:              65.0%
+Vehicle parameters to evaluate:
+  Model:            Tesla_Model_3_LR
+  Firmware Version: v2024.12.15
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          355.0V
+  SOC:              65.0%
+✓ Model 'Tesla_Model_3_LR' is verified and fully supported (Tesla Model 3 Long Range).
+✓ Model 'Tesla_Model_3_LR' is verified and fully supported (Tesla Model 3 Long Range).
+✓ Firmware 'v2024.12.15' matches supported profile requirements.
+✓ Firmware 'v2024.12.15' matches supported profile requirements.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Pre-Flight Diagnostics Completed Successfully ===
+[2026-07-17 12:08:48] SUCCESS: HLV EV Software suite successfully installed to /opt/hlv_enhancement.
+=== Starting Pre-Flight Diagnostics ===
+=== Starting Pre-Flight Diagnostics ===
+Host OS detected: Linux 6.8.0
+Host OS detected: Linux 6.8.0
+Python Version detected: 3.12.13
+Python Version detected: 3.12.13
+✓ Environment and OS verification PASSED.
+✓ Environment and OS verification PASSED.
+✓ Hardware check: Simulation interface available (Simulation Mode)
+✓ Hardware check: Simulation interface available (Simulation Mode)
+Loaded vehicle status from: /opt/hlv_enhancement/config/vehicle_status.json
+Loaded vehicle status from: /opt/hlv_enhancement/config/vehicle_status.json
+Vehicle parameters to evaluate:
+  Model:            GM_Hummer_EV
+  Firmware Version: GM_ULT_v1.5
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          790.0V
+  SOC:              65.0%
+Vehicle parameters to evaluate:
+  Model:            GM_Hummer_EV
+  Firmware Version: GM_ULT_v1.5
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          790.0V
+  SOC:              65.0%
+✓ Model 'GM_Hummer_EV' is verified and fully supported (GM Hummer EV).
+✓ Model 'GM_Hummer_EV' is verified and fully supported (GM Hummer EV).
+✓ Firmware 'GM_ULT_v1.5' matches supported profile requirements.
+✓ Firmware 'GM_ULT_v1.5' matches supported profile requirements.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Starting Pre-Flight Diagnostics ===
+=== Starting Pre-Flight Diagnostics ===
+Host OS detected: Linux 6.8.0
+Host OS detected: Linux 6.8.0
+Python Version detected: 3.12.13
+Python Version detected: 3.12.13
+✓ Environment and OS verification PASSED.
+✓ Environment and OS verification PASSED.
+✓ Hardware check: Simulation interface available (Simulation Mode)
+✓ Hardware check: Simulation interface available (Simulation Mode)
+Loaded vehicle status from: /opt/hlv_enhancement/config/vehicle_status.json
+Loaded vehicle status from: /opt/hlv_enhancement/config/vehicle_status.json
+Vehicle parameters to evaluate:
+  Model:            Ford_Fusion_Energi
+  Firmware Version: F_FW_v2.1
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          320.0V
+  SOC:              65.0%
+Vehicle parameters to evaluate:
+  Model:            Ford_Fusion_Energi
+  Firmware Version: F_FW_v2.1
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          320.0V
+  SOC:              65.0%
+✓ Model 'Ford_Fusion_Energi' is verified and fully supported (Ford Fusion Energi).
+✓ Model 'Ford_Fusion_Energi' is verified and fully supported (Ford Fusion Energi).
+✓ Firmware 'F_FW_v2.1' matches supported profile requirements.
+✓ Firmware 'F_FW_v2.1' matches supported profile requirements.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Starting Pre-Flight Diagnostics ===
+=== Starting Pre-Flight Diagnostics ===
+Host OS detected: Linux 6.8.0
+Host OS detected: Linux 6.8.0
+Python Version detected: 3.12.3
+Python Version detected: 3.12.3
+✓ Environment and OS verification PASSED.
+✓ Environment and OS verification PASSED.
+✓ Hardware check: Simulation interface available (Simulation Mode)
+✓ Hardware check: Simulation interface available (Simulation Mode)
+Loaded vehicle status from: /opt/hlv_enhancement/config/vehicle_status.json
+Loaded vehicle status from: /opt/hlv_enhancement/config/vehicle_status.json
+Vehicle parameters to evaluate:
+  Model:            Tesla_Model_3_LR
+  Firmware Version: v2024.12.15
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          355.0V
+  SOC:              65.0%
+Vehicle parameters to evaluate:
+  Model:            Tesla_Model_3_LR
+  Firmware Version: v2024.12.15
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          355.0V
+  SOC:              65.0%
+✓ Model 'Tesla_Model_3_LR' is verified and fully supported (Tesla Model 3 Long Range).
+✓ Model 'Tesla_Model_3_LR' is verified and fully supported (Tesla Model 3 Long Range).
+✓ Firmware 'v2024.12.15' matches supported profile requirements.
+✓ Firmware 'v2024.12.15' matches supported profile requirements.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Pre-Flight Diagnostics Completed Successfully ===
+[2026-07-17 12:11:26] SUCCESS: HLV EV Software suite successfully installed to /opt/hlv_enhancement.
+=== Starting Pre-Flight Diagnostics ===
+=== Starting Pre-Flight Diagnostics ===
+Host OS detected: Linux 6.8.0
+Host OS detected: Linux 6.8.0
+Python Version detected: 3.12.13
+Python Version detected: 3.12.13
+✓ Environment and OS verification PASSED.
+✓ Environment and OS verification PASSED.
+✓ Hardware check: Simulation interface available (Simulation Mode)
+✓ Hardware check: Simulation interface available (Simulation Mode)
+Loaded vehicle status from: /opt/hlv_enhancement/config/vehicle_status.json
+Loaded vehicle status from: /opt/hlv_enhancement/config/vehicle_status.json
+Vehicle parameters to evaluate:
+  Model:            GM_Hummer_electric
+  Firmware Version: GM_ULT_v1.2
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          780.0V
+  SOC:              65.0%
+Vehicle parameters to evaluate:
+  Model:            GM_Hummer_electric
+  Firmware Version: GM_ULT_v1.2
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          780.0V
+  SOC:              65.0%
+✓ Model 'GM_Hummer_electric' is verified and fully supported (GM Hummer electric).
+✓ Model 'GM_Hummer_electric' is verified and fully supported (GM Hummer electric).
+✓ Firmware 'GM_ULT_v1.2' matches supported profile requirements.
+✓ Firmware 'GM_ULT_v1.2' matches supported profile requirements.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Starting Pre-Flight Diagnostics ===
+=== Starting Pre-Flight Diagnostics ===
+Host OS detected: Linux 6.8.0
+Host OS detected: Linux 6.8.0
+Python Version detected: 3.12.13
+Python Version detected: 3.12.13
+✓ Environment and OS verification PASSED.
+✓ Environment and OS verification PASSED.
+✓ Hardware check: Simulation interface available (Simulation Mode)
+✓ Hardware check: Simulation interface available (Simulation Mode)
+Loaded vehicle status from: /opt/hlv_enhancement/config/vehicle_status.json
+Loaded vehicle status from: /opt/hlv_enhancement/config/vehicle_status.json
+Vehicle parameters to evaluate:
+  Model:            Ford_Fusion
+  Firmware Version: F_FW_v3.0
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          335.0V
+  SOC:              65.0%
+Vehicle parameters to evaluate:
+  Model:            Ford_Fusion
+  Firmware Version: F_FW_v3.0
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          335.0V
+  SOC:              65.0%
+✓ Model 'Ford_Fusion' is verified and fully supported (Ford Fusion).
+✓ Model 'Ford_Fusion' is verified and fully supported (Ford Fusion).
+✓ Firmware 'F_FW_v3.0' matches supported profile requirements.
+✓ Firmware 'F_FW_v3.0' matches supported profile requirements.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Starting Pre-Flight Diagnostics ===
+=== Starting Pre-Flight Diagnostics ===
+Host OS detected: Linux 6.8.0
+Host OS detected: Linux 6.8.0
+Python Version detected: 3.12.3
+Python Version detected: 3.12.3
+✓ Environment and OS verification PASSED.
+✓ Environment and OS verification PASSED.
+✓ Hardware check: Simulation interface available (Simulation Mode)
+✓ Hardware check: Simulation interface available (Simulation Mode)
+Loaded vehicle status from: /opt/hlv_enhancement/config/vehicle_status.json
+Loaded vehicle status from: /opt/hlv_enhancement/config/vehicle_status.json
+Vehicle parameters to evaluate:
+  Model:            Tesla_Model_3_LR
+  Firmware Version: v2024.12.15
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          355.0V
+  SOC:              65.0%
+Vehicle parameters to evaluate:
+  Model:            Tesla_Model_3_LR
+  Firmware Version: v2024.12.15
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          355.0V
+  SOC:              65.0%
+✓ Model 'Tesla_Model_3_LR' is verified and fully supported (Tesla Model 3 Long Range).
+✓ Model 'Tesla_Model_3_LR' is verified and fully supported (Tesla Model 3 Long Range).
+✓ Firmware 'v2024.12.15' matches supported profile requirements.
+✓ Firmware 'v2024.12.15' matches supported profile requirements.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Pre-Flight Diagnostics Completed Successfully ===
+[2026-07-17 12:17:39] SUCCESS: HLV EV Software suite successfully installed to /opt/hlv_enhancement.
+=== Starting Pre-Flight Diagnostics ===
+=== Starting Pre-Flight Diagnostics ===
+Host OS detected: Linux 6.8.0
+Host OS detected: Linux 6.8.0
+Python Version detected: 3.12.3
+Python Version detected: 3.12.3
+✓ Environment and OS verification PASSED.
+✓ Environment and OS verification PASSED.
+✓ Hardware check: Simulation interface available (Simulation Mode)
+✓ Hardware check: Simulation interface available (Simulation Mode)
+Loaded vehicle status from: /opt/hlv_enhancement/config/vehicle_status.json
+Loaded vehicle status from: /opt/hlv_enhancement/config/vehicle_status.json
+Applying simulated status preset for model: Tesla_Model_3_LR
+Applying simulated status preset for model: Tesla_Model_3_LR
+Vehicle parameters to evaluate:
+  Model:            Tesla_Model_3_LR
+  Firmware Version: v2024.12.15
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          355.0V
+  SOC:              65.0%
+Vehicle parameters to evaluate:
+  Model:            Tesla_Model_3_LR
+  Firmware Version: v2024.12.15
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          355.0V
+  SOC:              65.0%
+✓ Model 'Tesla_Model_3_LR' is verified and fully supported (Tesla Model 3 Long Range).
+✓ Model 'Tesla_Model_3_LR' is verified and fully supported (Tesla Model 3 Long Range).
+✓ Firmware 'v2024.12.15' matches supported profile requirements.
+✓ Firmware 'v2024.12.15' matches supported profile requirements.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Pre-Flight Diagnostics Completed Successfully ===
+[2026-07-17 12:18:12] SUCCESS: HLV EV Software suite successfully installed to /opt/hlv_enhancement.
+=== Starting Pre-Flight Diagnostics ===
+=== Starting Pre-Flight Diagnostics ===
+Host OS detected: Linux 6.8.0
+Host OS detected: Linux 6.8.0
+Python Version detected: 3.12.13
+Python Version detected: 3.12.13
+✓ Environment and OS verification PASSED.
+✓ Environment and OS verification PASSED.
+✓ Hardware check: Simulation interface available (Simulation Mode)
+✓ Hardware check: Simulation interface available (Simulation Mode)
+Loaded vehicle status from: /opt/hlv_enhancement/config/vehicle_status.json
+Loaded vehicle status from: /opt/hlv_enhancement/config/vehicle_status.json
+Applying simulated status preset for model: GM_Hummer_electric
+Applying simulated status preset for model: GM_Hummer_electric
+Vehicle parameters to evaluate:
+  Model:            GM_Hummer_electric
+  Firmware Version: GM_ULT_v1.2
+  Battery SOH:      95.0%
+  Temperature:      23.0°C
+  Voltage:          785.0V
+  SOC:              62.0%
+Vehicle parameters to evaluate:
+  Model:            GM_Hummer_electric
+  Firmware Version: GM_ULT_v1.2
+  Battery SOH:      95.0%
+  Temperature:      23.0°C
+  Voltage:          785.0V
+  SOC:              62.0%
+✓ Model 'GM_Hummer_electric' is verified and fully supported (GM Hummer electric).
+✓ Model 'GM_Hummer_electric' is verified and fully supported (GM Hummer electric).
+✓ Firmware 'GM_ULT_v1.2' matches supported profile requirements.
+✓ Firmware 'GM_ULT_v1.2' matches supported profile requirements.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Starting Pre-Flight Diagnostics ===
+=== Starting Pre-Flight Diagnostics ===
+Host OS detected: Linux 6.8.0
+Host OS detected: Linux 6.8.0
+Python Version detected: 3.12.13
+Python Version detected: 3.12.13
+✓ Environment and OS verification PASSED.
+✓ Environment and OS verification PASSED.
+✓ Hardware check: Simulation interface available (Simulation Mode)
+✓ Hardware check: Simulation interface available (Simulation Mode)
+Loaded vehicle status from: /opt/hlv_enhancement/config/vehicle_status.json
+Loaded vehicle status from: /opt/hlv_enhancement/config/vehicle_status.json
+Applying simulated status preset for model: Ford_Fusion
+Applying simulated status preset for model: Ford_Fusion
+Vehicle parameters to evaluate:
+  Model:            Ford_Fusion
+  Firmware Version: F_FW_v3.0
+  Battery SOH:      90.0%
+  Temperature:      20.0°C
+  Voltage:          330.0V
+  SOC:              50.0%
+Vehicle parameters to evaluate:
+  Model:            Ford_Fusion
+  Firmware Version: F_FW_v3.0
+  Battery SOH:      90.0%
+  Temperature:      20.0°C
+  Voltage:          330.0V
+  SOC:              50.0%
+✓ Model 'Ford_Fusion' is verified and fully supported (Ford Fusion).
+✓ Model 'Ford_Fusion' is verified and fully supported (Ford Fusion).
+✓ Firmware 'F_FW_v3.0' matches supported profile requirements.
+✓ Firmware 'F_FW_v3.0' matches supported profile requirements.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Pre-Flight Diagnostics Completed Successfully ===

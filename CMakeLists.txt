@@ -149,6 +149,28 @@ if(HLV_BUILD_BENCHMARKS)
 endif()
 
 # ============================================================================
+# HLV Core Executable & Shared Library Distribution
+# ============================================================================
+
+message(STATUS "Configuring HLV Core Distribution Targets")
+
+# 1. CLI Executable
+add_executable(hlv_enhancer hlv_core/src/hlv_enhancer.cpp)
+target_link_libraries(hlv_enhancer PRIVATE hlv_battery)
+target_compile_definitions(hlv_enhancer PRIVATE HLV_BUILD_CLI)
+set_target_properties(hlv_enhancer PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/hlv_core/bin"
+)
+
+# 2. Shared Library for Python Wrapper
+add_library(hlv_enhancer_shared SHARED hlv_core/src/hlv_enhancer.cpp)
+target_link_libraries(hlv_enhancer_shared PRIVATE hlv_battery)
+set_target_properties(hlv_enhancer_shared PROPERTIES
+    OUTPUT_NAME hlv_enhancer
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/hlv_core/lib"
+)
+
+# ============================================================================
 # Installation & Package Export
 # ============================================================================
 

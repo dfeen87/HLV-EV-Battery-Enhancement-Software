@@ -1,0 +1,114 @@
+{
+  "model": "Tesla_Model_3_LR",
+  "firmware_version": "v2024.12.15",
+  "battery_soh": 92.5,
+  "temperature_c": 25.0,
+  "voltage_v": 355.0,
+  "soc": 65.0,
+  "simulated_presets": {
+    "Tesla_Model_3_LR": {
+      "model": "Tesla_Model_3_LR",
+      "firmware_version": "v2024.12.15",
+      "battery_soh": 92.5,
+      "temperature_c": 25.0,
+      "voltage_v": 355.0,
+      "soc": 65.0
+    },
+    "Tesla_Model_3_SR": {
+      "model": "Tesla_Model_3_SR",
+      "firmware_version": "v2024.20.10",
+      "battery_soh": 94.0,
+      "temperature_c": 22.0,
+      "voltage_v": 315.0,
+      "soc": 55.0
+    },
+    "Tesla_Model_Y_LR": {
+      "model": "Tesla_Model_Y_LR",
+      "firmware_version": "v2024.12.5",
+      "battery_soh": 89.5,
+      "temperature_c": 28.0,
+      "voltage_v": 350.0,
+      "soc": 60.0
+    },
+    "Tesla_Model_Y_SR": {
+      "model": "Tesla_Model_Y_SR",
+      "firmware_version": "v2024.8.1",
+      "battery_soh": 96.2,
+      "temperature_c": 19.5,
+      "voltage_v": 310.0,
+      "soc": 75.0
+    },
+    "Tesla_Model_S_Plaid": {
+      "model": "Tesla_Model_S_Plaid",
+      "firmware_version": "v2025.4.1",
+      "battery_soh": 91.0,
+      "temperature_c": 30.0,
+      "voltage_v": 395.0,
+      "soc": 80.0
+    },
+    "Tesla_Model_X_LR": {
+      "model": "Tesla_Model_X_LR",
+      "firmware_version": "v2024.12.1",
+      "battery_soh": 88.0,
+      "temperature_c": 24.5,
+      "voltage_v": 380.0,
+      "soc": 50.0
+    },
+    "Tesla_Cybertruck": {
+      "model": "Tesla_Cybertruck",
+      "firmware_version": "v2024.20.1",
+      "battery_soh": 97.5,
+      "temperature_c": 26.0,
+      "voltage_v": 810.0,
+      "soc": 70.0
+    },
+    "GM_Hummer_EV": {
+      "model": "GM_Hummer_EV",
+      "firmware_version": "GM_ULT_v1.5",
+      "battery_soh": 93.0,
+      "temperature_c": 27.5,
+      "voltage_v": 805.0,
+      "soc": 68.0
+    },
+    "GM_Hummer_electric": {
+      "model": "GM_Hummer_electric",
+      "firmware_version": "GM_ULT_v1.2",
+      "battery_soh": 95.0,
+      "temperature_c": 23.0,
+      "voltage_v": 785.0,
+      "soc": 62.0
+    },
+    "Ford_Fusion_Energi": {
+      "model": "Ford_Fusion_Energi",
+      "firmware_version": "F_FW_v2.5",
+      "battery_soh": 86.5,
+      "temperature_c": 21.0,
+      "voltage_v": 320.0,
+      "soc": 45.0
+    },
+    "Ford_Fusion": {
+      "model": "Ford_Fusion",
+      "firmware_version": "F_FW_v3.0",
+      "battery_soh": 90.0,
+      "temperature_c": 20.0,
+      "voltage_v": 330.0,
+      "soc": 50.0
+    },
+    "Hyundai_Ioniq_5": {
+      "model": "Hyundai_Ioniq_5",
+      "firmware_version": "H_NE_v2.0.1",
+      "battery_soh": 94.5,
+      "temperature_c": 25.0,
+      "voltage_v": 690.0,
+      "soc": 72.0
+    },
+    "Nissan_Leaf_ePlus": {
+      "model": "Nissan_Leaf_ePlus",
+      "firmware_version": "N_L_v5.2",
+      "battery_soh": 84.0,
+      "temperature_c": 31.0,
+      "voltage_v": 348.0,
+      "soc": 40.0
+    }
+  }
+}
