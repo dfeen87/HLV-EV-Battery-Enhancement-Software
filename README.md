@@ -871,6 +871,8 @@ This provides torque/regen optimization insights, stress‑aware driving guidanc
 make update
 ```
 
+NOTE: The install.log file records build and installation details only; vehicle‑specific information is generated dynamically at runtime and does not require updates to the install log.
+
 ---
 
 ### Notes
