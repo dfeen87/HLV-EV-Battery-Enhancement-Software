@@ -101,6 +101,32 @@
         "v2025.*"
       ]
     },
+    "GM_Hummer_EV": {
+      "model_name": "GM Hummer EV",
+      "chemistry": "NMC",
+      "nominal_voltage_v": 800.0,
+      "voltage_range": {
+        "min": 600.0,
+        "max": 900.0
+      },
+      "supported_firmware_versions": [
+        "GM_ULT_v1.*",
+        "GM_ULT_v2.*"
+      ]
+    },
+    "Ford_Fusion_Energi": {
+      "model_name": "Ford Fusion Energi",
+      "chemistry": "NMC",
+      "nominal_voltage_v": 325.0,
+      "voltage_range": {
+        "min": 270.0,
+        "max": 370.0
+      },
+      "supported_firmware_versions": [
+        "F_FW_v2.*",
+        "F_FW_v3.*"
+      ]
+    },
     "Hyundai_Ioniq_5": {
       "model_name": "Hyundai Ioniq 5",
       "chemistry": "NMC",
