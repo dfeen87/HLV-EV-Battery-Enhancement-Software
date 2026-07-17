@@ -220,3 +220,54 @@ Vehicle parameters to evaluate:
 ✓ Firmware 'F_FW_v2.1' matches supported profile requirements.
 ✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
 === Pre-Flight Diagnostics Completed Successfully ===
+=== Starting Pre-Flight Diagnostics ===
+Host OS detected: Linux 6.8.0
+Python Version detected: 3.12.3
+✓ Environment and OS verification PASSED.
+✓ Hardware check: Simulation interface available (Simulation Mode)
+Loaded vehicle status from: /opt/hlv_enhancement/config/vehicle_status.json
+Vehicle parameters to evaluate:
+  Model:            Tesla_Model_3_LR
+  Firmware Version: v2024.12.15
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          355.0V
+  SOC:              65.0%
+✓ Model 'Tesla_Model_3_LR' is verified and fully supported (Tesla Model 3 Long Range).
+✓ Firmware 'v2024.12.15' matches supported profile requirements.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Starting Pre-Flight Diagnostics ===
+Host OS detected: Linux 6.8.0
+Python Version detected: 3.12.13
+✓ Environment and OS verification PASSED.
+✓ Hardware check: Simulation interface available (Simulation Mode)
+Loaded vehicle status from: /opt/hlv_enhancement/config/vehicle_status.json
+Vehicle parameters to evaluate:
+  Model:            GM_Hummer_electric
+  Firmware Version: GM_ULT_v1.2
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          780.0V
+  SOC:              65.0%
+✓ Model 'GM_Hummer_electric' is verified and fully supported (GM Hummer electric).
+✓ Firmware 'GM_ULT_v1.2' matches supported profile requirements.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+=== Pre-Flight Diagnostics Completed Successfully ===
+=== Starting Pre-Flight Diagnostics ===
+Host OS detected: Linux 6.8.0
+Python Version detected: 3.12.13
+✓ Environment and OS verification PASSED.
+✓ Hardware check: Simulation interface available (Simulation Mode)
+Loaded vehicle status from: /opt/hlv_enhancement/config/vehicle_status.json
+Vehicle parameters to evaluate:
+  Model:            Ford_Fusion
+  Firmware Version: F_FW_v3.0
+  Battery SOH:      92.5%
+  Temperature:      25.0°C
+  Voltage:          335.0V
+  SOC:              65.0%
+✓ Model 'Ford_Fusion' is verified and fully supported (Ford Fusion).
+✓ Firmware 'F_FW_v3.0' matches supported profile requirements.
+✓ All health, temperature, voltage, and SOC metrics are within safe boundaries.
+=== Pre-Flight Diagnostics Completed Successfully ===
