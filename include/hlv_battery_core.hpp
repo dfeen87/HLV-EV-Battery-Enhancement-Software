@@ -1,6 +1,6 @@
 /*
  * ============================================================================
- * HLV BATTERY ENHANCEMENT LIBRARY v1.2
+ * HLV BATTERY ENHANCEMENT LIBRARY v4.1
  * ============================================================================
  * 
  * Implementation of Marcel Krüger's Helix-Light-Vortex (HLV) Theory
@@ -9,14 +9,14 @@
  * Based on: "Mathematical Formulation of the U2→U1 Coupling in the 
  *            Helix-Light-Vortex Theory" (Krüger, 2025)
  * 
- * UPDATES IN v1.2:
+ * UPDATES IN v4.1:
  * - Fixed monotonic degradation accumulation bug (use cycle delta, not absolute)
  * - Replaced exceptions in hot path with value clamping and input_clamped flag
  * - Initialized all struct members with safe defaults
  * - Added assert-based bounds checking to Matrix4x4::operator()
  * - Strengthened HLVConfig::validate() with additional parameter checks
  * - Enforced energy_conservation_tolerance to flag numerical instability
- * - Version bump to 1.2.0
+ * - Version bump to 4.1.0
  * 
  * ARCHITECTURE:
  * ------------
@@ -69,8 +69,8 @@ namespace hlv {
 // VERSION INFORMATION
 // ============================================================================
 
-constexpr int HLV_VERSION_MAJOR = 1;
-constexpr int HLV_VERSION_MINOR = 2;
+constexpr int HLV_VERSION_MAJOR = 4;
+constexpr int HLV_VERSION_MINOR = 1;
 constexpr int HLV_VERSION_PATCH = 0;
 
 inline std::string get_version_string() {

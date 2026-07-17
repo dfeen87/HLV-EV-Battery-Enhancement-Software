@@ -8,7 +8,7 @@
 [![C++17](https://img.shields.io/badge/C%2B%2B-17-blue.svg)](https://isocpp.org/)
 [![Status: Production Ready](https://img.shields.io/badge/Status-Production%20Ready-green.svg)]()
 [![Hardened](https://img.shields.io/badge/Hardened-Edition%20Ready-Purple.svg)]()
-[![Version](https://img.shields.io/badge/Version-4.0.0-blue.svg)]()
+[![Version](https://img.shields.io/badge/Version-4.1.0-blue.svg)]()
 [![CI](https://github.com/dfeen87/HLV-EV-Battery-Enhancement-Software/actions/workflows/ci.yml/badge.svg)](https://github.com/dfeen87/HLV-EV-Battery-Enhancement-Software/actions/workflows/ci.yml)
 
 This library implements the **Helix-Light-Vortex (HLV) Theory** developed by physicist Marcel Krüger to create next-generation battery management capabilities. By treating batteries as dual-state systems—where physical state (Ψ) and informational state (Φ) are dynamically coupled—we achieve earlier degradation detection, better health prediction, and optimized charging strategies.
@@ -609,7 +609,7 @@ Temperature (°C)    Action
 ### Requirements
 
 - **C++11** or later
-- **HLV Battery Enhancement Library** v3.2.0+
+- **HLV Battery Enhancement Library** v4.1.0+
 - **HLV BMS Middleware** v2.0+ (for multi-cell support)
 - Real-time operating system (recommended for control loops < 10ms)
 
@@ -1495,7 +1495,7 @@ SoC
 
 ## 🗺️ Roadmap
 
-### Delivered in v3.2.0
+### Delivered in v4.1.0
 - ✅ Chemistry-specific parameter sets (LFP, NMC, NCA, LTO)
 - ✅ Advanced thermal modeling
 - ✅ Multi-cell pack support

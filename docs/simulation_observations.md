@@ -1,5 +1,5 @@
 # Simulation Observations & Expected Behavior  
-**HLV Battery Enhancement Software – v3.2.0**
+**HLV Battery Enhancement Software – v4.1.0**
 
 ## Purpose of This Document
 
