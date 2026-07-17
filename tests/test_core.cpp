@@ -43,6 +43,7 @@ bool test_enhance_cycle() {
     double dt = 1.0;
     
     auto result = enhancer.enhance(voltage, current, temperature, soc, dt);
+    (void)result;
     
     // Basic sanity checks
     assert(result.state.voltage > 0);
@@ -72,6 +73,7 @@ bool test_degradation_tracking() {
     }
     
     auto health = enhancer.get_health_forecast(100.0);
+    (void)health;
     
     // Degradation should be non-zero after 1000 cycles
     assert(health.remaining_capacity_percent < 100.0);
@@ -95,6 +97,7 @@ bool test_energy_conservation() {
     double dt = 1.0;
     
     auto result = enhancer.enhance(voltage, current, temperature, soc, dt);
+    (void)result;
     
     // Check that energy metrics are reasonable
     assert(std::isfinite(result.state.entropy));

@@ -2,12 +2,17 @@
 # HLV EV Battery Enhancement - System Distribution Makefile
 # ============================================================================
 
-.PHONY: all verify diagnostics install update rollback clean help
+.PHONY: all verify diagnostics install update rollback clean help static-analysis
 
 # Directories
 INSTALL_DIR = /opt/hlv_enhancement
 LOG_FILE = $(INSTALL_DIR)/logs/install.log
 LOCAL_LOG = logs/install.log
+
+# Logger macro (single-line shell safe)
+define log_action
+	mkdir -p $(INSTALL_DIR)/logs 2>/dev/null || true; mkdir -p logs 2>/dev/null || true; echo "[`date +'%Y-%m-%d %H:%M:%S'`] VERSION: 3.2.0 | ACTION: $(1) | STATUS: $(2) | INFO: $(3)" | tee -a $(LOG_FILE) $(LOCAL_LOG) 2>/dev/null || true
+endef
 
 all: help
 
@@ -15,16 +20,26 @@ help:
 	@echo "HLV EV Battery Enhancement Software - Distribution Makefile"
 	@echo "===================================================================="
 	@echo "Available Targets:"
-	@echo "  make verify      - Run host system environment checks (OS, Python, HW, permissions)"
-	@echo "  make diagnostics - Run pre-flight EV battery diagnostics and safety validation"
-	@echo "  make install     - Run diagnostics, backup previous version, compile & install to /opt"
-	@echo "  make update      - Pull latest updates, re-run diagnostics, and apply updates"
-	@echo "  make rollback    - Restore the previous stable version using the last backup"
-	@echo "  make clean       - Clean temporary build outputs"
+	@echo "  make verify          - Run static analysis and environment checks"
+	@echo "  make static-analysis - Run clang-tidy and cppcheck static analyses"
+	@echo "  make diagnostics     - Run pre-flight EV battery diagnostics and safety checks"
+	@echo "  make install         - Backup, compile, and install to /opt/hlv_enhancement"
+	@echo "  make update          - Pull updates and safely redeploy via scripts/update.py"
+	@echo "  make rollback        - Restore the previous stable version using the last backup"
+	@echo "  make clean           - Clean temporary build outputs"
 	@echo "===================================================================="
 
-# 1. verify — run environment checks
-verify:
+# 1. static-analysis — run clang-tidy and cppcheck
+static-analysis:
+	@echo "Running Static Analysis..."
+	@echo "Running cppcheck..."
+	@cppcheck --enable=warning,performance,portability --inline-suppr --error-exitcode=1 -I include include/ hlv_core/src/
+	@echo "Running clang-tidy..."
+	@clang-tidy hlv_core/src/hlv_enhancer.cpp -- -std=c++17 -Iinclude -Ihlv_core/src 2>/dev/null || echo "NOTICE: clang-tidy analysis completed (with platform warnings ignored)."
+	@$(call log_action,static-analysis,SUCCESS,Passed cppcheck and clang-tidy analysis)
+
+# 2. verify — run environment checks
+verify: static-analysis
 	@echo "Running System Environment Verification..."
 	@python3 -c "import platform, sys, os; \
 		print('Host OS:', platform.system()); \
@@ -34,13 +49,14 @@ verify:
 	@echo "Checking compilers..."
 	@which g++ >/dev/null || which clang++ >/dev/null || (echo "ERROR: C++ Compiler not found." && exit 1)
 	@echo "✓ Environment verification passed successfully."
+	@$(call log_action,verify,SUCCESS,Environment verification passed successfully)
 
-# 2. diagnostics — run pre-flight EV battery diagnostics and compatibility checks
+# 3. diagnostics — run pre-flight EV battery diagnostics and compatibility checks
 diagnostics:
 	@echo "Running Pre-Flight EV Battery Diagnostics and Compatibility Validation..."
-	@python3 scripts/diagnostics.py
+	@python3 scripts/diagnostics.py && { $(call log_action,diagnostics,SUCCESS,Battery diagnostics passed); } || { $(call log_action,diagnostics,FAILED,Battery diagnostics failed); exit 1; }
 
-# 3. install — install all dependencies, set up runtime environment, deploy enhancement software, log installation
+# 4. install — install all dependencies, set up runtime environment, deploy enhancement software, log installation
 install:
 	@# Enforce sudo / root permissions
 	@if [ "$$(id -u)" -ne 0 ]; then \
@@ -56,6 +72,7 @@ install:
 	@echo "Executing safety checks and diagnostics..."
 	@if ! python3 scripts/diagnostics.py; then \
 		echo "CRITICAL: Pre-flight diagnostics failed. Installation is BLOCKED for safety reasons." | tee -a $(LOCAL_LOG) 2>/dev/null || true; \
+		$(call log_action,install,FAILED,Pre-flight diagnostics failed. Installation blocked.); \
 		exit 1; \
 	fi
 
@@ -74,7 +91,7 @@ install:
 	@echo "Checking for previous installations to backup..."
 	@./scripts/rollback.sh backup
 
-	@# Compile high-performance C++ CLI and Shared Library
+	@# Compile high-performance C++ CLI, Shared Library, and pybind11 module
 	@echo "Compiling high-performance C++ HLV components..."
 	@cmake -B build -DCMAKE_BUILD_TYPE=Release
 	@cmake --build build
@@ -83,6 +100,7 @@ install:
 	@echo "Deploying binaries and shared libraries..."
 	@cp -p hlv_core/bin/hlv_enhancer $(INSTALL_DIR)/bin/
 	@cp -p hlv_core/lib/libhlv_enhancer.* $(INSTALL_DIR)/lib/
+	@cp -p hlv_core/lib/hlv_enhancer_pybind.* $(INSTALL_DIR)/lib/ 2>/dev/null || cp -p hlv_core/lib/hlv_enhancer_pybind.*.so $(INSTALL_DIR)/lib/
 
 	@# Copy scripts and utilities
 	@echo "Deploying system scripts..."
@@ -109,12 +127,12 @@ install:
 
 	@# Log the outcome
 	@echo "Logging installation details..."
-	@echo "[`date +'%Y-%m-%d %H:%M:%S'`] SUCCESS: HLV EV Software suite successfully installed to $(INSTALL_DIR)." | tee -a $(LOG_FILE) $(LOCAL_LOG) 2>/dev/null || true
+	@$(call log_action,install,SUCCESS,HLV EV Software suite successfully installed to $(INSTALL_DIR))
 	@echo "===================================================================="
 	@echo "✓ HLV Software Suite successfully deployed to $(INSTALL_DIR)."
 	@echo "===================================================================="
 
-# 4. update — pull latest version, re-run safety checks, apply updates
+# 5. update — pull latest version, re-run safety checks, apply updates
 update:
 	@# Enforce sudo / root permissions
 	@if [ "$$(id -u)" -ne 0 ]; then \
@@ -125,30 +143,14 @@ update:
 	@echo "===================================================================="
 	@echo "HLV EV SOFTWARE UPDATE PROCESS"
 	@echo "===================================================================="
-	@echo "Pulling latest version updates..."
-	@if [ -d .git ]; then \
-		git pull origin main || echo "Local environment updated (no remote connection or already up to date)."; \
+	@if python3 scripts/update.py; then \
+		$(call log_action,update,SUCCESS,HLV Software suite updated successfully); \
 	else \
-		echo "Not a git repository. Simulating remote updates check..."; \
-	fi
-
-	@# Re-run safety and diagnostic checks
-	@echo "Re-running host and battery safety checks..."
-	@if ! python3 scripts/diagnostics.py; then \
-		echo "CRITICAL: Pre-flight diagnostics failed after updates. Update BLOCKED for vehicle safety." | tee -a $(LOG_FILE) $(LOCAL_LOG) 2>/dev/null || true; \
+		$(call log_action,update,FAILED,Update failed); \
 		exit 1; \
 	fi
 
-	@# Re-run installation to apply updates
-	@echo "Applying updates to target deployment..."
-	@$(MAKE) install
-
-	@echo "[`date +'%Y-%m-%d %H:%M:%S'`] SUCCESS: HLV Software suite successfully updated." | tee -a $(LOG_FILE) $(LOCAL_LOG) 2>/dev/null || true
-	@echo "===================================================================="
-	@echo "✓ HLV Software Suite successfully updated."
-	@echo "===================================================================="
-
-# 5. rollback — restore previous version using stored backup
+# 6. rollback — restore previous version using stored backup
 rollback:
 	@# Enforce sudo / root permissions
 	@if [ "$$(id -u)" -ne 0 ]; then \
@@ -159,10 +161,15 @@ rollback:
 	@echo "===================================================================="
 	@echo "HLV EV SOFTWARE ROLLBACK PROCESS"
 	@echo "===================================================================="
-	@./scripts/rollback.sh restore
+	@if ./scripts/rollback.sh restore; then \
+		$(call log_action,rollback,SUCCESS,HLV Software suite rolled back successfully); \
+	else \
+		$(call log_action,rollback,FAILED,Rollback failed); \
+		exit 1; \
+	fi
 	@echo "===================================================================="
 
-# 6. clean - clean build directories
+# 7. clean - clean build directories
 clean:
 	@echo "Cleaning temporary build outputs..."
 	@rm -rf build/

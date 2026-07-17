@@ -1,6 +1,6 @@
 # HLV EV Battery Enhancement Software - Installation Guide
 
-Welcome to the installation and deployment manual for the Helix-Light-Vortex (HLV) EV Battery Enhancement Software. This system deploys advanced dual-state (Ψ, Φ) physics-based algorithms directly alongside your vehicle's existing Battery Management System (BMS) to optimize battery life, fast charging profiles, and regenerative braking.
+Welcome to the production-grade installation and deployment manual for the Helix-Light-Vortex (HLV) EV Battery Enhancement Software. This system deploys advanced dual-state (Ψ, Φ) physics-based algorithms directly alongside your vehicle's existing Battery Management System (BMS) to optimize battery life, fast charging profiles, and regenerative braking.
 
 ---
 
@@ -8,14 +8,11 @@ Welcome to the installation and deployment manual for the Helix-Light-Vortex (HL
 - [Prerequisites](#prerequisites)
 - [System Requirements](#system-requirements)
 - [Target Directory Layout](#target-directory-layout)
-- [Workflow Instructions](#workflow-instructions)
-  - [1. Verification](#1-verification)
-  - [2. Pre-Flight Diagnostics](#2-pre-flight-diagnostics)
-  - [3. System Installation](#3-system-installation)
-  - [4. Software Updates](#4-software-updates)
-  - [5. Backup & Rollback](#5-backup--rollback)
-- [Manual Configuration Overrides](#manual-configuration-overrides)
-- [Troubleshooting & Logs](#troubleshooting--logs)
+- [Makefile Workflows](#makefile-workflows)
+- [Safety Gates & Failure Gating](#safety-gates--failure-gating)
+- [Static & Runtime Analysis](#static--runtime-analysis)
+- [Valgrind Memory Leak Analysis](#valgrind-memory-leak-analysis)
+- [Backup & Revert Rollback](#backup--revert-rollback)
 
 ---
 
@@ -44,8 +41,8 @@ When installed, the package is deployed to the system root under:
 `/opt/hlv_enhancement/`
 
 The directories are organized as follows:
-* `/opt/hlv_enhancement/bin` — Compiled high-performance C++ CLI tool (`hlv_enhancer`).
-* `/opt/hlv_enhancement/lib` — Shared library files (`libhlv_enhancer.so` or `libhlv_enhancer.dylib`).
+* `/opt/hlv_enhancement/bin` — Compiled high-performance C++ CLI tool (`hlv_enhancer`) and helper scripts.
+* `/opt/hlv_enhancement/lib` — Shared library files (`libhlv_enhancer.so`) and high-performance Python bindings (`hlv_enhancer_pybind.so`).
 * `/opt/hlv_enhancement/python` — Python `ctypes` bindings for C++ library integrations.
 * `/opt/hlv_enhancement/python_fallback` — Pure-Python mathematical fallback module.
 * `/opt/hlv_enhancement/config` — Vehicle profiles, safety thresholds, and installation policies.
@@ -54,78 +51,100 @@ The directories are organized as follows:
 
 ---
 
-## 🚀 Workflow Instructions
+## 🛠️ Makefile Workflows
 
-The complete setup workflow is fully driven by a top-level `Makefile`.
+The entire installation and maintenance lifecycle is driven by the top-level `Makefile`.
 
-### 1. Verification
-Run system pre-requisite environment checks (checking target OS, compiler capabilities, Python versions, and write permissions):
+### 1. `make static-analysis`
+Runs static analysis checks using `cppcheck` and `clang-tidy` to identify code quality or safety issues in compile time:
+```bash
+make static-analysis
+```
+
+### 2. `make verify`
+Runs full host OS and compiler compatibility checks. It automatically calls `make static-analysis` first:
 ```bash
 make verify
 ```
 
-### 2. Pre-Flight Diagnostics
-Run comprehensive, safety-enforced vehicle diagnostics (validates SOH, SOC, temperatures, and vehicle profile firmware matches):
+### 3. `make diagnostics`
+Executes pre-flight battery, temperature, SOC, voltage, model, and firmware verification checks on the vehicle status:
 ```bash
 make diagnostics
 ```
-*Note: This must pass for `make install` to proceed.*
 
-### 3. System Installation
-Installs the complete package to `/opt/hlv_enhancement`. This requires administrative privileges (via `sudo`) to write to `/opt` and configure system paths:
+### 4. `sudo make install`
+Safe, root-gated installation that compiles and deploys the entire stack to `/opt/hlv_enhancement/`:
 ```bash
 sudo make install
 ```
-This target automatically:
-1. Runs the validation checks first.
-2. Backs up any existing previous installations under `/opt/hlv_enhancement/backups/`.
-3. Compiles the C++ core engine (`hlv_enhancer`) and shared libraries.
-4. deploys binary, config, script, python, and documentation files to `/opt/hlv_enhancement`.
-5. Logs all outcomes and decisions to `/opt/hlv_enhancement/logs/install.log`.
 
-### 4. Software Updates
-Pulls the latest code version, re-validates safety and compatibility checks, compiles any new updates, and deploys them:
+### 5. `sudo make update`
+Pulls updates, stages files, runs safety checks on the update payload, takes a backup, and deploys updates safely:
 ```bash
 sudo make update
 ```
 
-### 5. Backup & Rollback
-If any unexpected behavior occurs after an update, revert immediately to the previous stable backup using:
+### 6. `sudo make rollback`
+Restores the most recent timestamped backup from `/opt/hlv_enhancement/backups/`:
 ```bash
 sudo make rollback
 ```
-This restores the most recent timestamped backup state and updates the log.
 
 ---
 
-## ⚙️ Manual Configuration Overrides
+## 🛑 Safety Gates & Failure Gating
 
-By default, diagnostics query `/tmp/vehicle_status.json` or `/config/vehicle_status.json`. You can simulate various physical vehicle conditions during verification using:
-
-### CLI Overrides
-```bash
-# Force diagnostics to evaluate with a low battery health (this will fail)
-./scripts/diagnostics.py --soh 74.0
-
-# Force diagnostics to evaluate with a high temperature condition (this will fail)
-./scripts/diagnostics.py --temp 55.0
-```
-
-### Environment Variable Overrides
-```bash
-# Override State of Charge
-export HLV_SOC=85.0
-make diagnostics
-```
+To ensure extreme vehicle safety, `make install` and `make update` incorporate an **impenetrable safety gate**:
+1. Before compiling or copying any file, the installer executes `scripts/diagnostics.py`.
+2. If any parameter (such as SOH < 80%, Temperature outside 0-45°C, SOC outside 20-90%, or voltage out of range) fails to satisfy its threshold, the diagnostics script exits with a non-zero code.
+3. The Makefile catches this code and **IMMEDIATELY ABORTS** the installation, writing a critical failure message to the logs and leaving the active system fully unaltered.
 
 ---
 
-## 📝 Troubleshooting & Logs
+## 🔍 Static & Runtime Analysis
 
-All diagnostic decisions, warnings, and system alterations are securely written to the following log file:
-`/opt/hlv_enhancement/logs/install.log`
+### Enforced Compiler Flags
+All C++ targets are built with strict compiler warnings:
+`-Wall -Wextra -Wpedantic -Werror`
 
-If you encounter a build failure:
-1. Ensure `cmake` is fully installed.
-2. Delete the temporary build cache (`rm -rf build/`) and retry.
-3. Check that your user has `sudo` privileges.
+### Sanitizers
+When configuring the project in `Debug` mode, AddressSanitizer (ASan) and UndefinedBehaviorSanitizer (UBSan) are automatically activated:
+```bash
+cmake -B build -DCMAKE_BUILD_TYPE=Debug
+cmake --build build
+```
+Any memory out-of-bounds or undefined behaviors will trigger immediate runtime crashes with trace dumps.
+
+---
+
+## 🧠 Valgrind Memory Leak Analysis
+
+To run Valgrind on the CLI tool and find any potential memory leaks or illegal accesses:
+
+1. Build in Debug or Release with symbols:
+   ```bash
+   cmake -B build -DCMAKE_BUILD_TYPE=Debug
+   cmake --build build
+   ```
+
+2. Run the `hlv_enhancer` CLI tool under Valgrind's leak checker:
+   ```bash
+   valgrind --tool=memcheck --leak-check=full --show-leak-kinds=all --track-origins=yes ./hlv_core/bin/hlv_enhancer -v 355.0 -c 50.0 -t 25.0 -s 0.65 -d 0.1
+   ```
+
+3. Review the outputs:
+   - Ensure that "definitely lost", "indirectly lost", and "possibly lost" are all 0 bytes.
+   - Any "invalid read" or "invalid write" indicates memory safety issues that must be addressed immediately.
+
+---
+
+## 🔄 Backup & Revert Rollback
+
+Before any file in `/opt/hlv_enhancement` is altered or updated, the system triggers `/opt/hlv_enhancement/bin/rollback.sh backup`.
+* Backups are stored as a timestamped directory in `/opt/hlv_enhancement/backups/YYYYMMDD_HHMMSS`.
+* To revert to the previous version, run:
+  ```bash
+  sudo make rollback
+  ```
+  This cleanly wipes active binaries, configurations, and scripts, copies the backup files back into place, and writes a success event to the `/opt/hlv_enhancement/logs/install.log` file.

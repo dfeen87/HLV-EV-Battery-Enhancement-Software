@@ -49,7 +49,9 @@ int main() {
         
         // Check for weak cells
         auto weak = pack.get_weak_cell_ids();
+        (void)weak;
         auto health = pack.get_pack_health(100.0);
+        (void)health;
     }
     
     auto end = std::chrono::high_resolution_clock::now();

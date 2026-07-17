@@ -48,6 +48,7 @@ bool test_kalman_filter() {
     filter.update(0.8, 50.0);
     
     auto filtered_state = filter.get_state();
+    (void)filtered_state;
     assert(filtered_state[0] >= 0.0 && filtered_state[0] <= 1.0);
     
     std::cout << " PASS\n";

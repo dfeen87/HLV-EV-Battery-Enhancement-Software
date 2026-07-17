@@ -179,6 +179,7 @@ public:
         bool wheel_slip,
         double dt
     ) {
+        (void)motor_rpm;
         RegenResult out;
         out.diag = RegenDiagnostics();
 

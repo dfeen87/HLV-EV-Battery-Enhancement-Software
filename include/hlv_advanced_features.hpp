@@ -384,11 +384,11 @@ private:
 public:
     KalmanHLVFilter(double process_noise = 1e-5,
                    double measurement_noise = 1e-3)
-        : process_noise_(process_noise),
-          measurement_noise_(measurement_noise) {
-        // Initialize state
-        x_ = {1.0, 0.0, 0.0, 0.0}; // Full SoC, no degradation
-        P_ = {0.01, 0.01, 0.01, 0.01}; // Initial uncertainty
+        : x_{1.0, 0.0, 0.0, 0.0},
+          P_{0.01, 0.01, 0.01, 0.01},
+          process_noise_(process_noise),
+          measurement_noise_(measurement_noise),
+          last_hlv_state_{} {
     }
     
     // Predict step using HLV dynamics

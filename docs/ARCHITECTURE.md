@@ -1,6 +1,6 @@
 # HLV EV Battery Enhancement - System Architecture
 
-This document provides a technical overview of the Helix-Light-Vortex (HLV) EV Battery Enhancement software structure, detailing the interaction of its subsystems.
+This document provides a highly detailed technical overview of the Helix-Light-Vortex (HLV) EV Battery Enhancement software structure, detailing module boundaries, interfaces, and the closed-loop energy cycle.
 
 ---
 
@@ -11,16 +11,16 @@ The software integrates high-performance physical models (C++17) with robust scr
 ```
 +------------------------------------------------------------+
 |                       Top-Level CLI / UI                   |
-|           (make install / diagnostics.py / hlv_enhancer)    |
+|       (make install / diagnostics.py / hlv_enhancer)       |
 +------------------------------------------------------------+
                               |
                               v
 +------------------------------------------------------------+
-|                   Python Wrapper Layer                     |
-|                 (hlv_core/python/hlv_enhancer.py)          |
+|                pybind11 Python Wrapper                     |
+|           (hlv_core/lib/hlv_enhancer_pybind.so)            |
 +------------------------------------------------------------+
                               |
-                              v (via ctypes / extern "C")
+                              v (via C++ interfaces)
 +------------------------------------------------------------+
 |                    Compiled C++17 Core                     |
 |          (libhlv_enhancer.so / hlv_enhancer binary)        |
@@ -34,7 +34,53 @@ The software integrates high-performance physical models (C++17) with robust scr
 
 ---
 
-## 📂 Subsystem Definitions
+## 🔁 The Closed-Loop Energy Cycle
+
+The key differentiator of the HLV stack v3.2.0 is its closed-loop energy management cycle. Instead of treating battery state estimation, motor torque delivery, and braking energy recovery as isolated silos, they are integrated into a continuous physics-informed loop.
+
+```
+                  +--------------------------------+
+                  |      Battery State (Ψ, Φ)      |
+                  |  - Voltage, Current, SOH, SOC   |
+                  |  - Entropy & Metric trace       |
+                  +--------------------------------+
+                    /                            \
+                   /                              \
+                  v                                v
++----------------------------+          +----------------------------+
+|    HLV Torque Manager      |          |    HLV Regen Manager       |
+|  - Progressive derating    |          |  - High-power recovery     |
+|  - Thermal protections     |          |  - Adaptive blend ratio    |
+|  - Limp mode enforcement   |          |  - Fail-safe mechanical cut|
++----------------------------+          +----------------------------+
+                  \                                /
+                   \                              /
+                    v                            v
+                  +--------------------------------+
+                  |       Dynamic Vehicle          |
+                  |       Energy Recovery          |
+                  |  - Controlled charging updates |
+                  |  - Closed-loop integration     |
+                  +--------------------------------+
+```
+
+### 1. Battery State to Torque Delivery
+* Sensor readings are updated at 100Hz. The `HLVBMSMiddleware` estimates the coupled thermodynamic state of the pack.
+* When high internal stresses ($\partial_{\mu}\Phi$) or capacity degradation are detected, the `HLVTorqueManager` instantly scales back peak motor commands to prevent premature aging.
+
+### 2. Kinetics to Regenerative Braking
+* During deceleration, the driver's braking request is routed through the `HLVRegenBrakingManager`.
+* Based on current SOC headroom, temperatures, and cell balances, the regen manager computes safe charge acceptance bounds.
+* High-power energy recovery is permitted ONLY if cells are warm, balanced, and healthy.
+
+### 3. Energy Recovery to Battery State
+* The recovered energy is converted into charging current ($I_{\text{regen}}$) and fed back into the `HLVBMSMiddleware` update cycle.
+* This updates the informational state (minimizing entropy growth) and updates physical State of Charge.
+* **Outcome**: A safe, thermodynamics-compliant loop that reduces dependence on external grid charging while strictly preventing battery damage.
+
+---
+
+## 📂 Subsystem & Module Boundaries
 
 ### 1. High-Performance Core (`/hlv_core`)
 Written in pure, standard C++17 with zero operating system dependencies:
@@ -43,37 +89,19 @@ Written in pure, standard C++17 with zero operating system dependencies:
 * **`torque_enhancement.hpp`**: Translates battery health, entropy, and cell balances into intelligent real-time motor torque limits.
 * **`hlv_regen_braking_manager_v1.hpp`**: Implements health-aware regenerative braking blending, allowing healthy cells to maximize energy recovery while protecting weak cells.
 
-### 2. Python Ctypes & Fallback Wrappers (`/hlv_core/python`, `/hlv_core/python_fallback`)
-* **`hlv_enhancer.py`**: A ctypes wrapper that loads the shared library and translates C structs into Python dictionaries. This permits seamless script-based telemetry parsing with no performance loss.
-* **`hlv_enhancer_fallback.py`**: A pure-Python fallback approximating the exact physical equations. Runs on ultra-low-power systems where C++ toolchains are unavailable.
+### 2. Python pybind11 Module Wrapper (`/hlv_core/src/hlv_pybind11_wrapper.cpp`)
+* Implements high-performance C++ bindings that compile into `hlv_enhancer_pybind.so` using `pybind11`.
+* Binds core classes (`HLVBMSMiddleware`, `HLVTorqueManager`), enums (`DriveMode`, `RegenMode`), and configurations (`TorqueConfig`, `MiddlewareConfig`), making them accessible to standard Python control scripts with zero parsing overhead.
 
 ### 3. Verification & Diagnostics Scripts (`/scripts`)
 Modular, robust diagnostics tools used during installation, updates, or maintenance:
 * **`diagnostics.py`**: The primary diagnostic script checking OS compliance, Python versions, interface existence, and physical battery boundaries (SOH >= 80%, SOC 20-90%, Temperature 0-45°C).
+* **`update.py`**: Secure update manager that fetches updates, validates safety within staging, takes system backups, and deploys updates cleanly.
 * **`rollback.sh`**: Handles backup generation and state restores during setup and software updates.
-* **`battery_health.sh` / `firmware_detect.sh` / `compatibility.sh`**: Light shell wrappers for targeted diagnostic views.
 
 ### 4. Configuration Layer (`/config`)
-* **`vehicle_profiles.json`**: Supported EV models (including Tesla Model 3/Y/S/X, Hyundai Ioniq 5, Nissan Leaf e+) along with nominal voltages and firmware globs.
+* **`vehicle_profiles.json`**: Supported EV models along with nominal voltages and firmware globs.
 * **`safety_thresholds.json`**: Standard threshold definitions.
 * **`install_policy.json`**: System-level installation rules and dependencies.
 * **`vehicle_status.json`**: Mock state representing current simulated telemetries.
-
----
-
-## 🔄 Lifecycle Workflows
-
-### Installation Phase
-1. The user invokes `make install`.
-2. The `diagnostics.py` script is called to ensure safety.
-3. If diagnostics pass, `rollback.sh` performs a backup of the existing `/opt/hlv_enhancement` files.
-4. The C++ targets are compiled into `/hlv_core/bin` and `/hlv_core/lib`.
-5. Files are cleanly copied to `/opt/hlv_enhancement/`.
-6. Successful deployment is logged.
-
-### Run-Time Phase
-The vehicle control loop (100Hz) feeds physical sensor measurements (`voltage`, `current`, `temperature`, `soc`) into the HLV middleware:
-1. `enhance_cycle(...)` updates the dual-state model.
-2. If metric gradients indicate stress, torque limits are scaled back.
-3. If cell voltage is unstable, regen braking blending is restricted.
-4. The system updates logs and diagnostics continuously.
+* **`update_source.json`**: Update source fallback URL and policy definitions.

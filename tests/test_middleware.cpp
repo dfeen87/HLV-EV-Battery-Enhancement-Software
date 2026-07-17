@@ -29,6 +29,7 @@ bool test_middleware_enhance_cycle() {
     middleware.init(75.0, 400.0);
     
     auto result = middleware.enhance_cycle(360.0, 50.0, 25.0, 0.8, 1.0);
+    (void)result;
     
     assert(result.state.voltage > 0);
     assert(result.hlv_confidence >= 0 && result.hlv_confidence <= 1.0);

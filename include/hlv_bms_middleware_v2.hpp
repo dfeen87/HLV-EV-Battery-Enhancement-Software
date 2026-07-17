@@ -173,8 +173,8 @@ class HLVBMSMiddleware {
     std::unique_ptr<hlv::advanced::KalmanHLVFilter> kalman_;
 
     SafetyMonitor safety_;
-    DiagnosticReport diag_;
-    hlv::EnhancedState enhanced_;
+    DiagnosticReport diag_ = {};
+    hlv::EnhancedState enhanced_ = {};
 
     bool initialized_ = false;
     double time_s_ = 0.0;
