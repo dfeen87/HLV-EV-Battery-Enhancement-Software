@@ -7,7 +7,7 @@
 using namespace hlv;
 
 bool test_feen_disabled() {
-    std::cout << "Testing FEEN disabled (pre-3.2.0 behavior)..." << std::flush;
+    std::cout << "Testing FEEN disabled (pre-4.1.0 behavior)..." << std::flush;
 
     HLVEnhancement enhancer;
     HLVConfig config;
