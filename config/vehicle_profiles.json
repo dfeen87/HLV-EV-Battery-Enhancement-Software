@@ -88,6 +88,19 @@
         "v2025.*"
       ]
     },
+    "Tesla_Cybertruck": {
+      "model_name": "Tesla Cybertruck",
+      "chemistry": "NMC",
+      "nominal_voltage_v": 816.0,
+      "voltage_range": {
+        "min": 680.0,
+        "max": 920.0
+      },
+      "supported_firmware_versions": [
+        "v2024.*",
+        "v2025.*"
+      ]
+    },
     "Hyundai_Ioniq_5": {
       "model_name": "Hyundai Ioniq 5",
       "chemistry": "NMC",
