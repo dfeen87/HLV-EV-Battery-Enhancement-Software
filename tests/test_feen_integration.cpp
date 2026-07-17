@@ -15,6 +15,7 @@ bool test_feen_disabled() {
     enhancer.init(config);
 
     auto result = enhancer.enhance(360.0, 50.0, 25.0, 0.8, 1.0);
+    (void)result;
 
     assert(result.feen_trust_metric == -1.0);
     assert(result.hlv_confidence >= 0.0 && result.hlv_confidence <= 1.0);
@@ -53,14 +54,17 @@ bool test_feen_adapter_edge_cases() {
 
     // Test normal value
     double normal_trust = adapter.compute_battery_trust_from_feen(360.0);
+    (void)normal_trust;
     assert(normal_trust >= 0.0 && normal_trust <= 1.0);
 
     // Test NaN
     double nan_trust = adapter.compute_battery_trust_from_feen(std::nan(""));
+    (void)nan_trust;
     assert(nan_trust >= 0.0 && nan_trust <= 1.0);
 
     // Test Inf
     double inf_trust = adapter.compute_battery_trust_from_feen(std::numeric_limits<double>::infinity());
+    (void)inf_trust;
     assert(inf_trust >= 0.0 && inf_trust <= 1.0);
 
     std::cout << " PASS\n";
@@ -76,10 +80,12 @@ bool test_determinism() {
     HLVEnhancement enhancer1;
     enhancer1.init(config);
     auto r1 = enhancer1.enhance(360.0, 50.0, 25.0, 0.8, 1.0);
+    (void)r1;
 
     HLVEnhancement enhancer2;
     enhancer2.init(config);
     auto r2 = enhancer2.enhance(360.0, 50.0, 25.0, 0.8, 1.0);
+    (void)r2;
 
     assert(r1.feen_trust_metric == r2.feen_trust_metric);
     assert(r1.hlv_confidence == r2.hlv_confidence);

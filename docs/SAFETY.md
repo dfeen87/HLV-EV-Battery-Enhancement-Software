@@ -1,6 +1,6 @@
 # HLV EV Battery Enhancement - Safety & Disclaimers
 
-Helix-Light-Vortex (HLV) Battery Enhancement operates at the intersection of mathematical field physics and advanced chemistry state estimation. To ensure optimal performance and avoid any hazard, the system enforces rigid, deterministic safety boundaries.
+Helix-Light-Vortex (HLV) Battery Enhancement operates at the intersection of mathematical field physics and advanced chemistry state estimation. To ensure optimal performance and avoid any hazard, the system enforces rigid, deterministic safety boundaries and fail-closed behaviors.
 
 ---
 
@@ -39,20 +39,43 @@ The HLV core engine establishes three layers of protection to ensure battery saf
 
 ---
 
-## ⚙️ Landauer Principle and Energy Conservation
+## 🔒 Fail-Closed & Signal Freshness Philosophy
 
-The software guarantees thermodynamic mathematical determinism by checking for numerical energy balance.
-Every informational state update ($\delta E_{\Phi}$) and metric deformation ($\delta E_{\text{metric}}$) must exactly balance the physical energy state change ($\delta E_{\Psi}$):
+If any critical telemetry signal (such as voltage, current, or temperature) is delayed, corrupted, or missing, the HLV stack executes a **strict fail-closed protocol**:
 
-$$\delta E_{\Psi} + \delta E_{\Phi} + \delta E_{\text{metric}} = 0$$
-
-If this sum deviates from zero by more than the configured tolerance ($10^{-6}$ J by default), a **Numerical Instability Warning** is raised, indicating potential hardware/signal telemetry corruption.
+1. **Information Decay**: The informational state Φ immediately decays back to ground state ($\Phi \to 0$) with zero coupling effect.
+2. **Metric Trace Convergence**: The effective metric $g^{\text{eff}}_{\mu\nu}$ relaxes back to flat Minkowski space $g_{\mu\nu}$, disabling any predictive power enhancements.
+3. **Control Authority Handover**: All dynamic control scaling factors (torque fractions, regen bounds) return to standard OEM limits or are bypassed entirely.
+4. **Independent Protection**: Original vehicle hard-limits and contactor safety logic remain fully active and unaffected.
 
 ---
 
-## 🚨 Emergency Limp-Home Mode
+## 🚨 Emergency Limp-Home & Performance Derating
 
-If a physical telemetry signal fails or a hardware CAN-bus warning is active:
-1. The HLV Torque Enhancement Module immediately enters **Limp-Home Mode** (limiting maximum power output to 20% of peak rating).
-2. The HLV Regenerative Braking Manager fully disengages regenerative torque and yields 100% control authority to physical mechanical/friction brakes.
-3. Errors are logged immediately to the system logs, and dashboard warnings are output.
+The HLV system defines and enforces explicit derating states under critical vehicle conditions:
+
+### 1. Critical SOC (Limp-Home Mode)
+* **Trigger**: State of Charge falls below **5.0%** (`soc < config.battery.soc_min_critical`).
+* **Behavior**:
+  - The HLV Torque Manager immediately activates `limp_mode_active = True`.
+  - Maximum available motor torque is limited to **20%** of peak rating to protect the pack from deep discharge and cell reversal.
+  - Diagnostics triggers visual dashboard warnings.
+
+### 2. High Temperature Derating
+* **Trigger**: Pack or component temperature exceeds **45.0°C** (`temp_soft_limit_c`).
+* **Behavior**:
+  - The Torque Manager activates `thermal_derate_active = True`.
+  - Available torque is progressively and dynamically scaled down (up to **60% reduction**) as temperatures approach 60°C.
+  - If temperature exceeds 60°C, the system triggers an emergency thermal shutdown to prevent thermal runaway.
+
+### 3. Weak-Cell Detection
+* **Trigger**: Voltage imbalance among cells exceeds **50mV** or any cell exhibits an anomalous SOH degradation rate.
+* **Behavior**:
+  - Available charging and discharging power limits are reduced (scaled down dynamically based on the number and severity of weak cells).
+  - High-power regenerative braking is constrained to prevent weak-cell overvoltage.
+  - Cell balancing is commanded immediately.
+
+### 4. Closed-Loop Regenerative Blinking
+* If a physical CAN bus warning or stability control (ABS/ESC) event is active:
+  - The regenerative braking system fully disengages within **10ms**.
+  - 100% braking authority is yielded to the physical mechanical / friction brakes to ensure driving stability.
