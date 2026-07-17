@@ -114,6 +114,8 @@ HLV-Enhanced BMS: Physical State ⟷ Informational State → Coupled Dynamics �
 | Accuracy Improvement | 20-30% | Degradation detection vs. traditional BMS |
 | Integration Time | <1 hour | For experienced BMS engineers |
 
+GPU acceleration is intentionally disabled for the EV version of HLV. Automotive battery‑management systems require deterministic, low‑latency CPU execution, and GPU workloads introduce nondeterministic scheduling, higher thermal load, and unnecessary complexity for safety‑critical environments.
+
 ---
 ## 🔧 Advanced Features & Examples
 
