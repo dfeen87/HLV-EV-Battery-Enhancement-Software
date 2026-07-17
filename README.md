@@ -5,6 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![C++17](https://img.shields.io/badge/C%2B%2B-17-blue.svg)](https://isocpp.org/)
 [![Status: Production Ready](https://img.shields.io/badge/Status-Production%20Ready-green.svg)]()
+[![Hardened](https://img.shields.io/badge/Hardened-Edition%20Ready-Purple.svg)]()
 [![Version](https://img.shields.io/badge/Version-3.2.0-blue.svg)]()
 
 This library implements the **Helix-Light-Vortex (HLV) Theory** developed by physicist Marcel Krüger to create next-generation battery management capabilities. By treating batteries as dual-state systems—where physical state (Ψ) and informational state (Φ) are dynamically coupled—we achieve earlier degradation detection, better health prediction, and optimized charging strategies.
