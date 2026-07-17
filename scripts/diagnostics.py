@@ -167,28 +167,37 @@ def main():
             status = status_data
             log_message(f"Loaded vehicle status from: {status_file}", log_paths)
 
-    # Apply overrides (Env variables -> CLI args)
-    model = os.environ.get("HLV_MODEL", status.get("model", "Unknown"))
-    firmware_version = os.environ.get("HLV_FIRMWARE", status.get("firmware_version", "Unknown"))
-    battery_soh = status.get("battery_soh", 0.0)
+    # First determine the target model (arg takes priority, then env, then top-level status json)
+    model = args.model or os.environ.get("HLV_MODEL") or status.get("model", "Unknown")
+
+    # If the chosen model exists in simulated_presets, use its preset as the base status!
+    presets = status.get("simulated_presets", {})
+    if model in presets:
+        log_message(f"Applying simulated status preset for model: {model}", log_paths)
+        status_base = presets[model]
+    else:
+        status_base = status
+
+    # Apply overrides (Env variables -> base status values)
+    firmware_version = os.environ.get("HLV_FIRMWARE", status_base.get("firmware_version", status_base.get("firmware", "Unknown")))
+    battery_soh = status_base.get("battery_soh", 0.0)
     if "HLV_SOH" in os.environ:
         try: battery_soh = float(os.environ["HLV_SOH"])
         except ValueError: pass
-    temperature_c = status.get("temperature_c", 0.0)
+    temperature_c = status_base.get("temperature_c", 0.0)
     if "HLV_TEMP_C" in os.environ:
         try: temperature_c = float(os.environ["HLV_TEMP_C"])
         except ValueError: pass
-    voltage_v = status.get("voltage_v", 0.0)
+    voltage_v = status_base.get("voltage_v", 0.0)
     if "HLV_VOLTAGE_V" in os.environ:
         try: voltage_v = float(os.environ["HLV_VOLTAGE_V"])
         except ValueError: pass
-    soc = status.get("soc", 0.0)
+    soc = status_base.get("soc", 0.0)
     if "HLV_SOC" in os.environ:
         try: soc = float(os.environ["HLV_SOC"])
         except ValueError: pass
 
     # CLI args override everything
-    if args.model: model = args.model
     if args.firmware: firmware_version = args.firmware
     if args.soh is not None: battery_soh = args.soh
     if args.temp is not None: temperature_c = args.temp
